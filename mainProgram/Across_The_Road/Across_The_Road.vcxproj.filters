@@ -21,12 +21,15 @@
     <ClCompile Include="console.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="thread.cpp">
+    <ClCompile Include="CGAME.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="includePath.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CGAME.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
