@@ -1,33 +1,36 @@
 #include "includePath.h"
-#include <SFML/Graphics.hpp>
-#include <limits>
 
-int main() {
-    sf::RenderWindow window(sf::VideoMode(900, 500), "SFML-Tutorial", sf::Style::Close);
-    window.setFramerateLimit(60);
+#include <iostream>
 
-    sf::RectangleShape rectang(sf::Vector2f(400, 220));
+int main()
+{   
+    sf::ContextSettings settings;
+    settings.antialiasingLevel = 8;
+    // create the window
+    sf::RenderWindow window(sf::VideoMode(800, 600), "SFML shapes", sf::Style::Default, settings);
+    Truck a(30.f, 40.f);
 
-    rectang.setPosition(250, 140);
-    rectang.setFillColor(sf::Color::Yellow);
-
+    // run the program as long as the window is open
     while (window.isOpen())
     {
+        // check all the window's events that were triggered since the last iteration of the loop
         sf::Event event;
         while (window.pollEvent(event))
         {
-            if (event.type == sf::Event::EventType::Closed)
-            {
+            // "close requested" event: we close the window
+            if (event.type == sf::Event::Closed)
                 window.close();
-            }
         }
 
+        // clear the window with black color
+
+        // draw everything here...
+        // window.draw(...);
+        a.Draw(window);
+        a.Move(0.3f ,0.3f);
         window.clear();
-
-        window.draw(rectang);
-
+        a.Draw(window);
         window.display();
+        // end the current frame
     }
-
-    return 0;
 }

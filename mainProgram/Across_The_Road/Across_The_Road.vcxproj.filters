@@ -18,10 +18,7 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="console.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CGAME.cpp">
+    <ClCompile Include="vehicle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -29,7 +26,7 @@
     <ClInclude Include="includePath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CGAME.h">
+    <ClInclude Include="vehicle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
