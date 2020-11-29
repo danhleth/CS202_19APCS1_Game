@@ -20,10 +20,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="people.cpp" />
     <ClCompile Include="vehicle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="includePath.h" />
+    <ClInclude Include="people.h" />
     <ClInclude Include="vehicle.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
