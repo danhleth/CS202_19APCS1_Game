@@ -8,7 +8,11 @@ int main()
     settings.antialiasingLevel = 8;
     // create the window
     sf::RenderWindow window(sf::VideoMode(800, 600), "SFML shapes", sf::Style::Default, settings);
-    Truck a(30.f, 40.f);
+    
+    Truck a(300.f, 300.f);
+
+    //CT:
+    Car b(100.f, 100.f);
 
     // run the program as long as the window is open
     while (window.isOpen())
@@ -32,5 +36,12 @@ int main()
         a.Draw(window);
         window.display();
         // end the current frame
+        
+        //CT: car
+        b.Draw(window);
+        b.Move(0.3f, 0.3f);
+        window.clear();
+        b.Draw(window);
+        window.display();
     }
 }

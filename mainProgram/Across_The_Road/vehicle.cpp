@@ -1,15 +1,17 @@
 #include "vehicle.h"
 
 	//Vehicle
-Vehicle::Vehicle() {}
-
+Vehicle::Vehicle() {
+	mX = 0;
+	mY = 0;
+}
 Vehicle::Vehicle(float x, float y) {
 	mX = x;
 	mY = y;
 }
 
-void Vehicle::Move(int _x, int _y) {
-
+void Vehicle::Move(float _x, float _y) {
+	return;
 }
 
 float Vehicle::X() {
@@ -26,10 +28,10 @@ void Vehicle::Y(float y) {
 }
 
 	//Truck
-Truck::Truck() {}
+Truck::Truck() 
+	:Vehicle() {}
 Truck::Truck(float x, float y) 
 	:Vehicle(x,y) {}
-
 void Truck::Move(float _x, float _y) {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
 		convex.move(_x, 0);
@@ -45,7 +47,7 @@ void Truck::Move(float _x, float _y) {
 	}
 }
 
-void Truck::Disapear(sf::RenderWindow& window) {
+void Truck::Disappear(sf::RenderWindow& window) {
 	
 }
 
@@ -58,6 +60,31 @@ void Truck::Draw(sf::RenderWindow &window) {
 }
 
 	//Car
-void Car::Move(int _x, int _y) {
+Car::Car() 
+	: Vehicle() {}
+Car::Car(float _x, float _y)
+	: Vehicle(_x, _y) {}
+void Car::Move(float _x, float _y) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
+		convex.move(_x, 0);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
+		convex.move(-_x, 0);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
+		convex.move(0, _y);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
+		convex.move(0, -_y);
+	}
+}
+void Car::Disappear(sf::RenderWindow&) {
 
+}
+void Car::Draw(sf::RenderWindow& window) {
+	convex.setPointCount(shape.size());
+	for (int i = 0; i < shape.size(); i++) {
+		convex.setPoint(i, sf::Vector2f(X() + shape[i][0], Y() + shape[i][1]));
+	}
+	window.draw(convex);
 }
