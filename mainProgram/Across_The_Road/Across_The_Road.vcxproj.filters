@@ -18,10 +18,7 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="vehicle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="people.cpp">
+    <ClCompile Include="OBJECT.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -29,10 +26,7 @@
     <ClInclude Include="includePath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="vehicle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="people.h">
+    <ClInclude Include="OBJECT.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
