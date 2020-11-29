@@ -1,14 +1,17 @@
 #include "vehicle.h"
 
 	//Vehicle
-Vehicle::Vehicle() {}
+Vehicle::Vehicle() {
+	mX = 0;
+	mY = 0;
+}
 
 Vehicle::Vehicle(float x, float y) {
 	mX = x;
 	mY = y;
 }
 
-void Vehicle::Move(int _x, int _y) {
+void Vehicle::Move(float _x, float _y) {
 
 }
 
@@ -45,7 +48,7 @@ void Truck::Move(float _x, float _y) {
 	}
 }
 
-void Truck::Disapear(sf::RenderWindow& window) {
+void Truck::Disappear(sf::RenderWindow& window) {
 	
 }
 
@@ -58,6 +61,6 @@ void Truck::Draw(sf::RenderWindow &window) {
 }
 
 	//Car
-void Car::Move(int _x, int _y) {
+void Car::Move(float _x, float _y) {
 
 }
