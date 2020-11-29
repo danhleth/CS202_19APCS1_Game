@@ -20,13 +20,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="people.cpp" />
-    <ClCompile Include="vehicle.cpp" />
+    <ClCompile Include="OBJECT.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="includePath.h" />
-    <ClInclude Include="people.h" />
-    <ClInclude Include="vehicle.h" />
+    <ClInclude Include="OBJECT.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

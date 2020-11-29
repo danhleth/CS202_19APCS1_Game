@@ -9,10 +9,7 @@ int main()
     // create the window
     sf::RenderWindow window(sf::VideoMode(800, 600), "SFML shapes", sf::Style::Default, settings);
     
-    Truck a(300.f, 300.f);
-
-    //CT:
-    Car b(100.f, 100.f);
+    OBJECT a = Car(300.f, 300.f);
 
     // run the program as long as the window is open
     while (window.isOpen())
@@ -31,17 +28,11 @@ int main()
         // draw everything here...
         // window.draw(...);
         a.Draw(window);
-        a.Move(0.3f ,0.3f);
+        a.KeyBoardMove(0.3f ,0.3f);
         window.clear();
         a.Draw(window);
         window.display();
         // end the current frame
         
-        //CT: car
-        b.Draw(window);
-        b.Move(0.3f, 0.3f);
-        window.clear();
-        b.Draw(window);
-        window.display();
     }
 }
