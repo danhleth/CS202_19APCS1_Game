@@ -59,7 +59,7 @@ Vehicle::Vehicle()
 Vehicle::Vehicle(float x, float y)
 	: OBJECT(x, y) {}
 
-//Truck
+	//Truck
 Truck::Truck()
 	: Vehicle()
 {
@@ -75,7 +75,7 @@ Truck::Truck(float x, float y)
 		});
 }
 
-//Car
+	//Car
 Car::Car()
 	: Vehicle()
 {
@@ -88,5 +88,29 @@ Car::Car(float _x, float _y)
 {
 	setShape({
 	{15.f, 30.f}, { 0.f, 30.f }, { 0.f, 55.f }, { 100.f, 55.f }, { 100.f, 30.f }, { 85.f, 30.f }, { 70.f, 0.f }, { 25.f, 0.f }
+		});
+}
+
+//CANIMAL
+CANIMAL::CANIMAL()
+	: OBJECT() {}
+CANIMAL::CANIMAL(float _x, float _y)
+	: OBJECT(_x, _y){}
+
+	//CDINOSAUR
+CDINOSAUR::CDINOSAUR()
+	: CANIMAL()
+{
+
+}
+CDINOSAUR::CDINOSAUR(float _x, float _y)
+	: CANIMAL(_x, _y)
+{
+	setShape({
+		{35.f, 50.f}, {0.f, 42.f}, {0.f, 39.f}, {35.f, 20.f}, {61.f, 0.f}, {100.f, 0.f},
+		{100.f, 32.f},{61.f, 32.f}, {61.f, 71.f}, {35.f, 71.f}
+		/*{45.f, 100.f}, {48.f, 80.f}, {47.f, 80.f}, {46.f, 80.f}, {39.f, 79.f}, {39.f, 84.f}, {25.f, 89.f}, {0.f, 89.f}, {13.f, 75.f}, {20.f, 50.f}, {23.f, 45.f},
+		{48.f, 30.f}, {50.f, 15.f}, {60.f, 5.f}, {63.f, 0.f}, {70.f, 0.f}, {76.f, 5.f}, {80.f, 17.f}, {90.f, 23.f}, {86.f, 25.f}, {80.f, 20.f}, {75.f, 20.f}, 
+		{74.f, 23.f}, {72.f, 25.f}, {77.f, 30.f}, {75.f, 28.f}, {72.f, 30.f}, {65.f, 40.f}, {68.f, 45.f}, {63.f, 100.f}, {55.f, 100.f }, {50.f, 95.f},{45.f, 100.f}*/
 		});
 }

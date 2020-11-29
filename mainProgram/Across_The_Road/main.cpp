@@ -9,7 +9,8 @@ int main()
     // create the window
     sf::RenderWindow window(sf::VideoMode(800, 600), "SFML shapes", sf::Style::Default, settings);
     
-    OBJECT a = Car(300.f, 300.f);
+    OBJECT a = CDINOSAUR(300.f, 300.f);/*Car(300.f, 300.f);*/
+    
 
     // run the program as long as the window is open
     while (window.isOpen())
