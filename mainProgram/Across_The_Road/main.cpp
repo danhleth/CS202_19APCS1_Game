@@ -37,8 +37,8 @@ int main()
         d.Draw(window);
         e.Draw(window);
         //a.KeyBoardMove(0.3f ,0.3f);
-        /*window.clear();*/
-        a.Draw(window);
+        /*window.clear();
+        a.Draw(window);*/
         window.display();
         // end the current frame
         /*b.Draw(window);
