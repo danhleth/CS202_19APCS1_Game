@@ -55,10 +55,10 @@ public:
 	//virtual void Tell();
 };
 
-class CDINAUSOR : public CANIMAL {
+class CDINOSAUR : public CANIMAL {
 public:
-	CDINAUSOR();
-	CDINAUSOR(float, float);
+	CDINOSAUR();
+	CDINOSAUR(float, float);
 };
 
 class CBIRD : public CANIMAL {
