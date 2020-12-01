@@ -1,7 +1,7 @@
 #pragma once
 #include "includePath.h"
 
-class OBJECT
+class COBJECT
 {
 private:
 	float mX, mY;
@@ -9,8 +9,8 @@ private:
 	vector<vector<float>> shape;
 public:
 	//Constructor
-	OBJECT();
-	OBJECT(float, float);
+	COBJECT();
+	COBJECT(float, float);
 
 	float X();
 	float Y();
@@ -22,31 +22,31 @@ public:
 	virtual void Draw(sf::RenderWindow&);
 };
 
-class Vehicle : public OBJECT {
+class CVEHICLE : public COBJECT {
 private:
 
 public:
-	Vehicle();
-	Vehicle(float, float);
+	CVEHICLE();
+	CVEHICLE(float, float);
 };
 
-class Truck : public Vehicle {
+class CTRUCK : public CVEHICLE {
 private:
 
 public:
-	Truck();
-	Truck(float, float);
+	CTRUCK();
+	CTRUCK(float, float);
 };
 
-class Car : public Vehicle {
+class CCAR : public CVEHICLE {
 private:
 
 public:
-	Car();
-	Car(float, float);
+	CCAR();
+	CCAR(float, float);
 };
 
-class CANIMAL : public OBJECT {
+class CANIMAL : public COBJECT {
 private:
 
 public:
@@ -68,13 +68,13 @@ public:
 };
 
 
-class PEOPLE : public OBJECT{
+class PEOPLE : public COBJECT{
 private:
 	bool mState;
 public:
 	PEOPLE();
 	PEOPLE(float, float);
-	bool isImpact(const Vehicle*&);
+	bool isImpact(const CVEHICLE*&);
 	//bool isImpact(const CAnimal)
 	bool isFinish();
 	bool isDead();
