@@ -10,11 +10,11 @@ int main()
     sf::RenderWindow window(sf::VideoMode(800, 600), "SFML shapes", sf::Style::Default, settings);
     
 
-    COBJECT a = PEOPLE(0.f, 100.f);
-    COBJECT b = CDINOSAUR(0.f, 200.f);
-    COBJECT e = CBIRD(0.f, 500.f);
-    COBJECT c = CCAR(0.f, 300.f);
-    COBJECT d = CTRUCK(0.f, 400.f);
+    COBJECT a = PEOPLE(50.f, 100.f);
+    COBJECT b = CDINOSAUR(100.f, 100.f);
+    COBJECT e = CBIRD(200.f, 100.f);
+    COBJECT d = CCAR(250.f, 100.f);
+    COBJECT c = CTRUCK(350, 100.f);
     // run the program as long as the window is open
     while (window.isOpen())
     {
@@ -32,12 +32,16 @@ int main()
         // draw everything here...
         // window.draw(...);
         a.Draw(window);
-        a.KeyBoardMove(0.3f ,0.3f);
-        window.clear();
+        b.Draw(window);
+        c.Draw(window);
+        d.Draw(window);
+        e.Draw(window);
+        //a.KeyBoardMove(0.3f ,0.3f);
+        /*window.clear();*/
         a.Draw(window);
         window.display();
         // end the current frame
-        b.Draw(window);
+        /*b.Draw(window);
         b.KeyBoardMove(0.3f, 0.3f);
         window.clear();
         b.Draw(window);
@@ -56,6 +60,7 @@ int main()
         e.KeyBoardMove(0.3f, 0.3f);
         window.clear();
         e.Draw(window);
-        window.display();
+        window.display();*/
     }
+    return 0;
 }
