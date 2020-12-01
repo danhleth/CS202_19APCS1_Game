@@ -1,6 +1,7 @@
-#include <windef.h>
-#include <windows.h>
+//#include <windef.h>
+//#include <iostream>
+//#include <windows.h>
+#include <SFML/Graphics.hpp>
 #include <iostream>
-#include <thread>
-
+#include <vector>
 using namespace std;
