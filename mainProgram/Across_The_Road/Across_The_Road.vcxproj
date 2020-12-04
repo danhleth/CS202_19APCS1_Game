@@ -19,10 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CGAME.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OBJECT.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CGAME.h" />
     <ClInclude Include="includePath.h" />
     <ClInclude Include="OBJECT.h" />
   </ItemGroup>
