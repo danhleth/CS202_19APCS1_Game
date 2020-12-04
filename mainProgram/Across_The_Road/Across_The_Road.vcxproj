@@ -18,6 +18,16 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CGAME.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="OBJECT.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CGAME.h" />
+    <ClInclude Include="includePath.h" />
+    <ClInclude Include="OBJECT.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -144,20 +154,6 @@
       <AdditionalDependencies>sfml-graphics.lib;sfml-audio.lib;sfml-network.lib;sfml-window.lib;sfml-system.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="CGAME.cpp" />
-    <ClCompile Include="CPEOPLE.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="OBJECT.cpp" />
-    <ClCompile Include="supportFunction.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="CGAME.h" />
-    <ClInclude Include="CPEOPLE.h" />
-    <ClInclude Include="includePath.h" />
-    <ClInclude Include="OBJECT.h" />
-    <ClInclude Include="supportFunction.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

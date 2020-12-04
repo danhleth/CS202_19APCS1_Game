@@ -55,14 +55,27 @@ public:
 	//virtual void Tell();
 };
 
-class CDINAUSOR : public CANIMAL {
+class CDINOSAUR : public CANIMAL {
 public:
-	CDINAUSOR();
-	CDINAUSOR(float, float);
+	CDINOSAUR();
+	CDINOSAUR(float, float);
 };
 
 class CBIRD : public CANIMAL {
 public:
 	CBIRD();
 	CBIRD(float, float);
+};
+
+
+class PEOPLE : public COBJECT{
+private:
+	bool mState;
+public:
+	PEOPLE();
+	PEOPLE(float, float);
+	bool isImpact(const CVEHICLE*&);
+	//bool isImpact(const CAnimal)
+	bool isFinish();
+	bool isDead();
 };

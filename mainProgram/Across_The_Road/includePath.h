@@ -1,7 +1,7 @@
 //#include <windef.h>
-//#include <iostream>
 //#include <windows.h>
+//#include <iostream>
+#include "OBJECT.h"
 #include <SFML/Graphics.hpp>
-#include <iostream>
 #include <vector>
 using namespace std;
