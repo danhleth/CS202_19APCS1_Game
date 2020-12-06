@@ -20,6 +20,7 @@ public:
 	virtual void Move(float, float);
 	virtual void KeyBoardMove(float, float);
 	virtual void Draw(sf::RenderWindow&);
+	virtual void setPosition(float, float);
 };
 
 class CVEHICLE : public COBJECT {
