@@ -56,6 +56,6 @@ void CGAME::render()
     this->window->clear(/*sf::Color(255, 255, 255, 0)*/);
     //Draw game
     people.Draw(*this->window);
-
+    people.KeyBoardMove(1,1);
     this->window->display();
 }
