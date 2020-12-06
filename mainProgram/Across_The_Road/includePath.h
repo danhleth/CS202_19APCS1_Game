@@ -4,4 +4,5 @@
 #include "OBJECT.h"
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include<ctime>
 using namespace std;
