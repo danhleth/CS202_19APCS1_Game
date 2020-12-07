@@ -107,7 +107,6 @@ void CGAME::pollEvent()
 void CGAME::update()
 {
     this->pollEvent();
-
     this->updateEnemies();
 }
 
@@ -116,13 +115,9 @@ void CGAME::render()
     this->window->clear(/*sf::Color(255, 255, 255, 0)*/);
     //Draw game
     people.Draw(*this->window);
-<<<<<<< HEAD
-    people.KeyBoardMove(1,1);
-=======
-
+    people.KeyBoardMove(1.f, 0.5f);
     renderEnemies();
 
->>>>>>> main
     this->window->display();
 }
 
