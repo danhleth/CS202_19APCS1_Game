@@ -8,10 +8,7 @@ void CGAME::initWindow()
 
     this->window->setFramerateLimit(60);//not understand
 
-    this->points = 0;
-    this->enemySpawnTimerMax = 120.f;
-    this->enemySpawnTimer = this->enemySpawnTimerMax;
-    this->maxEnemies = 7;
+    
 }
 
 void CGAME::initObject()
@@ -21,11 +18,29 @@ void CGAME::initObject()
 
 void CGAME::initEnemies() {};
 
+void CGAME::initLines() {
+    this->line = new CLINE[5];
+    this->line[0] = CLINE(0.f, 100.f);
+    this->line[1] = CLINE(0.f, 200.f);
+    this->line[2] = CLINE(0.f, 300.f);
+    this->line[3] = CLINE(0.f, 400.f);
+    this->line[4] = CLINE(0.f, 500.f);
+}
+
+void CGAME::initLevel() {
+    MAX_LEVEL = 3;
+
+    setLevel(1);
+}
+
+
 CGAME::CGAME()
 {
 	initWindow();
     initObject();
     initEnemies();
+    initLines();
+    initLevel();
 }
 
 CGAME::~CGAME()
@@ -33,11 +48,23 @@ CGAME::~CGAME()
 	delete this->window;
     for (int i = 0; i < enemies.size(); i++)
         delete enemies[i];
+    delete[] line;
 }
 
 const bool CGAME::running() const
 {
 	return this->window->isOpen();
+}
+
+void CGAME::setLevel(unsigned level){
+    /*if (level > MAX_LEVEL)
+        return;*/
+    currentLevel = level;
+
+    //this->points = 0;
+    this->enemySpawnTimerMax = (140.f - static_cast<float>((level-1)*40));
+    this->enemySpawnTimer = this->enemySpawnTimerMax;
+    this->maxEnemies = 10;// loop some   times
 }
    
 void CGAME::updateEnemies(){
@@ -55,7 +82,7 @@ void CGAME::updateEnemies(){
         enemies.erase(enemies.begin());// 6 = max - 1
     }
     for (auto& e : this->enemies)
-        e->Move(2.f,0.f);
+        e->Move((3.f+static_cast<float>(currentLevel-1)),0.f);
 }
 
 void CGAME::renderEnemies(){
@@ -116,8 +143,23 @@ void CGAME::render()
     //Draw game
     people.Draw(*this->window);
     people.KeyBoardMove(1.f, 0.5f);
+
     renderEnemies();
 
+    for (int i = 0; i < 5; i++)
+        line[i].Draw(*this->window);
+
     this->window->display();
+
+    if (people.getY() <= 100.f) {
+        if (currentLevel >= 3)
+            setLevel(1);
+        else {
+            ++currentLevel;
+            setLevel(currentLevel);
+        }
+        people.setPosition(400, 600);
+        enemies.clear();
+    }
 }
 
