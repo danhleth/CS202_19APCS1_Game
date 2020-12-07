@@ -113,6 +113,25 @@ void CGAME::spawnEnemy() {
     this->enemies.push_back(enemy);
 }
 
+void CGAME::generateMap()
+{
+    for (int i = 0; i < 5; i++)
+        line[i].Draw(*this->window);
+
+    this->window->display();
+
+    if (people.getY() <= 100.f) {
+        if (currentLevel >= 3)
+            setLevel(1);
+        else {
+            ++currentLevel;
+            setLevel(currentLevel);
+        }
+        people.setPosition(400, 600);
+        enemies.clear();
+    }
+}
+
 void CGAME::pollEvent()
 {
     while (this->window->pollEvent(this->event)) {
@@ -134,7 +153,6 @@ void CGAME::pollEvent()
 void CGAME::update()
 {
     this->pollEvent();
-
     this->updateEnemies();
 }
 
@@ -143,24 +161,8 @@ void CGAME::render()
     this->window->clear(/*sf::Color(255, 255, 255, 0)*/);
     //Draw game
     people.Draw(*this->window);
-    people.KeyBoardMove(5.f, 5.f);
-
+    people.KeyBoardMove(1.f, 0.5f);
     renderEnemies();
-
-    for (int i = 0; i < 5; i++)
-        line[i].Draw(*this->window);
-
-    this->window->display();
-
-    if (people.getY() <= 100.f) {
-        if (currentLevel >= 3)
-            setLevel(1);
-        else {
-            ++currentLevel;
-            setLevel(currentLevel);
-        }
-        people.setPosition(400, 600);
-        enemies.clear();
-    }
+    generateMap();
 }
 

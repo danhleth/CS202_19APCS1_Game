@@ -40,6 +40,7 @@ public:
 	void updateEnemies();
 	void renderEnemies();
 	void spawnEnemy();
+	void generateMap();
 	//Function
 	void pollEvent();
 	//Update & Render
