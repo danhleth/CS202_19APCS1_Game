@@ -9,7 +9,7 @@ private:
 	sf::VideoMode videoMode;
 	sf::Event event;
 	//Logic
-	int points;
+	//int points;
 	float enemySpawnTimer;
 	float enemySpawnTimerMax;
 	unsigned maxEnemies;
@@ -20,17 +20,23 @@ private:
 	PEOPLE people;
 	COBJECT* enemy;
 	vector<COBJECT*> enemies;
-	//InitWindow
+	COBJECT* line;
+	//Level
+	int currentLevel;
+	int MAX_LEVEL;
+	//Init
 	void initWindow();
 	void initObject();
 	void initEnemies();
+	void initLines();
+	void initLevel();
 public:
 	//Constructors & Destructors
 	CGAME();
 	~CGAME();
 	//Accessors
 	const bool running() const;
-
+	void setLevel(unsigned);
 	void updateEnemies();
 	void renderEnemies();
 	void spawnEnemy();
