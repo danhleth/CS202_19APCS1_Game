@@ -30,7 +30,7 @@ void COBJECT::KeyBoardMove(float _x, float _y) {
 
 void COBJECT::Draw(sf::RenderWindow& window) {
 	convex.setPointCount(shape.size());
-	if(typeid(*this) != typeid(PEOPLE))
+	if(typeid(*this) != typeid(PEOPLE)&& typeid(*this) != typeid(CLINE))
 		convex.setFillColor(sf::Color::Green);
 	for (int i = 0; i < shape.size(); i++) {
 		convex.setPoint(i, sf::Vector2f(X() + shape[i][0], Y() + shape[i][1]));
@@ -41,6 +41,7 @@ void COBJECT::Draw(sf::RenderWindow& window) {
 void COBJECT::setPosition(float x, float y) {
 	mX = x;
 	mY = y;
+	convex.setPosition(0.f, 0.f);
 }
 
 void COBJECT::setShape(vector<vector<float>> S) {
@@ -58,6 +59,14 @@ void COBJECT::X(float x) {
 }
 void COBJECT::Y(float y) {
 	mY = y;
+}
+
+float COBJECT::getX(){
+	return static_cast<float>(convex.getPosition().x)+mX;
+}
+
+float COBJECT::getY(){
+	return static_cast<float>(convex.getPosition().y)+mY;
 }
 
 //CVEHICLE
@@ -172,4 +181,15 @@ PEOPLE::PEOPLE(float _x, float _y) : COBJECT(_x, _y) {
 		{0, -55}, {-4, -54}, {-9, -52}, { -13, -47 }, {-15, -42},{ -15.5, -37.9 }, {-13, -33}, { -11, -31 },/* {-16.6, -33.4},*/{ -8.3, -29 }, { -16.6, -20 }, { -12.5, -15 }, { -8.5, -18 }, { -12, 0 }, { -4, 0 }, { -2, -8 },
 		{2, -8},{4, 0},{12, 0}, {8.5, -18},{12.5, -15},  {15, -20},{8.3, -29},{11, -31},{13, -33},{ 15.5, -37.9 }, {15, -42}, {13, -47 }, {9, -52}, {4, -54}
 		});
+}
+
+CLINE::CLINE() {
+	setShape({
+		{0,0},{800,0},{800,1},{0,1}
+	});
+}
+CLINE::CLINE(float _x, float _y): COBJECT(_x,_y) {
+	setShape({
+	{0,0},{800,0},{800,1},{0,1}
+	});
 }

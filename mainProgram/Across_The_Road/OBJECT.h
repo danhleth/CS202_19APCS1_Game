@@ -16,6 +16,8 @@ public:
 	float Y();
 	void X(float);
 	void Y(float);
+	float getX();
+	float getY();
 	void setShape(vector<vector<float>>);
 	virtual void Move(float, float);
 	virtual void KeyBoardMove(float, float);
@@ -79,4 +81,10 @@ public:
 	//bool isImpact(const CAnimal)
 	bool isFinish();
 	bool isDead();
+};
+
+class CLINE : public COBJECT {
+public:
+	CLINE();
+	CLINE(float,float);
 };
