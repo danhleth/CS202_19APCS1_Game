@@ -4,6 +4,7 @@ void CGAME::initWindow()
 {
 	settings.antialiasingLevel = 8;
 	videoMode = sf::VideoMode(800, 600);
+    
 	window = new sf::RenderWindow(videoMode, "Across The Road", sf::Style::Default, settings);
 
     this->window->setFramerateLimit(60);//not understand
@@ -98,6 +99,12 @@ void CGAME::pollEvent()
             if (event.key.code == sf::Keyboard::Escape)
                 window->close();
             break;
+        case sf::Event::KeyReleased:
+            if (event.key.code == sf::Keyboard::A) people.setSpeed(1.f);
+            if (event.key.code == sf::Keyboard::D) people.setSpeed(1.f);
+            if (event.key.code == sf::Keyboard::S) people.setSpeed(1.f);
+            if (event.key.code == sf::Keyboard::W) people.setSpeed(1.f);
+            break;
         default:
             break;
         }
@@ -116,8 +123,8 @@ void CGAME::render()
     this->window->clear(/*sf::Color(255, 255, 255, 0)*/);
     //Draw game
     people.Draw(*this->window);
-
-    renderEnemies();
+    people.KeyBoadMove_WithDt(0.08f);
+    //renderEnemies();
 
     this->window->display();
 }

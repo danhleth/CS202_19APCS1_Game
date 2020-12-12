@@ -9,6 +9,7 @@ int main()
     //sf::Thread thread(&func);
     //thread.launch();
     // run the program as long as the window is open
+    
     while (game.running())
     {
 

@@ -5,4 +5,5 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include<ctime>
+#include <time.h>  
 using namespace std;

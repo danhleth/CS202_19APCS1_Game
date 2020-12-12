@@ -173,3 +173,26 @@ PEOPLE::PEOPLE(float _x, float _y) : COBJECT(_x, _y) {
 		{2, -8},{4, 0},{12, 0}, {8.5, -18},{12.5, -15},  {15, -20},{8.3, -29},{11, -31},{13, -33},{ 15.5, -37.9 }, {15, -42}, {13, -47 }, {9, -52}, {4, -54}
 		});
 }
+
+void PEOPLE::KeyBoadMove_WithDt(float deltatime) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
+		Move(speed*deltatime, 0.f);
+		speed = speed * deltatime + speed;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
+		Move(-speed*deltatime , 0.f);
+		speed = speed * deltatime + speed;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
+		Move(0.f, speed*deltatime );
+		speed = speed * deltatime + speed;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
+		Move(0.f, -speed*deltatime);
+		speed = speed * deltatime + speed;
+	}
+	if (speed > 20.f) speed = 20.f;
+}
+void PEOPLE::setSpeed(float input_speed) {
+	this->speed = input_speed;
+}

@@ -71,12 +71,16 @@ public:
 
 class PEOPLE : public COBJECT{
 private:
+	float speed=1.f;
 	bool mState;
+	float mx, my;
 public:
 	PEOPLE();
 	PEOPLE(float, float);
+	void KeyBoadMove_WithDt(float);
+	void setSpeed(float);
 	bool isImpact(const CVEHICLE*&);
-	//bool isImpact(const CAnimal)
+	bool isImpact(const CANIMAL);
 	bool isFinish();
 	bool isDead();
 };
