@@ -21,7 +21,7 @@ public:
 	void setShape(vector<vector<float>>);
 	virtual void Move(float, float);
 	virtual void KeyBoardMove(float, float);
-	virtual void Draw(sf::RenderWindow&);
+	virtual void Draw(sf::RenderTarget*);
 	virtual void setPosition(float, float);
 };
 

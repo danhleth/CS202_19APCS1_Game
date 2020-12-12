@@ -28,14 +28,14 @@ void COBJECT::KeyBoardMove(float _x, float _y) {
 	}
 }
 
-void COBJECT::Draw(sf::RenderWindow& window) {
+void COBJECT::Draw(sf::RenderTarget* window) {
 	convex.setPointCount(shape.size());
 	if(typeid(*this) != typeid(PEOPLE)&& typeid(*this) != typeid(CLINE))
 		convex.setFillColor(sf::Color::Green);
 	for (int i = 0; i < shape.size(); i++) {
 		convex.setPoint(i, sf::Vector2f(X() + shape[i][0], Y() + shape[i][1]));
 	}
-	window.draw(convex);
+	window->draw(convex);
 }
 
 void COBJECT::setPosition(float x, float y) {
