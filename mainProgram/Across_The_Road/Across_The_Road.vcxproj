@@ -22,11 +22,13 @@
     <ClCompile Include="CGAME.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OBJECT.cpp" />
+    <ClCompile Include="State.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CGAME.h" />
     <ClInclude Include="includePath.h" />
     <ClInclude Include="OBJECT.h" />
+    <ClInclude Include="State.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
