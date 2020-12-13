@@ -28,19 +28,20 @@ void COBJECT::KeyBoardMove(float _x, float _y) {
 	}
 }
 
-void COBJECT::Draw(sf::RenderWindow& window) {
+void COBJECT::Draw(sf::RenderTarget* window) {
 	convex.setPointCount(shape.size());
-	if(typeid(*this) != typeid(PEOPLE))
+	if(typeid(*this) != typeid(PEOPLE)&& typeid(*this) != typeid(CLINE))
 		convex.setFillColor(sf::Color::Green);
 	for (int i = 0; i < shape.size(); i++) {
 		convex.setPoint(i, sf::Vector2f(X() + shape[i][0], Y() + shape[i][1]));
 	}
-	window.draw(convex);
+	window->draw(convex);
 }
 
 void COBJECT::setPosition(float x, float y) {
 	mX = x;
 	mY = y;
+	convex.setPosition(0.f, 0.f);
 }
 
 void COBJECT::setShape(vector<vector<float>> S) {
@@ -58,6 +59,14 @@ void COBJECT::X(float x) {
 }
 void COBJECT::Y(float y) {
 	mY = y;
+}
+
+float COBJECT::getX(){
+	return static_cast<float>(convex.getPosition().x)+mX;
+}
+
+float COBJECT::getY(){
+	return static_cast<float>(convex.getPosition().y)+mY;
 }
 
 //CVEHICLE
@@ -145,16 +154,16 @@ CBIRD::CBIRD()
 	: CANIMAL()
 {
 	setShape({
-		{2,-22}, {4.5, -21}, {6, -19}, {10, -19.5}, {6, -9}, {5,-5}, {8,0}, {14,-4}, {12,-9}, {18,-12}, {16, -19},{19,-19}, {22,-20}, {29, -15}, {32,-13},{30,-20}, {34, -20},
-		{30,-24},{32,-31},{29, -29},{22,-24},{19,-25},{16, -25},{18,-32},{12,-35},{14,-40},{8,-44},{5,-39},{6,-35},{10, -24.5},{6, -24},{4.5, -23}
+		{-2,-22}, {-4.5, -21}, {-6, -19}, {-10, -19.5}, {-6, -9}, {-5,-5}, {-8,0}, {-14,-4}, {-12,-9}, {-18,-12}, {-16, -19},{-19,-19}, {-22,-20}, {-29, -15}, {-32,-13},{-30,-20}, {-34, -20},
+		{-30,-24},{-32,-31},{-29, -29},{-22,-24},{-19,-25},{-16, -25},{-18,-32},{-12,-35},{-14,-40},{-8,-44},{-5,-39},{-6,-35},{-10, -24.5},{-6, -24},{-4.5, -23}
 		});
 }
 CBIRD::CBIRD(float _x, float _y)
 	: CANIMAL(_x, _y)
 {
 	setShape({
-		{2,-22}, {4.5, -21}, {6, -19}, {10, -19.5}, {6, -9}, {5,-5}, {8,0}, {14,-4}, {12,-9}, {18,-12}, {16, -19},{19,-19}, {22,-20}, {29, -15}, {32,-13},{30,-20}, {34, -20},
-		{30,-24},{32,-31},{29, -29},{22,-24},{19,-25},{16, -25},{18,-32},{12,-35},{14,-40},{8,-44},{5,-39},{6,-35},{10, -24.5},{6, -24},{4.5, -23}
+		{-2,-22}, {-4.5, -21}, {-6, -19}, {-10, -19.5}, {-6, -9}, {-5,-5}, {-8,0}, {-14,-4}, {-12,-9}, {-18,-12}, {-16, -19},{-19,-19}, {-22,-20}, {-29, -15}, {-32,-13},{-30,-20}, {-34, -20},
+		{-30,-24},{-32,-31},{-29, -29},{-22,-24},{-19,-25},{-16, -25},{-18,-32},{-12,-35},{-14,-40},{-8,-44},{-5,-39},{-6,-35},{-10, -24.5},{-6, -24},{-4.5, -23}
 		});
 }
 
@@ -195,4 +204,14 @@ void PEOPLE::KeyBoadMove_WithDt(float deltatime) {
 }
 void PEOPLE::setSpeed(float input_speed) {
 	this->speed = input_speed;
+}
+CLINE::CLINE() {
+	setShape({
+		{0,0},{800,0},{800,1},{0,1}
+	});
+}
+CLINE::CLINE(float _x, float _y): COBJECT(_x,_y) {
+	setShape({
+	{0,0},{800,0},{800,1},{0,1}
+	});
 }

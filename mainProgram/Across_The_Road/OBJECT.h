@@ -16,10 +16,12 @@ public:
 	float Y();
 	void X(float);
 	void Y(float);
+	float getX();
+	float getY();
 	void setShape(vector<vector<float>>);
 	virtual void Move(float, float);
 	virtual void KeyBoardMove(float, float);
-	virtual void Draw(sf::RenderWindow&);
+	virtual void Draw(sf::RenderTarget*);
 	virtual void setPosition(float, float);
 };
 
@@ -83,4 +85,10 @@ public:
 	bool isImpact(const CANIMAL);
 	bool isFinish();
 	bool isDead();
+};
+
+class CLINE : public COBJECT {
+public:
+	CLINE();
+	CLINE(float,float);
 };
