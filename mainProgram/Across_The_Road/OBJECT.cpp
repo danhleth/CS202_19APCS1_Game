@@ -183,6 +183,28 @@ PEOPLE::PEOPLE(float _x, float _y) : COBJECT(_x, _y) {
 		});
 }
 
+void PEOPLE::KeyBoadMove_WithDt(float deltatime) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
+		Move(speed*deltatime, 0.f);
+		speed = speed * deltatime + speed;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
+		Move(-speed*deltatime , 0.f);
+		speed = speed * deltatime + speed;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
+		Move(0.f, speed*deltatime );
+		speed = speed * deltatime + speed;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
+		Move(0.f, -speed*deltatime);
+		speed = speed * deltatime + speed;
+	}
+	if (speed > 20.f) speed = 20.f;
+}
+void PEOPLE::setSpeed(float input_speed) {
+	this->speed = input_speed;
+}
 CLINE::CLINE() {
 	setShape({
 		{0,0},{800,0},{800,1},{0,1}
