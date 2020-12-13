@@ -4,7 +4,6 @@ CGAME::CGAME()
 {
     initWindow();
     initStates();
-
 }
 
 CGAME::~CGAME()
@@ -46,12 +45,6 @@ void CGAME::pollEvent()
             if (event.key.code == sf::Keyboard::Escape)
                 window->close();
             break;
-        case sf::Event::KeyReleased:
-            if (event.key.code == sf::Keyboard::A) people.setSpeed(1.f);
-            if (event.key.code == sf::Keyboard::D) people.setSpeed(1.f);
-            if (event.key.code == sf::Keyboard::S) people.setSpeed(1.f);
-            if (event.key.code == sf::Keyboard::W) people.setSpeed(1.f);
-            break;
         default:
             break;
         }
@@ -79,7 +72,7 @@ void CGAME::render()
 {
     this->window->clear(/*sf::Color(255, 255, 255, 0)*/);
     if (!this->states.empty()) {
-        this->states.top()->render();
+        this->states.top()->render(this->event);
     }
 }
 
