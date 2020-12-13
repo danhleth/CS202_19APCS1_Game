@@ -19,13 +19,13 @@ public:
 
 	//update & render
 	virtual void update() = 0;
-	virtual void render(sf::RenderTarget* target = nullptr) = 0;
+	virtual void render(sf::Event ev, sf::RenderTarget* target = nullptr) = 0;
 };
 
 class GameState : public State {
 private:
 	//Logic
-	//int points;
+	int points;
 	float enemySpawnTimer;
 	float enemySpawnTimerMax;
 	unsigned maxEnemies;
@@ -58,7 +58,7 @@ public:
 	void updateEnemies();
 	void renderEnemies();
 	void updatePlayer();
-	void renderPlayer();
+	void renderPlayer(sf::Event);
 	void update();
-	void render(sf::RenderTarget* target = nullptr);
+	void render(sf::Event, sf::RenderTarget* target = nullptr);
 };

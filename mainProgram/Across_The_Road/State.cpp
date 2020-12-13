@@ -28,6 +28,11 @@ GameState::GameState(sf::RenderWindow* window) :
     initEnemies();
     initLines();
     initLevel();
+
+    this->points = 0;
+    this->enemySpawnTimerMax = 120.f;
+    this->enemySpawnTimer = this->enemySpawnTimerMax;
+    this->maxEnemies = 7;
 }
 
 GameState::~GameState()
@@ -49,9 +54,9 @@ void GameState::update()
     this->updatePlayer();
 }
 
-void GameState::render(sf::RenderTarget* target)
+void GameState::render(sf::Event ev, sf::RenderTarget* target)
 {
-    renderPlayer();
+    renderPlayer(ev);
     renderEnemies();
     generateMap();
 }
@@ -114,12 +119,19 @@ void GameState::renderEnemies() {
 
 void GameState::updatePlayer()
 {
-    this->people.KeyBoardMove(1.f, 1.f);
+    this->people.KeyBoadMove_WithDt(1.f);
 }
 
-void GameState::renderPlayer()
+void GameState::renderPlayer(sf::Event ev)
 {
     this->people.Draw(this->window);
+    if (ev.type == sf::Event::KeyReleased) {
+        if (ev.key.code == sf::Keyboard::A) people.setSpeed(1.f);
+        if (ev.key.code == sf::Keyboard::D) people.setSpeed(1.f);
+        if (ev.key.code == sf::Keyboard::S) people.setSpeed(1.f);
+        if (ev.key.code == sf::Keyboard::W) people.setSpeed(1.f);
+    }
+
 }
 
 void GameState::spawnEnemy() {
