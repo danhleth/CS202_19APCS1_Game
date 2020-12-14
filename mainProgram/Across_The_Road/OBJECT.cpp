@@ -184,7 +184,7 @@ PEOPLE::PEOPLE(float _x, float _y) : COBJECT(_x, _y) {
 }
 
 void PEOPLE::KeyBoadMove_WithDt(float distance, sf::Event ev) {
-	static bool ismoving;
+	static bool ismoving = false;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
 		ismoving = true;
 	}
@@ -200,18 +200,18 @@ void PEOPLE::KeyBoadMove_WithDt(float distance, sf::Event ev) {
 
 	if (ev.type == sf::Event::KeyReleased) {
 		if ((ev.key.code == sf::Keyboard::A) && ismoving==true) {
-			Move(-distance, 0.f);
+			Move(-10.f, 0.f);
 			ismoving = false;
 		}
-		if (ev.key.code == sf::Keyboard::D && ismoving == true) {
-			Move(distance, 0.f);
+		if ((ev.key.code == sf::Keyboard::D) && ismoving == true) {
+			Move(10.f, 0.f);
 			ismoving = false;
 		}
-		if (ev.key.code == sf::Keyboard::S && ismoving == true) {
+		if ((ev.key.code == sf::Keyboard::S) && ismoving == true) {
 			Move(0.f, distance);
 			ismoving = false;
 		}
-		if (ev.key.code == sf::Keyboard::W && ismoving == true) {
+		if ((ev.key.code == sf::Keyboard::W) && ismoving == true) {
 			Move(0.f, -distance);
 			ismoving = false;
 		}

@@ -51,7 +51,6 @@ void GameState::endState()
 void GameState::update()
 {
     this->updateEnemies();
-    this->updatePlayer();
 }
 
 void GameState::render(sf::Event ev, sf::RenderTarget* target)
@@ -117,10 +116,6 @@ void GameState::renderEnemies() {
         e->Draw(this->window);
 }
 
-void GameState::updatePlayer()
-{
-    //this->people.KeyBoadMove_WithDt(1.f,env);
-}
 
 void GameState::renderPlayer(sf::Event ev)
 {

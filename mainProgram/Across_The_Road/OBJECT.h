@@ -79,7 +79,6 @@ public:
 	PEOPLE();
 	PEOPLE(float, float);
 	void KeyBoadMove_WithDt(float,sf::Event);
-
 	bool isImpact(const CVEHICLE*&);
 	bool isImpact(const CANIMAL);
 	bool isFinish();
