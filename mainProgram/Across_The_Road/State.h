@@ -57,7 +57,6 @@ public:
 	//Update & Render
 	void updateEnemies();
 	void renderEnemies();
-	void updatePlayer();
 	void renderPlayer(sf::Event);
 	void update();
 	void render(sf::Event, sf::RenderTarget* target = nullptr);

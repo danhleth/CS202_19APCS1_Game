@@ -75,15 +75,19 @@ public:
 
 class PEOPLE : public COBJECT{
 private:
-	float speed=1.f;
 	bool mState;
 public:
 	PEOPLE();
 	PEOPLE(float, float);
-	void KeyBoadMove_WithDt(float);
+
+	void KeyBoadMove_WithDt(float,sf::Event);
+	//bool isImpact(const CVEHICLE*&);
+	//bool isImpact(const CANIMAL);
+
 	void setSpeed(float);
-	bool isImpact(const CVEHICLE*);
-	bool isImpact(const CANIMAL*);
+	//bool isImpact(const CVEHICLE*);
+	//bool isImpact(const CANIMAL*);
+
 	bool isFinish();
 	bool isDead();
 	void collisionAnimation(const CVEHICLE*);

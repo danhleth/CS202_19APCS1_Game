@@ -193,27 +193,40 @@ PEOPLE::PEOPLE(float _x, float _y) : COBJECT(_x, _y) {
 		});
 }
 
-void PEOPLE::KeyBoadMove_WithDt(float deltatime) {
+void PEOPLE::KeyBoadMove_WithDt(float distance, sf::Event ev) {
+	static bool ismoving = false;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
-		Move(speed*deltatime, 0.f);
-		speed = speed * deltatime + speed;
+		ismoving = true;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
-		Move(-speed*deltatime , 0.f);
-		speed = speed * deltatime + speed;
+		ismoving = true;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
-		Move(0.f, speed*deltatime );
-		speed = speed * deltatime + speed;
+		ismoving = true;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
-		Move(0.f, -speed*deltatime);
-		speed = speed * deltatime + speed;
+		ismoving = true;
 	}
-	if (speed > 20.f) speed = 20.f;
-}
-void PEOPLE::setSpeed(float input_speed) {
-	this->speed = input_speed;
+
+	if (ev.type == sf::Event::KeyReleased) {
+		if ((ev.key.code == sf::Keyboard::A) && ismoving==true) {
+			Move(-10.f, 0.f);
+			ismoving = false;
+		}
+		if ((ev.key.code == sf::Keyboard::D) && ismoving == true) {
+			Move(10.f, 0.f);
+			ismoving = false;
+		}
+		if ((ev.key.code == sf::Keyboard::S) && ismoving == true) {
+			Move(0.f, distance);
+			ismoving = false;
+		}
+		if ((ev.key.code == sf::Keyboard::W) && ismoving == true) {
+			Move(0.f, -distance);
+			ismoving = false;
+		}
+	}
+
 }
 
 void PEOPLE::collisionAnimation(const CVEHICLE* a)
