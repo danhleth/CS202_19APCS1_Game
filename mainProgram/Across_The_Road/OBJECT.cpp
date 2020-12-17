@@ -69,6 +69,16 @@ float COBJECT::getY(){
 	return static_cast<float>(convex.getPosition().y)+mY;
 }
 
+void COBJECT::changeConvex(sf::ConvexShape _convex)
+{
+	this->convex = _convex;
+}
+
+sf::ConvexShape COBJECT::getConvex()
+{
+	return this->convex;
+}
+
 //CVEHICLE
 CVEHICLE::CVEHICLE()
 	:COBJECT() {}
@@ -205,6 +215,25 @@ void PEOPLE::KeyBoadMove_WithDt(float deltatime) {
 void PEOPLE::setSpeed(float input_speed) {
 	this->speed = input_speed;
 }
+
+void PEOPLE::collisionAnimation(const CVEHICLE* a)
+{
+	if (this->isImpact(a)) {
+		sf::ConvexShape x = this->getConvex();
+		x.setFillColor(sf::Color::Red);
+		this->changeConvex(x);
+	}
+}
+
+void PEOPLE::collisionAnimation(const CANIMAL* b)
+{
+	if (this->isImpact(b)) {
+		sf::ConvexShape x = this->getConvex();
+		x.setFillColor(sf::Color::Red);
+		this->changeConvex(x);
+	}
+}
+
 CLINE::CLINE() {
 	setShape({
 		{0,0},{800,0},{800,1},{0,1}

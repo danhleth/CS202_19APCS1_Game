@@ -18,6 +18,8 @@ public:
 	void Y(float);
 	float getX();
 	float getY();
+	void changeConvex(sf::ConvexShape _convex);
+	sf::ConvexShape getConvex();
 	void setShape(vector<vector<float>>);
 	virtual void Move(float, float);
 	virtual void KeyBoardMove(float, float);
@@ -75,16 +77,17 @@ class PEOPLE : public COBJECT{
 private:
 	float speed=1.f;
 	bool mState;
-	float mx, my;
 public:
 	PEOPLE();
 	PEOPLE(float, float);
 	void KeyBoadMove_WithDt(float);
 	void setSpeed(float);
-	bool isImpact(const CVEHICLE*&);
-	bool isImpact(const CANIMAL);
+	bool isImpact(const CVEHICLE*);
+	bool isImpact(const CANIMAL*);
 	bool isFinish();
 	bool isDead();
+	void collisionAnimation(const CVEHICLE*);
+	void collisionAnimation(const CANIMAL*);
 };
 
 class CLINE : public COBJECT {
