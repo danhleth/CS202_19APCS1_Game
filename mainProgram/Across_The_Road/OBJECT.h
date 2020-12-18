@@ -73,25 +73,23 @@ public:
 };
 
 
-class PEOPLE : public COBJECT{
+class PEOPLE : public COBJECT {
 private:
 	bool mState;
 public:
 	PEOPLE();
 	PEOPLE(float, float);
 
-	void KeyBoadMove_WithDt(float,sf::Event);
+	void KeyBoadMove_WithDt(float, sf::Event);
 	//bool isImpact(const CVEHICLE*&);
 	//bool isImpact(const CANIMAL);
 
 	void setSpeed(float);
-	//bool isImpact(const CVEHICLE*);
-	//bool isImpact(const CANIMAL*);
+	bool isImpact() { return false; }
 
 	bool isFinish();
 	bool isDead();
-	void collisionAnimation(const CVEHICLE*);
-	void collisionAnimation(const CANIMAL*);
+	void collisionAnimation();
 };
 
 class CLINE : public COBJECT {

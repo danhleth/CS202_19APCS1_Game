@@ -229,18 +229,9 @@ void PEOPLE::KeyBoadMove_WithDt(float distance, sf::Event ev) {
 
 }
 
-void PEOPLE::collisionAnimation(const CVEHICLE* a)
+void PEOPLE::collisionAnimation()
 {
-	if (this->isImpact(a)) {
-		sf::ConvexShape x = this->getConvex();
-		x.setFillColor(sf::Color::Red);
-		this->changeConvex(x);
-	}
-}
-
-void PEOPLE::collisionAnimation(const CANIMAL* b)
-{
-	if (this->isImpact(b)) {
+	if (this->isImpact()) {
 		sf::ConvexShape x = this->getConvex();
 		x.setFillColor(sf::Color::Red);
 		this->changeConvex(x);

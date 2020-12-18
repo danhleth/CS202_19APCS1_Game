@@ -30,7 +30,8 @@ const bool CGAME::running() const
 
 void CGAME::initStates()
 {
-    states.push(new GameState(this->window));
+    states.push(new MenuState(this->window, &this->states));
+    //states.push(new GameState(this->window));
 }
 
 void CGAME::pollEvent()
@@ -40,10 +41,6 @@ void CGAME::pollEvent()
         {
         case sf::Event::Closed:
             window->close();
-            break;
-        case sf::Event::KeyPressed:
-            if (event.key.code == sf::Keyboard::Escape)
-                window->close();
             break;
         default:
             break;
@@ -65,14 +62,15 @@ void CGAME::update()
     else {
         this->window->close();
     }
-
 }
 
 void CGAME::render()
 {
     this->window->clear(/*sf::Color(255, 255, 255, 0)*/);
+
     if (!this->states.empty()) {
         this->states.top()->render(this->event);
     }
+    this->window->display();
 }
 
