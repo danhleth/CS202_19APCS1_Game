@@ -1,19 +1,23 @@
 #pragma once
 #include "includePath.h"
 #include "OBJECT.h"
+#include "PauseMenu.h"
 
 class State
 {
 private:
 	vector<sf::Texture> textures;
 	bool quit;
-	bool goNext;
 protected:
+	bool pause;
 	sf::RenderWindow* window;
 	stack<State*>* states;
 public:
 	State(sf::RenderWindow* window, stack<State*>*);
 	virtual ~State();
+	//Pause and Unpause
+	void pauseState();
+	void unpauseState();
 
 	virtual void endState() = 0;
 	const bool& getQuit() const;
@@ -42,6 +46,10 @@ private:
 	//Level
 	int currentLevel;
 	int MAX_LEVEL;
+	//PauseMenu
+	PauseMenu *pauseMenu;
+	void checkForPause();
+	void checkFromPause();
 	//Init
 	void initPlayer();
 	void initEnemies();

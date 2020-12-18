@@ -3,10 +3,20 @@
 COBJECT::COBJECT() {
 	mX = 0;
 	mY = 0;
+	this->texture = NULL;
+	this->sprite = NULL;
 }
 COBJECT::COBJECT(float x, float y) {
 	mX = x;
 	mY = y;
+	this->texture = NULL;
+	this->sprite = NULL;
+}
+
+void COBJECT::createSprite(sf::Texture* texture)
+{
+	this->texture = texture;
+	this->sprite->setTexture(*this->texture);
 }
 
 void COBJECT::Move(float _x, float _y) {
