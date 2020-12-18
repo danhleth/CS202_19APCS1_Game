@@ -22,12 +22,14 @@
     <ClCompile Include="CGAME.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OBJECT.cpp" />
+    <ClCompile Include="PauseMenu.cpp" />
     <ClCompile Include="State.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CGAME.h" />
     <ClInclude Include="includePath.h" />
     <ClInclude Include="OBJECT.h" />
+    <ClInclude Include="PauseMenu.h" />
     <ClInclude Include="State.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

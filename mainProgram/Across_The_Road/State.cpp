@@ -5,6 +5,7 @@ State::State(sf::RenderWindow* window, stack<State*>* states)
 	this->window = window;
     this->states = states;
 	this->quit = false;
+    this->pause = false;
 }
 
 State::~State()
@@ -29,6 +30,18 @@ void State::checkForQuit()
 	}
 }
 
+//Pause and Unpause
+void State::pauseState()
+{
+    this->pause = true;
+}
+
+void State::unpauseState()
+{
+    this->pause = false;
+}
+
+//GAMESTATE
 GameState::GameState(sf::RenderWindow* window, stack<State*>* states) :
 	State(window, states)
 {
@@ -36,6 +49,8 @@ GameState::GameState(sf::RenderWindow* window, stack<State*>* states) :
     initEnemies();
     initLines();
     initLevel();
+
+    this->pauseMenu = new PauseMenu(this->window);
 
     this->points = 0;
     this->enemySpawnTimerMax = 120.f;
@@ -57,8 +72,19 @@ void GameState::endState()
 
 void GameState::update()
 {
-    this->checkForQuit();
-    this->updateEnemies();
+    checkForPause();
+    if (!this->pause) {
+        this->checkForQuit();
+        this->updateEnemies();
+    }
+    else {
+        pauseMenu->update();
+        if (pauseMenu->getPause()) {
+            this->pause = false;
+            pauseMenu->setPause(false);
+        }
+    }
+    checkFromPause();
 }
 
 void GameState::render(sf::Event ev, sf::RenderTarget* target)
@@ -66,6 +92,11 @@ void GameState::render(sf::Event ev, sf::RenderTarget* target)
     renderPlayer(ev);
     renderEnemies();
     generateMap();
+
+    if (this->pause) {
+        //pause render
+        pauseMenu->render(ev, this->window);
+    }
 }
 
 void GameState::initPlayer()
@@ -168,6 +199,20 @@ void GameState::generateMap()
         }
         people.setPosition(400, 600);
         enemies.clear();
+    }
+}
+
+void GameState::checkForPause()
+{
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::P)) {
+        this->pause = true;
+    }
+}
+
+void GameState::checkFromPause()
+{
+    if (this->pauseMenu->senderFromGame == 1) {
+        setQuit(true);
     }
 }
 
@@ -283,6 +328,7 @@ void MenuState::checkButton()
 
 void MenuState::update()
 {
+    checkButton();
     highlight();
 }
 
@@ -296,5 +342,4 @@ void MenuState::render(sf::Event ev, sf::RenderTarget* target)
         target->draw(rec[i]);
         target->draw(text[i]);
     }
-    checkButton();
 }

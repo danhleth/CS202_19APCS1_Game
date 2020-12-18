@@ -7,6 +7,10 @@ private:
 	float mX, mY;
 	sf::ConvexShape convex;
 	vector<vector<float>> shape;
+protected:
+	sf::Texture *texture;
+	sf::Sprite *sprite;
+	void createSprite(sf::Texture*);
 public:
 	//Constructor
 	COBJECT();
