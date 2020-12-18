@@ -7,19 +7,22 @@ class State
 private:
 	vector<sf::Texture> textures;
 	bool quit;
+	bool goNext;
 protected:
 	sf::RenderWindow* window;
+	stack<State*>* states;
 public:
-	State(sf::RenderWindow* window);
+	State(sf::RenderWindow* window, stack<State*>*);
 	virtual ~State();
 
 	virtual void endState() = 0;
 	const bool& getQuit() const;
+	virtual void setQuit(bool);
 	virtual void checkForQuit();
 
 	//update & render
 	virtual void update() = 0;
-	virtual void render(sf::Event ev, sf::RenderTarget* target = nullptr) = 0;
+	virtual void render(sf::Event, sf::RenderTarget* target = nullptr) = 0;
 };
 
 class GameState : public State {
@@ -45,9 +48,9 @@ private:
 	void initLines();
 	void initLevel();
 public:
-	GameState(sf::RenderWindow* window);
+	GameState(sf::RenderWindow* window, stack<State*>*);
 	~GameState();
-
+	
 	void endState();
 	void setLevel(unsigned);
 	void spawnEnemy();
@@ -58,6 +61,32 @@ public:
 	void updateEnemies();
 	void renderEnemies();
 	void renderPlayer(sf::Event);
+	void update();
+	void render(sf::Event, sf::RenderTarget* target = nullptr);
+};
+
+class MenuState : public State {
+	sf::Texture backgroundTexture;
+	sf::RectangleShape background;
+	sf::RectangleShape rec[3];
+	sf::Text text[3];
+	sf::Font font;
+	int currentButton;
+	bool ismoving;
+
+	void initFont();
+	void initButton();
+	void initBackground();
+public:
+	MenuState(sf::RenderWindow* window, stack<State*>*);
+	~MenuState();
+	//Function
+	void endState();
+	void nextButton(sf::Event);
+	void highlight();
+	void checkButton();
+	//Update & Render
+
 	void update();
 	void render(sf::Event, sf::RenderTarget* target = nullptr);
 };

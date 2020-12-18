@@ -1,8 +1,9 @@
 #include "State.h"
 
-State::State(sf::RenderWindow* window)
+State::State(sf::RenderWindow* window, stack<State*>* states)
 {
 	this->window = window;
+    this->states = states;
 	this->quit = false;
 }
 
@@ -14,6 +15,13 @@ const bool& State::getQuit() const
 {
 	return this->quit;
 }
+
+void State::setQuit(bool q)
+{
+    this->quit = q;
+}
+
+
 void State::checkForQuit()
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
@@ -21,8 +29,8 @@ void State::checkForQuit()
 	}
 }
 
-GameState::GameState(sf::RenderWindow* window) :
-	State(window)
+GameState::GameState(sf::RenderWindow* window, stack<State*>* states) :
+	State(window, states)
 {
     initPlayer();
     initEnemies();
@@ -37,7 +45,6 @@ GameState::GameState(sf::RenderWindow* window) :
 
 GameState::~GameState()
 {
-    delete this->window;
     for (int i = 0; i < enemies.size(); i++)
         delete enemies[i];
     delete[] line;
@@ -50,6 +57,7 @@ void GameState::endState()
 
 void GameState::update()
 {
+    this->checkForQuit();
     this->updateEnemies();
 }
 
@@ -151,8 +159,6 @@ void GameState::generateMap()
     for (int i = 0; i < 5; i++)
         line[i].Draw(this->window);
 
-    this->window->display();
-
     if (people.getY() <= 100.f) {
         if (currentLevel >= 3)
             setLevel(1);
@@ -165,3 +171,130 @@ void GameState::generateMap()
     }
 }
 
+//MENU STATE
+
+MenuState::MenuState(sf::RenderWindow* window, stack<State*>* states) :
+    State(window, states)
+{
+    initFont();
+    initButton();
+    initBackground();
+    ismoving = false;
+}
+
+void MenuState::initButton()
+{
+    currentButton = 0;
+
+    this->rec[0].setSize(sf::Vector2f(200, 75));
+    this->rec[1].setSize(sf::Vector2f(200, 75));
+    this->rec[2].setSize(sf::Vector2f(200, 75));
+
+    this->rec[0].setFillColor(sf::Color(255, 0, 0, 255));
+    this->rec[1].setFillColor(sf::Color(0, 255, 0, 255));
+    this->rec[2].setFillColor(sf::Color(0, 0, 255, 255));
+
+    this->rec[0].setPosition(sf::Vector2f(300, 100));
+    this->rec[1].setPosition(sf::Vector2f(300, 225));
+    this->rec[2].setPosition(sf::Vector2f(300, 350));
+
+    this->text[0].setString("NEW GAME");
+    this->text[1].setString("LOAD GAME");
+    this->text[2].setString("QUIT");
+
+    for (int i = 0; i < 3; i++) {
+        text[i].setFillColor(sf::Color(255, 255, 255, 255));
+        rec[i].setOutlineColor(sf::Color(255, 255, 255));
+        text[i].setPosition(
+            rec[i].getPosition().x + 40 - text[i].getLocalBounds().width / 2.f,
+            rec[i].getPosition().y + 15 - text[i].getLocalBounds().height / 2.f
+        );
+        text[i].setCharacterSize(30);
+        text[i].setFont(this->font);
+        text[i].setStyle(sf::Text::Bold);
+    }
+}
+
+void MenuState::initBackground() {
+    this->background.setSize(sf::Vector2f((float)this->window->getSize().x, (float)this->window->getSize().y));
+    if (!this->backgroundTexture.loadFromFile("images/bg1.png")) {
+        throw "Texture load fail!! \n";
+    }
+    this->background.setTexture(&this->backgroundTexture);
+}
+
+MenuState::~MenuState()
+{
+    delete this->window;
+}
+
+void MenuState::endState()
+{
+    cout << "End GameState" << endl;
+}
+
+
+void MenuState::nextButton(sf::Event ev)
+{
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
+        ismoving = true;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
+        ismoving = true;
+    }
+
+    if (ev.type == sf::Event::KeyReleased) {
+        if (ev.key.code == sf::Keyboard::S && ismoving) {
+            this->currentButton = (this->currentButton + 1) % 3;
+            ismoving = false;
+        }
+        if (ev.key.code == sf::Keyboard::W && ismoving){
+            this->currentButton = (this->currentButton + 2) % 3;
+            ismoving = false;
+        }
+    }
+}
+
+void MenuState::highlight()
+{
+    for (int i = 0; i < 3; i++) 
+        if (i != currentButton) 
+            rec[i].setOutlineThickness(0);
+        else 
+            rec[i].setOutlineThickness(10);
+}
+
+void MenuState::initFont()
+{
+    if (!this->font.loadFromFile("font/Dosis-Light.ttf")) {
+        throw("Font not found! \n");
+    }
+}
+
+void MenuState::checkButton()
+{
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Enter)) {
+        if(currentButton == 0)
+            this->states->push(new GameState(this->window, this->states));
+        if (currentButton == 2)
+            window->close();
+    }
+}
+
+void MenuState::update()
+{
+    highlight();
+}
+
+void MenuState::render(sf::Event ev, sf::RenderTarget* target)
+{
+    nextButton(ev);
+    if (!target)
+        target = this->window;
+    target->draw(background);
+    for (int i = 0; i < 3; i++) {
+        target->draw(rec[i]);
+        target->draw(text[i]);
+    }
+    checkButton();
+}
