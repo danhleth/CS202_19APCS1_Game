@@ -7,6 +7,10 @@ private:
 	float mX, mY;
 	sf::ConvexShape convex;
 	vector<vector<float>> shape;
+protected:
+	sf::Texture *texture;
+	sf::Sprite *sprite;
+	void createSprite(sf::Texture*);
 public:
 	//Constructor
 	COBJECT();
@@ -18,10 +22,12 @@ public:
 	void Y(float);
 	float getX();
 	float getY();
+	void changeConvex(sf::ConvexShape _convex);
+	sf::ConvexShape getConvex();
 	void setShape(vector<vector<float>>);
 	virtual void Move(float, float);
 	virtual void KeyBoardMove(float, float);
-	virtual void Draw(sf::RenderWindow&);
+	virtual void Draw(sf::RenderTarget*);
 	virtual void setPosition(float, float);
 };
 
@@ -71,20 +77,21 @@ public:
 };
 
 
-class PEOPLE : public COBJECT{
+class PEOPLE : public COBJECT {
 private:
 	bool mState;
 public:
 	PEOPLE();
 	PEOPLE(float, float);
-	bool isImpact(const CVEHICLE*&);
-	//bool isImpact(const CAnimal)
+
+	void KeyBoadMove_WithDt(float, sf::Event);
+	//bool isImpact(const CVEHICLE*&);
+	//bool isImpact(const CANIMAL);
+
+	void setSpeed(float);
+	bool isImpact() { return false; }
+
 	bool isFinish();
 	bool isDead();
-};
-
-class CLINE : public COBJECT {
-public:
-	CLINE();
-	CLINE(float,float);
+	void collisionAnimation();
 };

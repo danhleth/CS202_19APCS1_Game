@@ -3,10 +3,20 @@
 COBJECT::COBJECT() {
 	mX = 0;
 	mY = 0;
+	this->texture = NULL;
+	this->sprite = NULL;
 }
 COBJECT::COBJECT(float x, float y) {
 	mX = x;
 	mY = y;
+	this->texture = NULL;
+	this->sprite = NULL;
+}
+
+void COBJECT::createSprite(sf::Texture* texture)
+{
+	this->texture = texture;
+	this->sprite->setTexture(*this->texture);
 }
 
 void COBJECT::Move(float _x, float _y) {
@@ -28,14 +38,14 @@ void COBJECT::KeyBoardMove(float _x, float _y) {
 	}
 }
 
-void COBJECT::Draw(sf::RenderWindow& window) {
+void COBJECT::Draw(sf::RenderTarget* window) {
 	convex.setPointCount(shape.size());
-	if(typeid(*this) != typeid(PEOPLE)&& typeid(*this) != typeid(CLINE))
+	if(typeid(*this) != typeid(PEOPLE))
 		convex.setFillColor(sf::Color::Green);
 	for (int i = 0; i < shape.size(); i++) {
 		convex.setPoint(i, sf::Vector2f(X() + shape[i][0], Y() + shape[i][1]));
 	}
-	window.draw(convex);
+	window->draw(convex);
 }
 
 void COBJECT::setPosition(float x, float y) {
@@ -69,6 +79,16 @@ float COBJECT::getY(){
 	return static_cast<float>(convex.getPosition().y)+mY;
 }
 
+void COBJECT::changeConvex(sf::ConvexShape _convex)
+{
+	this->convex = _convex;
+}
+
+sf::ConvexShape COBJECT::getConvex()
+{
+	return this->convex;
+}
+
 //CVEHICLE
 CVEHICLE::CVEHICLE()
 	:COBJECT() {}
@@ -80,14 +100,14 @@ CTRUCK::CTRUCK()
 	: CVEHICLE()
 {
 	setShape({
-		{0.f ,0.f}, {0.f, -100.f}, {115.f, -100.f}, {115.f, -45.f}, {120.f, -70.f}, {150.f, -70.f}, { 170.f, -35.f }, { 175.f, -35.f }, { 180.f, -30.f }, { 180.f, 0.f }
+		{0.f ,0.f}, {0.f, -80.f}, {115.f, -80.f}, {115.f, -45.f}, {120.f, -70.f}, {150.f, -70.f}, { 170.f, -35.f }, { 175.f, -35.f }, { 180.f, -30.f }, { 180.f, 0.f }
 		});
 }
 CTRUCK::CTRUCK(float x, float y)
 	:CVEHICLE(x, y)
 {
 	setShape({
-		{0.f ,0.f}, {0.f, -100.f}, {115.f, -100.f}, {115.f, -45.f}, {120.f, -70.f}, {150.f, -70.f}, { 170.f, -35.f }, { 175.f, -35.f }, { 180.f, -30.f }, { 180.f, 0.f }
+		{0.f ,0.f}, {0.f, -80.f}, {115.f, -80.f}, {115.f, -45.f}, {120.f, -70.f}, {150.f, -70.f}, { 170.f, -35.f }, { 175.f, -35.f }, { 180.f, -30.f }, { 180.f, 0.f }
 		});
 }
 
@@ -183,13 +203,47 @@ PEOPLE::PEOPLE(float _x, float _y) : COBJECT(_x, _y) {
 		});
 }
 
-CLINE::CLINE() {
-	setShape({
-		{0,0},{800,0},{800,1},{0,1}
-	});
+void PEOPLE::KeyBoadMove_WithDt(float distance, sf::Event ev) {
+	static bool ismoving = false;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
+		ismoving = true;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
+		ismoving = true;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
+		ismoving = true;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
+		ismoving = true;
+	}
+
+	if (ev.type == sf::Event::KeyReleased) {
+		if ((ev.key.code == sf::Keyboard::A) && ismoving==true) {
+			Move(-10.f, 0.f);
+			ismoving = false;
+		}
+		if ((ev.key.code == sf::Keyboard::D) && ismoving == true) {
+			Move(10.f, 0.f);
+			ismoving = false;
+		}
+		if ((ev.key.code == sf::Keyboard::S) && ismoving == true) {
+			Move(0.f, distance);
+			ismoving = false;
+		}
+		if ((ev.key.code == sf::Keyboard::W) && ismoving == true) {
+			Move(0.f, -distance);
+			ismoving = false;
+		}
+	}
+
 }
-CLINE::CLINE(float _x, float _y): COBJECT(_x,_y) {
-	setShape({
-	{0,0},{800,0},{800,1},{0,1}
-	});
+
+void PEOPLE::collisionAnimation()
+{
+	if (this->isImpact()) {
+		sf::ConvexShape x = this->getConvex();
+		x.setFillColor(sf::Color::Red);
+		this->changeConvex(x);
+	}
 }
