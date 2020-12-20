@@ -22,9 +22,9 @@ public:
 	PauseMenu(sf::RenderWindow*);
 	~PauseMenu();
 	//Function
-	void nextButton(sf::Event);
+	void nextButton(sf::Event&);
 	void highlight();
-	void checkButton(sf::Event);
+	void checkButton(sf::Event &);
 	//End Pause
 	bool getPause() const;
 	void setPause(bool);
@@ -33,5 +33,5 @@ public:
 	int senderFromGame;
 	//Update & Render
 	void update();
-	void render(sf::Event, sf::RenderTarget* target = nullptr);
+	void render(sf::Event &, sf::RenderTarget* target = nullptr);
 };

@@ -20,7 +20,7 @@ void CGAME::initWindow()
     settings.antialiasingLevel = 8;
     videoMode = sf::VideoMode(800, 600);
     window = new sf::RenderWindow(videoMode, "Across The Road", sf::Style::Default, settings);
-
+    this->window->setKeyRepeatEnabled(false);
     this->window->setFramerateLimit(60);//not understand
 }
 

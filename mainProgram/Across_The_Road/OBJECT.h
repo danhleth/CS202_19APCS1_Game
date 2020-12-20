@@ -11,6 +11,7 @@ protected:
 	sf::Texture *texture;
 	sf::Sprite *sprite;
 	void createSprite(sf::Texture*);
+	void initTexture();
 public:
 	//Constructor
 	COBJECT();
@@ -84,7 +85,7 @@ public:
 	PEOPLE();
 	PEOPLE(float, float);
 
-	void KeyBoadMove_WithDt(float, sf::Event);
+	void KeyBoadMove_WithDt(float, sf::Event &);
 	//bool isImpact(const CVEHICLE*&);
 	//bool isImpact(const CANIMAL);
 
