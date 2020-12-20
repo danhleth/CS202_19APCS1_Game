@@ -47,7 +47,9 @@ GameState::GameState(sf::RenderWindow* window, stack<State*>* states) :
 {
     initPlayer();
     initEnemies();
+
     initLines();
+
     initLevel();
 
     this->pauseMenu = new PauseMenu(this->window);
@@ -115,6 +117,7 @@ void GameState::initLines() {
 	this->line[4] = CLINE(0.f, 500.f);
 }
 
+
 void GameState::initLevel() {
 	MAX_LEVEL = 3;
 
@@ -179,7 +182,9 @@ void GameState::spawnEnemy() {
         this->enemy = new CDINOSAUR;
         break;
     }
-    float tmpp = 200 + static_cast<float>((rand() % 4) * 100);
+    float tmpp = 200 + static_cast<float>((rand() % 4) * 92);
+
+
     this->enemy->setPosition(0.f, tmpp);
 
     this->enemies.push_back(enemy);
@@ -187,8 +192,10 @@ void GameState::spawnEnemy() {
 
 void GameState::generateMap()
 {
+
     for (int i = 0; i < 5; i++)
         line[i].Draw(this->window);
+
 
     if (people.getY() <= 100.f) {
         if (currentLevel >= 3)
@@ -245,7 +252,8 @@ void MenuState::initButton()
 
     this->text[0].setString("NEW GAME");
     this->text[1].setString("LOAD GAME");
-    this->text[2].setString("QUIT");
+    this->text[2].setString("QUIT NOW");
+
 
     for (int i = 0; i < 3; i++) {
         text[i].setFillColor(sf::Color(255, 255, 255, 255));

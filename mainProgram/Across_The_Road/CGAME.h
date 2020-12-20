@@ -4,6 +4,8 @@
 class CGAME
 {
 private:
+	sf::Texture backgroundTexture;
+	sf::RectangleShape background;
 	sf::RenderWindow* window;
 	sf::ContextSettings settings;
 	sf::VideoMode videoMode;
@@ -12,6 +14,9 @@ private:
 	stack<State*> states;
 	void initStates();
 	void initWindow();
+
+	//void initBackground();
+
 public:
 	//Constructors & Destructors
 	CGAME();

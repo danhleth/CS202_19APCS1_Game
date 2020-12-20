@@ -101,3 +101,4 @@ public:
 	CLINE();
 	CLINE(float,float);
 };
+
