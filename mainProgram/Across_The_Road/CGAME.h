@@ -14,7 +14,9 @@ private:
 	stack<State*> states;
 	void initStates();
 	void initWindow();
-	void initBackground();
+
+	//void initBackground();
+
 public:
 	//Constructors & Destructors
 	CGAME();

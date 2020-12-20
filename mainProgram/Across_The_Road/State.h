@@ -53,6 +53,10 @@ private:
 	//Init
 	void initPlayer();
 	void initEnemies();
+
+
+	void initLines();
+
 	void initLevel();
 public:
 	GameState(sf::RenderWindow* window, stack<State*>*);

@@ -35,12 +35,18 @@ void CGAME::initStates()
     //states.push(new GameState(this->window));
 }
 
-void CGAME::initBackground() {
+/*void CGAME::initBackground() {
     this->background.setSize(sf::Vector2f((float)this->window->getSize().x, (float)this->window->getSize().y));
     if (!this->backgroundTexture.loadFromFile("images/bg1.png")) {
         throw "Texture load fail!! \n";
     }
     this->background.setTexture(&this->backgroundTexture);
+}*/
+
+void CGAME::initStates()
+{
+    states.push(new MenuState(this->window, &this->states));
+    //states.push(new GameState(this->window));
 }
 
 void CGAME::pollEvent()
@@ -77,13 +83,9 @@ void CGAME::render()
 {
     this->window->clear(/*sf::Color(255, 255, 255, 0)*/);
 
-
     if (!this->states.empty()) {
-        this->window->draw(background);
         this->states.top()->render(this->event);
     }
-
-
     this->window->display();
 }
 

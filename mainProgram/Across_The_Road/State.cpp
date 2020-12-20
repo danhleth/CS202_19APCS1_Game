@@ -47,6 +47,9 @@ GameState::GameState(sf::RenderWindow* window, stack<State*>* states) :
 {
     initPlayer();
     initEnemies();
+
+    initLines();
+
     initLevel();
 
     this->pauseMenu = new PauseMenu(this->window);
@@ -104,6 +107,15 @@ void GameState::initPlayer()
 }
 
 void GameState::initEnemies() {}
+
+void GameState::initLines() {
+	this->line = new CLINE[5];
+	this->line[0] = CLINE(0.f, 100.f);
+	this->line[1] = CLINE(0.f, 200.f);
+	this->line[2] = CLINE(0.f, 300.f);
+	this->line[3] = CLINE(0.f, 400.f);
+	this->line[4] = CLINE(0.f, 500.f);
+}
 
 
 void GameState::initLevel() {
@@ -171,6 +183,8 @@ void GameState::spawnEnemy() {
         break;
     }
     float tmpp = 200 + static_cast<float>((rand() % 4) * 92);
+
+
     this->enemy->setPosition(0.f, tmpp);
 
     this->enemies.push_back(enemy);
@@ -178,7 +192,11 @@ void GameState::spawnEnemy() {
 
 void GameState::generateMap()
 {
-   
+
+    for (int i = 0; i < 5; i++)
+        line[i].Draw(this->window);
+
+
     if (people.getY() <= 100.f) {
         if (currentLevel >= 3)
             setLevel(1);
@@ -235,6 +253,7 @@ void MenuState::initButton()
     this->text[0].setString("NEW GAME");
     this->text[1].setString("LOAD GAME");
     this->text[2].setString("QUIT NOW");
+
 
     for (int i = 0; i < 3; i++) {
         text[i].setFillColor(sf::Color(255, 255, 255, 255));

@@ -40,7 +40,7 @@ void COBJECT::KeyBoardMove(float _x, float _y) {
 
 void COBJECT::Draw(sf::RenderTarget* window) {
 	convex.setPointCount(shape.size());
-	if(typeid(*this) != typeid(PEOPLE))
+	if(typeid(*this) != typeid(PEOPLE)&& typeid(*this) != typeid(CLINE))
 		convex.setFillColor(sf::Color::Green);
 	for (int i = 0; i < shape.size(); i++) {
 		convex.setPoint(i, sf::Vector2f(X() + shape[i][0], Y() + shape[i][1]));
@@ -246,4 +246,15 @@ void PEOPLE::collisionAnimation()
 		x.setFillColor(sf::Color::Red);
 		this->changeConvex(x);
 	}
+}
+
+CLINE::CLINE() {
+	setShape({
+		{0,0},{800,0},{800,1},{0,1}
+	});
+}
+CLINE::CLINE(float _x, float _y): COBJECT(_x,_y) {
+	setShape({
+	{0,0},{800,0},{800,1},{0,1}
+	});
 }

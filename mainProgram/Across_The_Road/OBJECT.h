@@ -95,3 +95,10 @@ public:
 	bool isDead();
 	void collisionAnimation();
 };
+
+class CLINE : public COBJECT {
+public:
+	CLINE();
+	CLINE(float,float);
+};
+
