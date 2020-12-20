@@ -72,24 +72,28 @@ void GameState::endState()
 
 void GameState::update()
 {
-    checkForPause();
-    if (!this->pause) {
-        this->checkForQuit();
-        this->updateEnemies();
-    }
-    else {
-        pauseMenu->update();
-        if (pauseMenu->getPause()) {
-            this->pause = false;
-            pauseMenu->setPause(false);
+
+        checkForPause();
+        if (!this->pause) {
+            this->checkForQuit();
+            this->updateEnemies();
         }
-    }
-    checkFromPause();
+        else {
+            pauseMenu->update();
+            if (pauseMenu->getPause()) {
+                this->pause = false;
+                pauseMenu->setPause(false);
+            }
+        }
+        checkFromPause();
+    
 }
 
-void GameState::render(sf::Event ev, sf::RenderTarget* target)
-{
-    renderPlayer(ev);
+void GameState::render(sf::Event &ev, sf::RenderTarget* target)
+{   
+    if (!pause) {
+        renderPlayer(ev);
+    }
     renderEnemies();
     generateMap();
 
@@ -156,7 +160,7 @@ void GameState::renderEnemies() {
 }
 
 
-void GameState::renderPlayer(sf::Event ev)
+void GameState::renderPlayer(sf::Event &ev)
 {
     this->people.Draw(this->window);
     this->people.KeyBoadMove_WithDt(100.f, ev);
@@ -332,7 +336,7 @@ void MenuState::update()
     highlight();
 }
 
-void MenuState::render(sf::Event ev, sf::RenderTarget* target)
+void MenuState::render(sf::Event &ev, sf::RenderTarget* target)
 {
     nextButton(ev);
     if (!target)

@@ -26,7 +26,7 @@ public:
 
 	//update & render
 	virtual void update() = 0;
-	virtual void render(sf::Event, sf::RenderTarget* target = nullptr) = 0;
+	virtual void render(sf::Event &, sf::RenderTarget* target = nullptr) = 0;
 };
 
 class GameState : public State {
@@ -68,9 +68,9 @@ public:
 	//Update & Render
 	void updateEnemies();
 	void renderEnemies();
-	void renderPlayer(sf::Event);
+	void renderPlayer(sf::Event &);
 	void update();
-	void render(sf::Event, sf::RenderTarget* target = nullptr);
+	void render(sf::Event &, sf::RenderTarget* target = nullptr);
 };
 
 class MenuState : public State {
@@ -96,5 +96,5 @@ public:
 	//Update & Render
 
 	void update();
-	void render(sf::Event, sf::RenderTarget* target = nullptr);
+	void render(sf::Event &, sf::RenderTarget* target = nullptr);
 };
