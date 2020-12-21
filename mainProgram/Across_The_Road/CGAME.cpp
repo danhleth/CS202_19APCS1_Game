@@ -4,7 +4,7 @@ CGAME::CGAME()
 {
     initWindow();
     initStates();
-    initBackground();
+   // initBackground();
 }
 
 CGAME::~CGAME()
@@ -42,12 +42,6 @@ void CGAME::initStates()
     }
     this->background.setTexture(&this->backgroundTexture);
 }*/
-
-void CGAME::initStates()
-{
-    states.push(new MenuState(this->window, &this->states));
-    //states.push(new GameState(this->window));
-}
 
 void CGAME::pollEvent()
 {
