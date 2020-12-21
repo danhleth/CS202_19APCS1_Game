@@ -49,7 +49,7 @@ GameState::GameState(sf::RenderWindow* window, stack<State*>* states) :
     initEnemies();
 
     initLines();
-
+    initBackground();
     initLevel();
 
     this->pauseMenu = new PauseMenu(this->window);
@@ -75,25 +75,29 @@ void GameState::endState()
 void GameState::update()
 {
 
-        checkForPause();
-        if (!this->pause) {
-            this->checkForQuit();
-            this->updateEnemies();
+    checkForPause();
+    if (!this->pause) {
+        this->checkForQuit();
+        this->updateEnemies();
+    }
+    else {
+        pauseMenu->update();
+        if (pauseMenu->getPause()) {
+            this->pause = false;
+            pauseMenu->setPause(false);
         }
-        else {
-            pauseMenu->update();
-            if (pauseMenu->getPause()) {
-                this->pause = false;
-                pauseMenu->setPause(false);
-            }
-        }
-        checkFromPause();
-    
+    }
+    checkFromPause();
+
 }
 
 void GameState::render(sf::Event &ev, sf::RenderTarget* target)
 {   
+    if (!target)
+        target = this->window;
+    target->draw(background);
     if (!pause) {
+        
         renderPlayer(ev);
     }
     renderEnemies();
@@ -119,6 +123,15 @@ void GameState::initLines() {
 	this->line[2] = CLINE(0.f, 300.f);
 	this->line[3] = CLINE(0.f, 400.f);
 	this->line[4] = CLINE(0.f, 500.f);
+}
+
+void GameState::initBackground()
+{
+    this->background.setSize(sf::Vector2f((float)this->window->getSize().x, (float)this->window->getSize().y));
+    if (!this->backgroundTexture.loadFromFile("images/bg1.png")) {
+        throw "Texture load fail!! \n";
+    }
+    this->background.setTexture(&this->backgroundTexture);
 }
 
 

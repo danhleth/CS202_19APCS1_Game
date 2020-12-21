@@ -12,6 +12,8 @@ protected:
 	bool pause;
 	sf::RenderWindow* window;
 	stack<State*>* states;
+	sf::Texture backgroundTexture;
+	sf::RectangleShape background;
 public:
 	State(sf::RenderWindow* window, stack<State*>*);
 	virtual ~State();
@@ -56,7 +58,7 @@ private:
 
 
 	void initLines();
-
+	void initBackground();
 	void initLevel();
 public:
 	GameState(sf::RenderWindow* window, stack<State*>*);
@@ -77,8 +79,7 @@ public:
 };
 
 class MenuState : public State {
-	sf::Texture backgroundTexture;
-	sf::RectangleShape background;
+
 	sf::RectangleShape rec[3];
 	sf::Text text[3];
 	sf::Font font;
