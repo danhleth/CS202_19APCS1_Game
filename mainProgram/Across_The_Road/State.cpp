@@ -45,9 +45,9 @@ void State::unpauseState()
 GameState::GameState(sf::RenderWindow* window, stack<State*>* states) :
 	State(window, states)
 {
+    initTextures();
     initPlayer();
     initEnemies();
-
     initLines();
     initBackground();
     initLevel();
@@ -79,6 +79,7 @@ void GameState::update()
     if (!this->pause) {
         this->checkForQuit();
         this->updateEnemies();
+        people.update();
     }
     else {
         pauseMenu->update();
@@ -111,7 +112,7 @@ void GameState::render(sf::Event &ev, sf::RenderTarget* target)
 
 void GameState::initPlayer()
 {
-	this->people = PEOPLE(400, 600);
+    this->people = PEOPLE(400, 500, &this->textures["people"]);
 }
 
 void GameState::initEnemies() {}
@@ -123,6 +124,31 @@ void GameState::initLines() {
 	this->line[2] = CLINE(0.f, 300.f);
 	this->line[3] = CLINE(0.f, 400.f);
 	this->line[4] = CLINE(0.f, 500.f);
+}
+
+void GameState::initTextures()
+{
+    sf::Texture tmp;
+
+    tmp.loadFromFile("sprites/car.png");
+    tmp.setSmooth(true);
+    this->textures["car"] = tmp;
+
+    tmp.loadFromFile("sprites/bird.png");
+    tmp.setSmooth(true);
+    this->textures["bird"] = tmp;
+
+    tmp.loadFromFile("sprites/truck.png");
+    tmp.setSmooth(true);
+    this->textures["truck"] = tmp;
+
+    tmp.loadFromFile("sprites/dino.png");
+    tmp.setSmooth(true);
+    this->textures["dino"] = tmp;
+
+    tmp.loadFromFile("sprites/player3.png");
+    tmp.setSmooth(true);
+    this->textures["people"] = tmp;
 }
 
 void GameState::initBackground()
@@ -166,20 +192,22 @@ void GameState::updateEnemies() {
     else {
         enemies.erase(enemies.begin());// 6 = max - 1
     }
-    for (auto& e : this->enemies)
-        e->Move((3.f + static_cast<float>(currentLevel - 1)), 0.f);
+    for (auto& e : this->enemies) 
+        e->update();
 }
 
 void GameState::renderEnemies() {
     for (auto& e : this->enemies)
         e->Draw(this->window);
+    for (auto& e : this->enemies) 
+        e->Move((3.f + static_cast<float>(currentLevel - 1)), 0.f);
 }
 
 
 void GameState::renderPlayer(sf::Event &ev)
 {
     this->people.Draw(this->window);
-    this->people.KeyBoadMove_WithDt(100.f, ev);
+    this->people.KeyBoadMove_WithDt(46.f, ev);
 }
 
 void GameState::spawnEnemy() {
@@ -187,16 +215,16 @@ void GameState::spawnEnemy() {
     switch (tmp)
     {
     case 0:
-        this->enemy = new CTRUCK;
+        this->enemy = new CTRUCK(&this->textures["truck"]);
         break;
     case 1:
-        this->enemy = new CCAR;
+        this->enemy = new CCAR(&this->textures["car"]);
         break;
     case 2:
-        this->enemy = new CBIRD;
+        this->enemy = new CBIRD(&this->textures["bird"]);
         break;
     default:
-        this->enemy = new CDINOSAUR;
+        this->enemy = new CDINOSAUR(&this->textures["dino"]);
         break;
     }
     float tmpp = 200 + static_cast<float>((rand() % 4) * 92);

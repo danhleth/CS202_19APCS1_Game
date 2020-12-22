@@ -6,7 +6,6 @@
 class State
 {
 private:
-	vector<sf::Texture> textures;
 	bool quit;
 protected:
 	bool pause;
@@ -45,6 +44,7 @@ private:
 	COBJECT* enemy;
 	vector<COBJECT*> enemies;
 	COBJECT* line;
+	map<string, sf::Texture> textures;
 	//Level
 	int currentLevel;
 	int MAX_LEVEL;
@@ -55,9 +55,8 @@ private:
 	//Init
 	void initPlayer();
 	void initEnemies();
-
-
 	void initLines();
+	void initTextures();
 	void initBackground();
 	void initLevel();
 public:
