@@ -15,8 +15,6 @@ private:
 	void initStates();
 	void initWindow();
 
-	//void initBackground();
-
 public:
 	//Constructors & Destructors
 	CGAME();

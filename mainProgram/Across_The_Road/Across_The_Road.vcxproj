@@ -19,15 +19,19 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Animation.cpp" />
     <ClCompile Include="CGAME.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Movement.cpp" />
     <ClCompile Include="OBJECT.cpp" />
     <ClCompile Include="PauseMenu.cpp" />
     <ClCompile Include="State.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Animation.h" />
     <ClInclude Include="CGAME.h" />
     <ClInclude Include="includePath.h" />
+    <ClInclude Include="Movement.h" />
     <ClInclude Include="OBJECT.h" />
     <ClInclude Include="PauseMenu.h" />
     <ClInclude Include="State.h" />
