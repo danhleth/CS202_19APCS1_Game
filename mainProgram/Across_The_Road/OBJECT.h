@@ -112,10 +112,3 @@ public:
 	void update();
 };
 
-class CLINE : public COBJECT {
-public:
-	CLINE();
-	CLINE(float,float);
-	void Draw(sf::RenderTarget*);
-};
-

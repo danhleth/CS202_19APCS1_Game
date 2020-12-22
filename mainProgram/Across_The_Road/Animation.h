@@ -23,7 +23,7 @@ private:
 			this->currentRect = this->startRect;
 			this->endRect = sf::IntRect(end_x * width, end_y * height, width, height);
 			this->sprite.setTexture(this->textureSheet);
-			this->sprite.setTextureRect(this->startRect);
+			this->sprite.setTextureRect(this->startRect);//funny
 		}
 		//Functions
 		void play() {

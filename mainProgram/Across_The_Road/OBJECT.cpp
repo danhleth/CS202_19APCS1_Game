@@ -316,19 +316,3 @@ void PEOPLE::update()
 {
 	this->animation->play("LEFT");
 }
-
-CLINE::CLINE(): COBJECT() {
-	setShape({
-		{0,0},{800,0},{800,1},{0,1}
-	});
-}
-CLINE::CLINE(float _x, float _y): COBJECT(_x,_y) {
-	setShape({
-	{0,0},{800,0},{800,1},{0,1}
-	});
-}
-
-void CLINE::Draw(sf::RenderTarget* window)
-{
-	window->draw(this->convex);
-}
