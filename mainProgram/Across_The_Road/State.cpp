@@ -45,11 +45,10 @@ void State::unpauseState()
 GameState::GameState(sf::RenderWindow* window, stack<State*>* states) :
 	State(window, states)
 {
+    initTextures();
     initPlayer();
     initEnemies();
-
-    initLines();
-
+    initBackground();
     initLevel();
 
     this->pauseMenu = new PauseMenu(this->window);
@@ -75,25 +74,30 @@ void GameState::endState()
 void GameState::update()
 {
 
-        checkForPause();
-        if (!this->pause) {
-            this->checkForQuit();
-            this->updateEnemies();
+    checkForPause();
+    if (!this->pause) {
+        this->checkForQuit();
+        this->updateEnemies();
+        people.update();
+    }
+    else {
+        pauseMenu->update();
+        if (pauseMenu->getPause()) {
+            this->pause = false;
+            pauseMenu->setPause(false);
         }
-        else {
-            pauseMenu->update();
-            if (pauseMenu->getPause()) {
-                this->pause = false;
-                pauseMenu->setPause(false);
-            }
-        }
-        checkFromPause();
-    
+    }
+    checkFromPause();
+
 }
 
 void GameState::render(sf::Event &ev, sf::RenderTarget* target)
 {   
+    if (!target)
+        target = this->window;
+    target->draw(background);
     if (!pause) {
+        
         renderPlayer(ev);
     }
     renderEnemies();
@@ -107,18 +111,43 @@ void GameState::render(sf::Event &ev, sf::RenderTarget* target)
 
 void GameState::initPlayer()
 {
-	this->people = PEOPLE(400, 600);
+    this->people = PEOPLE(400, 500, &this->textures["people"]);
 }
 
 void GameState::initEnemies() {}
 
-void GameState::initLines() {
-	this->line = new CLINE[5];
-	this->line[0] = CLINE(0.f, 100.f);
-	this->line[1] = CLINE(0.f, 200.f);
-	this->line[2] = CLINE(0.f, 300.f);
-	this->line[3] = CLINE(0.f, 400.f);
-	this->line[4] = CLINE(0.f, 500.f);
+void GameState::initTextures()
+{
+    sf::Texture tmp;
+
+    tmp.loadFromFile("sprites/car.png");
+    tmp.setSmooth(true);
+    this->textures["car"] = tmp;
+
+    tmp.loadFromFile("sprites/bird.png");
+    tmp.setSmooth(true);
+    this->textures["bird"] = tmp;
+
+    tmp.loadFromFile("sprites/truck.png");
+    tmp.setSmooth(true);
+    this->textures["truck"] = tmp;
+
+    tmp.loadFromFile("sprites/dino.png");
+    tmp.setSmooth(true);
+    this->textures["dino"] = tmp;
+
+    tmp.loadFromFile("sprites/player3.png");
+    tmp.setSmooth(true);
+    this->textures["people"] = tmp;
+}
+
+void GameState::initBackground()
+{
+    this->background.setSize(sf::Vector2f((float)this->window->getSize().x, (float)this->window->getSize().y));
+    if (!this->backgroundTexture.loadFromFile("images/bg1.png")) {
+        throw "Texture load fail!! \n";
+    }
+    this->background.setTexture(&this->backgroundTexture);
 }
 
 
@@ -145,6 +174,10 @@ void GameState::updateEnemies() {
         if (this->enemySpawnTimer >= this->enemySpawnTimerMax) {
             //spaw the enemy and reset the timer
             this->spawnEnemy();
+            this->spawnEnemy();
+            if (this->enemies[this->enemies.size() - 1]->Y() == this->enemies[this->enemies.size() - 2]->Y()) {
+                this->enemies.pop_back();
+            }
             enemySpawnTimer = 0.f;
         }
         else
@@ -153,20 +186,22 @@ void GameState::updateEnemies() {
     else {
         enemies.erase(enemies.begin());// 6 = max - 1
     }
-    for (auto& e : this->enemies)
-        e->Move((3.f + static_cast<float>(currentLevel - 1)), 0.f);
+    for (auto& e : this->enemies) 
+        e->update();
 }
 
 void GameState::renderEnemies() {
     for (auto& e : this->enemies)
         e->Draw(this->window);
+    for (auto& e : this->enemies) 
+        e->Move((2.f + static_cast<float>(currentLevel - 1)), 0.f);
 }
 
 
 void GameState::renderPlayer(sf::Event &ev)
 {
     this->people.Draw(this->window);
-    this->people.KeyBoadMove_WithDt(100.f, ev);
+    this->people.KeyBoadMove_WithDt(46.f, ev);
 }
 
 void GameState::spawnEnemy() {
@@ -174,41 +209,38 @@ void GameState::spawnEnemy() {
     switch (tmp)
     {
     case 0:
-        this->enemy = new CTRUCK;
+        this->enemy = new CTRUCK(&this->textures["truck"]);
         break;
     case 1:
-        this->enemy = new CCAR;
+        this->enemy = new CCAR(&this->textures["car"]);
         break;
     case 2:
-        this->enemy = new CBIRD;
+        this->enemy = new CBIRD(&this->textures["bird"]);
         break;
     default:
-        this->enemy = new CDINOSAUR;
+        this->enemy = new CDINOSAUR(&this->textures["dino"]);
         break;
     }
-    float tmpp = 200 + static_cast<float>((rand() % 4) * 92);
-
-
+    float tmpp = 130 + static_cast<float>((rand() % 4) * 92);//set location
+    if (typeid(*this->enemy) == typeid(CTRUCK) || typeid(*this->enemy) == typeid(CBIRD))
+        tmpp -= 20;
     this->enemy->setPosition(0.f, tmpp);
-
+    
     this->enemies.push_back(enemy);
 }
 
 void GameState::generateMap()
 {
 
-    for (int i = 0; i < 5; i++)
-        line[i].Draw(this->window);
 
-
-    if (people.getY() <= 100.f) {
+    if (people.getY() <= 552.f) {//change from 100 to 552 because the sprite is something mysterious about the location
         if (currentLevel >= 3)
             setLevel(1);
         else {
             ++currentLevel;
             setLevel(currentLevel);
         }
-        people.setPosition(400, 600);
+        people.setPosition(400, 508);
         enemies.clear();
     }
 }
