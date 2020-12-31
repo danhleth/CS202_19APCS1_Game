@@ -12,6 +12,8 @@ protected:
 	sf::ConvexShape convex;
 	sf::Texture *texture;
 	sf::Sprite *sprite;
+	sf::Sound* sound;
+	sf::SoundBuffer* soundBuffer;
 	//Component
 	Movement* movement;
 	AnimationComponent* animation;
@@ -20,6 +22,7 @@ protected:
 	void createMovement(float maxVeclocity);
 	void createAnimation(sf::Texture& texture);
 	void initTexture();
+	void initSoundBuffer();
 public:
 	//Constructor
 	COBJECT();

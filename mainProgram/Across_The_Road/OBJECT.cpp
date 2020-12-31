@@ -117,6 +117,11 @@ void COBJECT::createAnimation(sf::Texture& texture)
 	this->animation = new AnimationComponent(texture, *this->sprite);
 }
 
+void COBJECT::initSoundBuffer()
+{
+
+}
+
 void COBJECT::changeConvex(sf::ConvexShape _convex)
 {
 	this->convex = _convex;

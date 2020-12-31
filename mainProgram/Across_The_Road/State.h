@@ -2,6 +2,7 @@
 #include "includePath.h"
 #include "OBJECT.h"
 #include "PauseMenu.h"
+//#include "Sound.h"
 
 class State
 {
@@ -43,6 +44,7 @@ private:
 	PEOPLE people;
 	COBJECT* enemy;
 	vector<COBJECT*> enemies;
+	map<string,sf::SoundBuffer> sounds;
 	COBJECT* line;
 	map<string, sf::Texture> textures;
 	//Level
@@ -58,6 +60,7 @@ private:
 	void initTextures();
 	void initBackground();
 	void initLevel();
+	void initSound();
 public:
 	GameState(sf::RenderWindow* window, stack<State*>*);
 	~GameState();

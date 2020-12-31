@@ -157,6 +157,17 @@ void GameState::initLevel() {
 	setLevel(1);
 }
 
+void GameState::initSound()
+{
+    sf::SoundBuffer soundTmp;
+    soundTmp.loadFromFile("sound/bird.mp3");
+    sounds["bird"] = soundTmp;
+    soundTmp.loadFromFile("sound/car_sound.mp3");
+    sounds["car"] = soundTmp;
+    soundTmp.loadFromFile("sound/dino.mp3");
+    sounds["dino"] = soundTmp;
+}
+
 void GameState::setLevel(unsigned level) {
     /*if (level > MAX_LEVEL)
         return;*/
