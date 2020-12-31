@@ -6,12 +6,13 @@
 class State
 {
 private:
-	vector<sf::Texture> textures;
 	bool quit;
 protected:
 	bool pause;
 	sf::RenderWindow* window;
 	stack<State*>* states;
+	sf::Texture backgroundTexture;
+	sf::RectangleShape background;
 public:
 	State(sf::RenderWindow* window, stack<State*>*);
 	virtual ~State();
@@ -26,7 +27,7 @@ public:
 
 	//update & render
 	virtual void update() = 0;
-	virtual void render(sf::Event, sf::RenderTarget* target = nullptr) = 0;
+	virtual void render(sf::Event &, sf::RenderTarget* target = nullptr) = 0;
 };
 
 class GameState : public State {
@@ -43,6 +44,7 @@ private:
 	COBJECT* enemy;
 	vector<COBJECT*> enemies;
 	COBJECT* line;
+	map<string, sf::Texture> textures;
 	//Level
 	int currentLevel;
 	int MAX_LEVEL;
@@ -53,10 +55,8 @@ private:
 	//Init
 	void initPlayer();
 	void initEnemies();
-
-
-	void initLines();
-
+	void initTextures();
+	void initBackground();
 	void initLevel();
 public:
 	GameState(sf::RenderWindow* window, stack<State*>*);
@@ -71,14 +71,13 @@ public:
 	//Update & Render
 	void updateEnemies();
 	void renderEnemies();
-	void renderPlayer(sf::Event);
+	void renderPlayer(sf::Event &);
 	void update();
-	void render(sf::Event, sf::RenderTarget* target = nullptr);
+	void render(sf::Event &, sf::RenderTarget* target = nullptr);
 };
 
 class MenuState : public State {
-	sf::Texture backgroundTexture;
-	sf::RectangleShape background;
+
 	sf::RectangleShape rec[3];
 	sf::Text text[3];
 	sf::Font font;
@@ -99,5 +98,5 @@ public:
 	//Update & Render
 
 	void update();
-	void render(sf::Event, sf::RenderTarget* target = nullptr);
+	void render(sf::Event &, sf::RenderTarget* target = nullptr);
 };

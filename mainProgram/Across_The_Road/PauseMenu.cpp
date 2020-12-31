@@ -72,25 +72,15 @@ PauseMenu::~PauseMenu()
 {
 }
 
-void PauseMenu::nextButton(sf::Event ev)
+void PauseMenu::nextButton(sf::Event &ev)
 {
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
-        ismoving = true;
+    if (ev.key.code == sf::Keyboard::S) {
+        this->currentButton = (this->currentButton + 1) % 3;
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
-        ismoving = true;
+    if (ev.key.code == sf::Keyboard::W) {
+        this->currentButton = (this->currentButton + 2) % 3;
     }
-
-    if (ev.type == sf::Event::KeyReleased) {
-        if (ev.key.code == sf::Keyboard::S && ismoving) {
-            this->currentButton = (this->currentButton + 1) % 3;
-            ismoving = false;
-        }
-        if (ev.key.code == sf::Keyboard::W && ismoving) {
-            this->currentButton = (this->currentButton + 2) % 3;
-            ismoving = false;
-        }
-    }
+    ev.key.code = sf::Keyboard::Unknown;
 }
 
 void PauseMenu::highlight()
@@ -120,14 +110,14 @@ void PauseMenu::checkForUnpause()
     }
 }
 
-void PauseMenu::checkButton(sf::Event ev)
+void PauseMenu::checkButton(sf::Event& ev)
 {
-    bool isPressed = false;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Enter)) {
+    if (ev.key.code == sf::Keyboard::Enter) {
         if (currentButton == 0)
             this->unpause = true;
         if (currentButton == 2) {
-            
+            this->unpause = true;
+            this->senderFromGame = 1;
         }
     }
 }
@@ -152,7 +142,7 @@ void PauseMenu::update()
     }
 }
 
-void PauseMenu::render(sf::Event ev, sf::RenderTarget* target)
+void PauseMenu::render(sf::Event &ev, sf::RenderTarget* target)
 {
     checkButton(ev);
     nextButton(ev);
