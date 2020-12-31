@@ -22,7 +22,12 @@ void COBJECT::update()
 	int a = 0;
 }
 
-COBJECT::COBJECT(sf::Texture* texture) {
+void COBJECT::playSound()
+{
+	this->sound->play();
+}
+
+COBJECT::COBJECT(sf::Texture* texture, sf::SoundBuffer* soundBuffer) {
 	mX = 0;
 	mY = 0;
 	this->texture = NULL;
@@ -30,14 +35,18 @@ COBJECT::COBJECT(sf::Texture* texture) {
 	this->movement = NULL;
 	createSprite(texture);
 	this->createMovement(3);
+	this->soundBuffer = soundBuffer;
+	this->sound = new sf::Sound(*this->soundBuffer);
 }
-COBJECT::COBJECT(float x, float y, sf::Texture* texture) {
+COBJECT::COBJECT(float x, float y, sf::Texture* texture, sf::SoundBuffer* soundBuffer) {
 	mX = x;
 	mY = y;
 	this->texture = NULL;
 	this->sprite = NULL;
 	createSprite(texture);
 	this->createMovement(3);
+	this->soundBuffer = soundBuffer;
+	this->sound = new sf::Sound(*this->soundBuffer);
 }
 
 void COBJECT::createSprite(sf::Texture* texture)
@@ -117,11 +126,6 @@ void COBJECT::createAnimation(sf::Texture& texture)
 	this->animation = new AnimationComponent(texture, *this->sprite);
 }
 
-void COBJECT::initSoundBuffer()
-{
-
-}
-
 void COBJECT::changeConvex(sf::ConvexShape _convex)
 {
 	this->convex = _convex;
@@ -133,14 +137,14 @@ sf::ConvexShape COBJECT::getConvex()
 }
 
 //CVEHICLE
-CVEHICLE::CVEHICLE(sf::Texture* texture)
-	:COBJECT(texture) {}
-CVEHICLE::CVEHICLE(float x, float y, sf::Texture* texture)
-	: COBJECT(x, y,texture) {}
+CVEHICLE::CVEHICLE(sf::Texture* texture, sf::SoundBuffer* soundBuffer)
+	:COBJECT(texture, soundBuffer) {}
+CVEHICLE::CVEHICLE(float x, float y, sf::Texture* texture, sf::SoundBuffer* soundBuffer)
+	: COBJECT(x, y,texture, soundBuffer) {}
 
 //CTRUCK
-CTRUCK::CTRUCK(sf::Texture* texture)
-	: CVEHICLE(texture)
+CTRUCK::CTRUCK(sf::Texture* texture, sf::SoundBuffer* soundBuffer)
+	: CVEHICLE(texture, soundBuffer)
 {
 	//setShape({
 	//	{0.f ,0.f}, {0.f, -80.f}, {115.f, -80.f}, {115.f, -45.f}, {120.f, -70.f}, {150.f, -70.f}, { 170.f, -35.f }, { 175.f, -35.f }, { 180.f, -30.f }, { 180.f, 0.f }
@@ -156,8 +160,8 @@ CTRUCK::CTRUCK(sf::Texture* texture)
 //}
 
 //CCAR
-CCAR::CCAR(sf::Texture* texture)
-	: CVEHICLE(texture)
+CCAR::CCAR(sf::Texture* texture, sf::SoundBuffer* soundBuffer)
+	: CVEHICLE(texture, soundBuffer)
 {
 	//setShape({
 	//	{0.f, 0.f}, {90.f, 0.f}, {90.f, -7.f}, {88.f, -12.f}, {82.f, -12.f}, {68.f, -36.f}, {18.f, -36.f}, {10.f, -12.f}, {0.f, -12.f}
@@ -173,14 +177,14 @@ CCAR::CCAR(sf::Texture* texture)
 //}
 
 //CANIMAL
-CANIMAL::CANIMAL(sf::Texture* texture)
-	: COBJECT(texture) {}
+CANIMAL::CANIMAL(sf::Texture* texture, sf::SoundBuffer* soundBuffer)
+	: COBJECT(texture, soundBuffer) {}
 CANIMAL::CANIMAL(float _x, float _y)
 	: COBJECT(_x, _y){}
 
 	//CDINOSAUR
-CDINOSAUR::CDINOSAUR(sf::Texture* texture)
-	: CANIMAL(texture)
+CDINOSAUR::CDINOSAUR(sf::Texture* texture, sf::SoundBuffer* soundBuffer)
+	: CANIMAL(texture, soundBuffer)
 {
 	//setShape({
 	//	//tail
@@ -223,8 +227,8 @@ void CDINOSAUR::update() {
 }
 
 	//CBIRD
-CBIRD::CBIRD(sf::Texture* texture)
-	: CANIMAL(texture)
+CBIRD::CBIRD(sf::Texture* texture, sf::SoundBuffer* soundBuffer)
+	: CANIMAL(texture, soundBuffer)
 {
 	//setShape({
 	//	{-2,-22}, {-4.5, -21}, {-6, -19}, {-10, -19.5}, {-6, -9}, {-5,-5}, {-8,0}, {-14,-4}, {-12,-9}, {-18,-12}, {-16, -19},{-19,-19}, {-22,-20}, {-29, -15}, {-32,-13},{-30,-20}, {-34, -20},
@@ -261,7 +265,7 @@ PEOPLE::PEOPLE(){
 
 
 
-PEOPLE::PEOPLE(float x, float y, sf::Texture* texture) : COBJECT(x, y, texture) {
+PEOPLE::PEOPLE(float x, float y, sf::Texture* texture, sf::SoundBuffer* soundBuffer) : COBJECT(x, y, texture, soundBuffer) {
 	mState = 1;
 	//setShape({
 	//	{0, -55}, {-4, -54}, {-9, -52}, { -13, -47 }, {-15, -42},{ -15.5, -37.9 }, {-13, -33}, { -11, -31 },/* {-16.6, -33.4},*/{ -8.3, -29 }, { -16.6, -20 }, { -12.5, -15 }, { -8.5, -18 }, { -12, 0 }, { -4, 0 }, { -2, -8 },
