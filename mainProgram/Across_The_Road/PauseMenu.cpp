@@ -125,6 +125,7 @@ void PauseMenu::checkButton(sf::Event& ev)
 void PauseMenu::EndPause()
 {
     cout << "End Pause menu \n";
+        
 }
 
 void PauseMenu::initFont()

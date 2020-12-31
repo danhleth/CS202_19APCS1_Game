@@ -67,8 +67,17 @@ GameState::~GameState()
 }
 
 void GameState::endState()
-{
-	cout << "End GameState" << endl;
+{   
+    ofstream fout;
+    int rID = rand() % 1000;
+    string batch= "data/" + to_string(rID) + "_user.txt";
+ 
+    fout.open(batch);
+    if (fout.is_open()) {
+        fout << currentLevel << endl;
+    }
+    fout.close();
+	cout << batch << endl;
 }
 
 void GameState::update()
@@ -318,7 +327,7 @@ MenuState::~MenuState()
 }
 
 void MenuState::endState()
-{
+{   
     cout << "End GameState" << endl;
 }
 
