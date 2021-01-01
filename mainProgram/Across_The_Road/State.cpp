@@ -22,7 +22,6 @@ void State::setQuit(bool q)
     this->quit = q;
 }
 
-
 void State::checkForQuit()
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
@@ -160,13 +159,13 @@ void GameState::initLevel() {
 void GameState::initSound()
 {
     sf::SoundBuffer soundTmp;
-    soundTmp.loadFromFile("sound/bird.mp3");
+    soundTmp.loadFromFile("sound/bird.wav");
     sounds["bird"] = soundTmp;
-    soundTmp.loadFromFile("sound/car_sound.mp3");
+    soundTmp.loadFromFile("sound/car_sound.wav");
     sounds["car"] = soundTmp;
-    soundTmp.loadFromFile("sound/dino.mp3");
+    soundTmp.loadFromFile("sound/dino.wav");
     sounds["dino"] = soundTmp;
-    soundTmp.loadFromFile("sound/people_footstep.mp3");
+    soundTmp.loadFromFile("sound/people_footstep.wav");
     sounds["people"] = soundTmp;
 }
 
@@ -207,6 +206,7 @@ void GameState::renderEnemies() {
     for (auto& e : this->enemies) {
         e->Draw(this->window);
         e->playSound();
+        /*cout << "abc" << endl;*/
     }
     for (auto& e : this->enemies) {
         e->Move((2.f + static_cast<float>(currentLevel - 1)), 0.f);
