@@ -41,6 +41,8 @@ public:
 	virtual void Draw(sf::RenderTarget*);
 	virtual void setPosition(float, float);
 	virtual void update();
+	virtual void setScale(float,float);
+	virtual void setColor(float,float,float);
 };
 
 class CVEHICLE : public COBJECT {

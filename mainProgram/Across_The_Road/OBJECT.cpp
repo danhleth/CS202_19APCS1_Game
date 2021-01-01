@@ -22,6 +22,13 @@ void COBJECT::update()
 	int a = 0;
 }
 
+void COBJECT::setScale(float width, float hight){
+	this->sprite->setScale(width, hight);
+}
+void COBJECT::setColor (float red, float green, float white) {
+	this->sprite->setColor(sf::Color(red, green, white));
+}
+
 COBJECT::COBJECT(sf::Texture* texture) {
 	mX = 0;
 	mY = 0;
