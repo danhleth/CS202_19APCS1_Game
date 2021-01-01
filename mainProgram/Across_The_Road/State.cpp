@@ -22,7 +22,6 @@ void State::setQuit(bool q)
     this->quit = q;
 }
 
-
 void State::checkForQuit()
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
@@ -117,7 +116,7 @@ void GameState::render(sf::Event &ev, sf::RenderTarget* target)
 
 void GameState::initPlayer()
 {
-    this->people = PEOPLE(400, 500, &this->textures["people"]);
+    this->people = PEOPLE(400, 500, &this->textures["people"], &this->sounds["people"]);
 }
 
 void GameState::initEnemies() {}
@@ -161,6 +160,19 @@ void GameState::initLevel() {
 	MAX_LEVEL = 3;
 
 	setLevel(1);
+}
+
+void GameState::initSound()
+{
+    sf::SoundBuffer soundTmp;
+    soundTmp.loadFromFile("sound/bird.wav");
+    sounds["bird"] = soundTmp;
+    soundTmp.loadFromFile("sound/car_sound.wav");
+    sounds["car"] = soundTmp;
+    soundTmp.loadFromFile("sound/dino.wav");
+    sounds["dino"] = soundTmp;
+    soundTmp.loadFromFile("sound/people_footstep.wav");
+    sounds["people"] = soundTmp;
 }
 
 void GameState::setLevel(unsigned level) {
@@ -210,10 +222,15 @@ void GameState::updateEnemies() {
 }
 
 void GameState::renderEnemies() {
-    for (auto& e : this->enemies)
+    for (auto& e : this->enemies) {
         e->Draw(this->window);
-    for (auto& e : this->enemies) 
+        e->playSound();
+        /*cout << "abc" << endl;*/
+    }
+    for (auto& e : this->enemies) {
         e->Move((2.f + static_cast<float>(currentLevel - 1)), 0.f);
+        e->playSound();
+    }
 }
 
 
@@ -229,16 +246,17 @@ void GameState::spawnEnemy() {
     switch (tmp)
     {
     case 0:
-        enemyTmp = new CTRUCK(&this->textures["truck"]);
+
+        this->enemy = new CTRUCK(&this->textures["truck"], &this->sounds["car"]);
         break;
     case 1:
-        enemyTmp = new CCAR(&this->textures["car"]);
+        this->enemy = new CCAR(&this->textures["car"], &this->sounds["car"]);
         break;
     case 2:
-        enemyTmp = new CBIRD(&this->textures["bird"]);
+        this->enemy = new CBIRD(&this->textures["bird"], &this->sounds["bird"]);
         break;
     default:
-        enemyTmp = new CDINOSAUR(&this->textures["dino"]);
+        this->enemy = new CDINOSAUR(&this->textures["dino"], &this->sounds["dino"]);
         break;
     }
     float tmpp = 130 + static_cast<float>((rand() % 4) * 92);//set location
