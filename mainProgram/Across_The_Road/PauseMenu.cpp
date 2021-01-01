@@ -154,3 +154,61 @@ void PauseMenu::render(sf::Event &ev, sf::RenderTarget* target)
         target->draw(text[i]);
     }
 }
+
+MessageBox::MessageBox(sf::RenderWindow* window)
+{
+    this->window = window;
+    initFont();
+    initBackground();
+    pause = false;
+}
+
+void MessageBox::initFont()
+{
+    if (!this->font.loadFromFile("font/Dosis-Light.ttf")) {
+        throw("Font not found! \n");
+    }
+}
+
+void MessageBox::initBackground()
+{
+    this->box.setSize(
+        sf::Vector2f(
+            (float)this->window->getSize().x,
+            (float)this->window->getSize().y
+        )
+    );
+    this->box.setFillColor(sf::Color(20, 20, 20, 100));
+    this->text[0].setString("YOU LOSE");
+    this->text[1].setString("Press Enter to continue !");
+
+    text[0].setCharacterSize(30);
+    text[0].setFont(this->font);
+    text[0].setStyle(sf::Text::Bold);
+
+    text[1].setCharacterSize(15);
+    text[1].setFont(this->font);
+    text[1].setStyle(sf::Text::Regular);
+
+    text[0].setPosition(
+        (float)this->window->getSize().x / 2 - 10.f,
+        (float)this->window->getSize().y / 2 - 50.f
+    );
+}
+
+void MessageBox::draw(sf::RenderTarget* target)
+{
+    checkForNext();
+    if (!target)
+        target = this->window;
+    target->draw(box);
+    target->draw(text[1]);
+    target->draw(text[0]);
+}
+
+void MessageBox::checkForNext()
+{
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+        this->pause = true;
+    }
+}

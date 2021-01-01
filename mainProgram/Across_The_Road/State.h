@@ -52,6 +52,7 @@ private:
 	int MAX_LEVEL;
 	//PauseMenu
 	PauseMenu *pauseMenu;
+	MessageBox* messageBox;
 	void checkForPause();
 	void checkFromPause();
 	//Init
@@ -64,12 +65,12 @@ private:
 public:
 	GameState(sf::RenderWindow* window, stack<State*>*);
 	~GameState();
-	
+	//Function
 	void endState();
 	void setLevel(unsigned);
 	void spawnEnemy();
 	void generateMap();
-	//Function
+	void checkImpact();
 	
 	//Update & Render
 	void updateEnemies();

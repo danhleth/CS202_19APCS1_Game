@@ -7,6 +7,7 @@ COBJECT::COBJECT() {
 	this->sprite = NULL;
 	this->movement = NULL;
 	this->createMovement(3);
+	//this->createHitBox();
 }
 
 COBJECT::COBJECT(float x, float y) {
@@ -15,16 +16,21 @@ COBJECT::COBJECT(float x, float y) {
 	this->texture = NULL;
 	this->sprite = NULL;
 	this->createMovement(3);
+	//this->createHitBox();
 }
 
 void COBJECT::update()
 {
 	int a = 0;
 }
-
 void COBJECT::playSound()
 {
 	this->sound->play();
+}
+
+sf::RectangleShape COBJECT::hitbox()
+{
+	return sf::RectangleShape();
 }
 
 COBJECT::COBJECT(sf::Texture* texture, sf::SoundBuffer* soundBuffer) {
@@ -37,6 +43,7 @@ COBJECT::COBJECT(sf::Texture* texture, sf::SoundBuffer* soundBuffer) {
 	this->createMovement(3);
 	this->soundBuffer = soundBuffer;
 	this->sound = new sf::Sound(*this->soundBuffer);
+	//this->createHitBox();
 }
 COBJECT::COBJECT(float x, float y, sf::Texture* texture, sf::SoundBuffer* soundBuffer) {
 	mX = x;
@@ -47,7 +54,17 @@ COBJECT::COBJECT(float x, float y, sf::Texture* texture, sf::SoundBuffer* soundB
 	this->createMovement(3);
 	this->soundBuffer = soundBuffer;
 	this->sound = new sf::Sound(*this->soundBuffer);
+	//this->createHitBox();
 }
+
+//void COBJECT::createHitBox() {
+//	if (this->sprite != NULL) {
+//		this->hitBox.setPosition(this->sprite->getPosition().x, this->sprite->getPosition().y);
+//		this->hitBox.setFillColor(sf::Color::Transparent);
+//		this->hitBox.setOutlineColor(sf::Color::White);
+//		this->hitBox.setOutlineThickness(1.f);
+//	}
+//}
 
 void COBJECT::createSprite(sf::Texture* texture)
 {
@@ -58,6 +75,10 @@ void COBJECT::createSprite(sf::Texture* texture)
 void COBJECT::createMovement(float maxVeclocity) {
 	this->movement = new Movement(maxVeclocity);
 }
+
+//void COBJECT::setSizeHitBox(float x, float y) {
+//	this->hitBox.setSize(sf::Vector2f(x, y));
+//}
 
 void COBJECT::Move(float _x, float _y) {
 	this->movement->move(_x, _y);
@@ -88,6 +109,8 @@ void COBJECT::Draw(sf::RenderTarget* window) {
 	//}
 	//window->draw(convex);
 	window->draw(*this->sprite);
+	//window->draw(this->hitbox());
+	//window->draw(this->hitBox);
 }
 
 void COBJECT::setPosition(float x, float y) {
@@ -142,6 +165,10 @@ CVEHICLE::CVEHICLE(sf::Texture* texture, sf::SoundBuffer* soundBuffer)
 CVEHICLE::CVEHICLE(float x, float y, sf::Texture* texture, sf::SoundBuffer* soundBuffer)
 	: COBJECT(x, y,texture, soundBuffer) {}
 
+sf::RectangleShape CVEHICLE::hitbox()
+{
+	return sf::RectangleShape();
+}
 //CTRUCK
 CTRUCK::CTRUCK(sf::Texture* texture, sf::SoundBuffer* soundBuffer)
 	: CVEHICLE(texture, soundBuffer)
@@ -149,6 +176,7 @@ CTRUCK::CTRUCK(sf::Texture* texture, sf::SoundBuffer* soundBuffer)
 	//setShape({
 	//	{0.f ,0.f}, {0.f, -80.f}, {115.f, -80.f}, {115.f, -45.f}, {120.f, -70.f}, {150.f, -70.f}, { 170.f, -35.f }, { 175.f, -35.f }, { 180.f, -30.f }, { 180.f, 0.f }
 	//	});
+	//this->setSizeHitBox(152, 91);
 
 }
 //CTRUCK::CTRUCK(float x, float y)
@@ -159,6 +187,16 @@ CTRUCK::CTRUCK(sf::Texture* texture, sf::SoundBuffer* soundBuffer)
 //		});
 //}
 
+sf::RectangleShape CTRUCK::hitbox() {
+	sf::RectangleShape h;
+	h.setPosition(sf::Vector2f(this->sprite->getPosition().x + 10.f, this->sprite->getPosition().y + 15.f));
+	h.setSize(sf::Vector2f(120.f, 60.f));
+	h.setFillColor(sf::Color::Transparent);
+	h.setOutlineColor(sf::Color::White);
+	h.setOutlineThickness(2.f);
+	return h;
+}
+
 //CCAR
 CCAR::CCAR(sf::Texture* texture, sf::SoundBuffer* soundBuffer)
 	: CVEHICLE(texture, soundBuffer)
@@ -167,6 +205,7 @@ CCAR::CCAR(sf::Texture* texture, sf::SoundBuffer* soundBuffer)
 	//	{0.f, 0.f}, {90.f, 0.f}, {90.f, -7.f}, {88.f, -12.f}, {82.f, -12.f}, {68.f, -36.f}, {18.f, -36.f}, {10.f, -12.f}, {0.f, -12.f}
 	//	});
 	this->sprite->setScale(0.2f, 0.2f);
+	//this->setSizeHitBox(100, 56);
 }
 //CCAR::CCAR(float _x, float _y)
 //	: CVEHICLE(_x, _y)
@@ -176,12 +215,26 @@ CCAR::CCAR(sf::Texture* texture, sf::SoundBuffer* soundBuffer)
 //		});
 //}
 
+sf::RectangleShape CCAR::hitbox() {
+	sf::RectangleShape h;
+	h.setPosition(sf::Vector2f(this->sprite->getPosition().x + 5.f, this->sprite->getPosition().y + 3.f));
+	h.setSize(sf::Vector2f(90.f, 48.f));
+	h.setFillColor(sf::Color::Transparent);
+	h.setOutlineColor(sf::Color::White);
+	h.setOutlineThickness(2.f);
+	return h;
+}
+
+
 //CANIMAL
 CANIMAL::CANIMAL(sf::Texture* texture, sf::SoundBuffer* soundBuffer)
 	: COBJECT(texture, soundBuffer) {}
 CANIMAL::CANIMAL(float _x, float _y)
 	: COBJECT(_x, _y){}
-
+sf::RectangleShape CANIMAL::hitbox()
+{
+	return sf::RectangleShape();
+}
 	//CDINOSAUR
 CDINOSAUR::CDINOSAUR(sf::Texture* texture, sf::SoundBuffer* soundBuffer)
 	: CANIMAL(texture, soundBuffer)
@@ -202,6 +255,7 @@ CDINOSAUR::CDINOSAUR(sf::Texture* texture, sf::SoundBuffer* soundBuffer)
 	this->sprite->setScale(1.3f, 1.3f);
 	this->createAnimation(*texture);
 	this->animation->addAnimation("LEFT", 60.f, 0, 0, 11, 0, 54, 50);
+	//this->setSizeHitBox(54 * 1.3f , 50 * 1.3f);
 }
 
 //CDINOSAUR::CDINOSAUR(float _x, float _y)
@@ -222,6 +276,16 @@ CDINOSAUR::CDINOSAUR(sf::Texture* texture, sf::SoundBuffer* soundBuffer)
 //		});
 //}
 
+sf::RectangleShape CDINOSAUR::hitbox() {
+	sf::RectangleShape h;
+	h.setPosition(sf::Vector2f(this->sprite->getPosition().x + 0.f, this->sprite->getPosition().y + 3.f));
+	h.setSize(sf::Vector2f(70.f, 48.f));
+	h.setFillColor(sf::Color::Transparent);
+	h.setOutlineColor(sf::Color::White);
+	h.setOutlineThickness(2.f);
+	return h;
+}
+
 void CDINOSAUR::update() {
 	this->animation->play("LEFT");
 }
@@ -237,7 +301,7 @@ CBIRD::CBIRD(sf::Texture* texture, sf::SoundBuffer* soundBuffer)
 	this->sprite->setScale(0.5f, 0.5f);
 	this->createAnimation(*texture);
 	this->animation->addAnimation("LEFT", 60.f, 0, 0, 8, 0, 160, 173);
-
+	//this->setSizeHitBox(160 * 0.5f , 173 * 0.5f);
 }
 CBIRD::CBIRD(float _x, float _y)
 	: CANIMAL(_x, _y)
@@ -246,6 +310,16 @@ CBIRD::CBIRD(float _x, float _y)
 		{-2,-22}, {-4.5, -21}, {-6, -19}, {-10, -19.5}, {-6, -9}, {-5,-5}, {-8,0}, {-14,-4}, {-12,-9}, {-18,-12}, {-16, -19},{-19,-19}, {-22,-20}, {-29, -15}, {-32,-13},{-30,-20}, {-34, -20},
 		{-30,-24},{-32,-31},{-29, -29},{-22,-24},{-19,-25},{-16, -25},{-18,-32},{-12,-35},{-14,-40},{-8,-44},{-5,-39},{-6,-35},{-10, -24.5},{-6, -24},{-4.5, -23}
 		});
+}
+
+sf::RectangleShape CBIRD::hitbox() {
+	sf::RectangleShape h;
+	h.setPosition(sf::Vector2f(this->sprite->getPosition().x + 0.f, this->sprite->getPosition().y + 20.f));
+	h.setSize(sf::Vector2f(70.f, 48.f));
+	h.setFillColor(sf::Color::Transparent);
+	h.setOutlineColor(sf::Color::White);
+	h.setOutlineThickness(2.f);
+	return h;
 }
 
 void CBIRD::update() {
@@ -263,8 +337,6 @@ PEOPLE::PEOPLE(){
 
 }
 
-
-
 PEOPLE::PEOPLE(float x, float y, sf::Texture* texture, sf::SoundBuffer* soundBuffer) : COBJECT(x, y, texture, soundBuffer) {
 	mState = 1;
 	//setShape({
@@ -275,9 +347,28 @@ PEOPLE::PEOPLE(float x, float y, sf::Texture* texture, sf::SoundBuffer* soundBuf
 	this->sprite->setScale(0.9f, 0.9f);
 	this->createAnimation(*texture);
 	this->animation->addAnimation("LEFT", 60.f, 0, 0, 2, 0, 50, 61);
+	//this->setSizeHitBox(50 * 0.9f, 61 * 0.9f);
 }
 
 
+
+bool PEOPLE::isImpact(vector<COBJECT*> enemies)
+{
+	float start_x = this->hitbox().getPosition().x;
+	float start_y = this->hitbox().getPosition().y;
+	float end_x = this->hitbox().getPosition().x + this->hitbox().getSize().x;
+	float end_y = this->hitbox().getPosition().y + this->hitbox().getSize().y;
+	for (auto& e : enemies) {
+		if (e->hitbox().getGlobalBounds().contains(start_x, start_y) ||
+			e->hitbox().getGlobalBounds().contains(start_x, end_y) ||
+			e->hitbox().getGlobalBounds().contains(end_x, start_y) ||
+			e->hitbox().getGlobalBounds().contains(end_x, end_y)
+			) {
+			return true;
+		}
+	}
+	return false;
+}
 
 void PEOPLE::setSpeed(float)
 {
@@ -319,6 +410,17 @@ void PEOPLE::collisionAnimation()
 void PEOPLE::Draw(sf::RenderTarget* window)
 {
 	window->draw(*sprite);
+	//window->draw(this->hitbox());
+}
+
+sf::RectangleShape PEOPLE::hitbox() {
+	sf::RectangleShape h;
+	h.setPosition(sf::Vector2f(this->sprite->getPosition().x + 5.f, this->sprite->getPosition().y + 3.f));
+	h.setSize(sf::Vector2f(33.f, 48.f));
+	h.setFillColor(sf::Color::Transparent);
+	h.setOutlineColor(sf::Color::White);
+	h.setOutlineThickness(2.f);
+	return h;
 }
 
 void PEOPLE::update()

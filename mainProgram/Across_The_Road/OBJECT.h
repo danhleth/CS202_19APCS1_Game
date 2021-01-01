@@ -15,12 +15,15 @@ protected:
 	sf::Sound* sound;
 	sf::SoundBuffer* soundBuffer;
 	//Component
+	//sf::RectangleShape hitBox;
 	Movement* movement;
 	AnimationComponent* animation;
 
 	void createSprite(sf::Texture*);
 	void createMovement(float maxVeclocity);
 	void createAnimation(sf::Texture& texture);
+	//void createHitBox();
+	void setSizeHitBox(float, float);
 	void initTexture();
 public:
 	//Constructor
@@ -35,6 +38,7 @@ public:
 	void Y(float);
 	float getX();
 	float getY();
+
 	void changeConvex(sf::ConvexShape _convex);
 	sf::ConvexShape getConvex();
 	void setShape(vector<vector<float>>);
@@ -42,6 +46,7 @@ public:
 	virtual void KeyBoardMove(float, float);
 	virtual void Draw(sf::RenderTarget*);
 	virtual void setPosition(float, float);
+	virtual sf::RectangleShape hitbox();
 	virtual void update();
 	void playSound();
 };
@@ -50,8 +55,9 @@ class CVEHICLE : public COBJECT {
 private:
 
 public:
-	CVEHICLE(sf::Texture* texture, sf::SoundBuffer* soundBuffer);
 	CVEHICLE(float, float, sf::Texture* texture, sf::SoundBuffer* soundBuffer);
+	CVEHICLE(sf::Texture* texture, sf::SoundBuffer* soundBuffer);
+	sf::RectangleShape hitbox();
 };
 
 class CTRUCK : public CVEHICLE {
@@ -60,6 +66,7 @@ private:
 public:
 	CTRUCK(sf::Texture* texture, sf::SoundBuffer* soundBuffer);
 	CTRUCK(float, float);
+	sf::RectangleShape hitbox();
 };
 
 class CCAR : public CVEHICLE {
@@ -68,6 +75,7 @@ private:
 public:
 	CCAR(sf::Texture* texture, sf::SoundBuffer* soundBuffer);
 	CCAR(float, float);
+	sf::RectangleShape hitbox();
 };
 
 class CANIMAL : public COBJECT {
@@ -76,6 +84,7 @@ private:
 public:
 	CANIMAL(sf::Texture* texture, sf::SoundBuffer* soundBuffer);
 	CANIMAL(float, float);
+	sf::RectangleShape hitbox();
 	//virtual void Tell();
 };
 
@@ -83,6 +92,7 @@ class CDINOSAUR : public CANIMAL {
 public:
 	CDINOSAUR(sf::Texture* texture, sf::SoundBuffer* soundBuffer);
 	CDINOSAUR(float, float);
+	sf::RectangleShape hitbox();
 	void update();
 };
 
@@ -90,6 +100,7 @@ class CBIRD : public CANIMAL {
 public:
 	CBIRD(sf::Texture* texture, sf::SoundBuffer* soundBuffer);
 	CBIRD(float, float);
+	sf::RectangleShape hitbox();
 	void update();
 };
 
@@ -101,10 +112,10 @@ private:
 public:
 	PEOPLE();
 	PEOPLE(float, float, sf::Texture* texture, sf::SoundBuffer* soundBuffer);
+	sf::RectangleShape hitbox();
 
 	void KeyBoadMove_WithDt(float, sf::Event &);
-	//bool isImpact(const CVEHICLE*&);
-	//bool isImpact(const CANIMAL);
+	bool isImpact(vector<COBJECT*> enemies);
 
 	void setSpeed(float);
 	bool isImpact() { return false; }
