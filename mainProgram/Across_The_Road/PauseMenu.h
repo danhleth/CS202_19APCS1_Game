@@ -48,5 +48,5 @@ public:
 	void initFont();
 	void initBackground();
 	void draw(sf::RenderTarget*);
-	void checkForNext();
+	bool checkQuit(sf::Event&);
 };

@@ -44,7 +44,8 @@ private:
 	PEOPLE people;
 	COBJECT* enemy;
 	vector<COBJECT*> enemies;
-	map<string, sf::SoundBuffer> sounds;
+	map<string, sf::SoundBuffer> soundBuffers;
+	map<string, sf::Sound> sounds;
 	COBJECT* line;
 	map<string, sf::Texture> textures;
 	//Level
