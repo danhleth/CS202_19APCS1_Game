@@ -88,12 +88,8 @@ void GameState::update()
                 pauseMenu->setPause(false);
             }
         }
-        else {
-            messageBox->draw(this->window);
-        }
     }
     checkFromPause();
-
 }
 
 void GameState::render(sf::Event &ev, sf::RenderTarget* target)
@@ -101,17 +97,23 @@ void GameState::render(sf::Event &ev, sf::RenderTarget* target)
     if (!target)
         target = this->window;
     target->draw(background);
-    if (!pause) {
         
         renderPlayer(ev);
         renderEnemies();
-    }
+    
     
     generateMap();
 
     if (this->pause) {
         //pause render
-        pauseMenu->render(ev, this->window);
+        if (this->messageBox->pause) {
+            messageBox->draw(this->window);
+            if (messageBox->checkQuit(ev)) {
+                setQuit(true);
+            }
+        }
+        else
+            pauseMenu->render(ev, this->window);
     }
 }
 
@@ -212,15 +214,20 @@ void GameState::updateEnemies() {
 void GameState::renderEnemies() {
     for (auto& e : this->enemies)
         e->Draw(this->window);
-    for (auto& e : this->enemies) 
-        e->Move((2.f + static_cast<float>(currentLevel - 1)), 0.f);
+    if (!this->pause) {
+        for (auto& e : this->enemies)
+            e->Move((2.f + static_cast<float>(currentLevel - 1)), 0.f);
+    }
+
 }
 
 
 void GameState::renderPlayer(sf::Event &ev)
 {
     this->people.Draw(this->window);
-    this->people.KeyBoadMove_WithDt(46.f, ev);
+    if (!this->pause) {
+        this->people.KeyBoadMove_WithDt(46.f, ev);
+    }
 }
 
 void GameState::spawnEnemy() {
@@ -265,7 +272,6 @@ void GameState::generateMap()
 void GameState::checkImpact()
 {
     if (this->people.isImpact(this->enemies)) {
-        setQuit(true);
         this->pause = true;
         this->messageBox->pause = true;
     }

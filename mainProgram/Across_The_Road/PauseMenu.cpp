@@ -191,14 +191,17 @@ void MessageBox::initBackground()
     text[1].setStyle(sf::Text::Regular);
 
     text[0].setPosition(
-        (float)this->window->getSize().x / 2 - 10.f,
+        (float)this->window->getSize().x / 2 - 50.f,
         (float)this->window->getSize().y / 2 - 50.f
+    );
+    text[1].setPosition(
+        (float)this->window->getSize().x / 2 - 60.f,
+        (float)this->window->getSize().y / 2 - 0.f
     );
 }
 
 void MessageBox::draw(sf::RenderTarget* target)
 {
-    checkForNext();
     if (!target)
         target = this->window;
     target->draw(box);
@@ -206,9 +209,11 @@ void MessageBox::draw(sf::RenderTarget* target)
     target->draw(text[0]);
 }
 
-void MessageBox::checkForNext()
+bool MessageBox::checkQuit(sf::Event& ev)
 {
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
-        this->pause = true;
+    if (ev.key.code == sf::Keyboard::Enter) {
+        ev.key.code = sf::Keyboard::Unknown;
+        return true;
     }
+    return false;
 }
