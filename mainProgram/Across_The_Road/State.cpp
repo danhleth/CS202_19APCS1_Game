@@ -49,6 +49,7 @@ GameState::GameState(sf::RenderWindow* window, stack<State*>* states) :
     initEnemies();
     initBackground();
     initLevel();
+    initSound();
 
     this->pauseMenu = new PauseMenu(this->window);
     this->messageBox = new MessageBox(this->window);
@@ -118,7 +119,7 @@ void GameState::render(sf::Event &ev, sf::RenderTarget* target)
 
 void GameState::initPlayer()
 {
-    this->people = PEOPLE(400, 500, &this->textures["people"], &this->sounds["people"]);
+    this->people = PEOPLE(400, 500, &this->textures["people"], &this->soundBuffers["people"]);
 }
 
 void GameState::initEnemies() {}
@@ -168,13 +169,23 @@ void GameState::initSound()
 {
     sf::SoundBuffer soundTmp;
     soundTmp.loadFromFile("sound/bird.wav");
-    sounds["bird"] = soundTmp;
+    soundBuffers["bird"] = soundTmp;
     soundTmp.loadFromFile("sound/car_sound.wav");
-    sounds["car"] = soundTmp;
+    soundBuffers["car"] = soundTmp;
     soundTmp.loadFromFile("sound/dino.wav");
-    sounds["dino"] = soundTmp;
+    soundBuffers["dino"] = soundTmp;
     soundTmp.loadFromFile("sound/people_footstep.wav");
-    sounds["people"] = soundTmp;
+    soundBuffers["people"] = soundTmp;
+
+    sf::Sound sound;
+    sound.setBuffer(soundBuffers["birds"]);
+    sounds["birds"] = sound;
+    sound.setBuffer(soundBuffers["car"]);
+    sounds["car"] = sound;
+    sound.setBuffer(soundBuffers["dino"]);
+    sounds["dino"] = sound;
+    sound.setBuffer(soundBuffers["people"]);
+    sounds["people"] = sound;
 }
 
 void GameState::setLevel(unsigned level) {
@@ -224,8 +235,19 @@ void GameState::updateEnemies() {
 }
 
 void GameState::renderEnemies() {
+
     for (auto& e : this->enemies) {
         e->Draw(this->window);
+        if (typeid(*e) == typeid(CTRUCK) || typeid(*e) == typeid(CCAR)) {
+            sounds["car"].play();
+        }
+        if (typeid(*e) == typeid(CBIRD)) {
+            sounds["bird"].play();
+        }
+        if (typeid(*e) == typeid(CDINOSAUR)) {
+            sounds["dino"].play();
+        }
+    }
     if (!this->pause) {
         for (auto& e : this->enemies)
             e->Move((2.f + static_cast<float>(currentLevel - 1)), 0.f);
@@ -248,17 +270,16 @@ void GameState::spawnEnemy() {
     switch (tmp)
     {
     case 0:
-
-        this->enemy = new CTRUCK(&this->textures["truck"], &this->sounds["car"]);
+        enemyTmp = new CTRUCK(&this->textures["truck"], &this->soundBuffers["car"]);
         break;
     case 1:
-        this->enemy = new CCAR(&this->textures["car"], &this->sounds["car"]);
+        enemyTmp = new CCAR(&this->textures["car"], &this->soundBuffers["car"]);
         break;
     case 2:
-        this->enemy = new CBIRD(&this->textures["bird"], &this->sounds["bird"]);
+        enemyTmp = new CBIRD(&this->textures["bird"], &this->soundBuffers["bird"]);
         break;
     default:
-        this->enemy = new CDINOSAUR(&this->textures["dino"], &this->sounds["dino"]);
+        enemyTmp = new CDINOSAUR(&this->textures["dino"], &this->soundBuffers["dino"]);
         break;
     }
     float tmpp = 130 + static_cast<float>((rand() % 4) * 92);//set location

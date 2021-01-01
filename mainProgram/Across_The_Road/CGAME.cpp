@@ -50,7 +50,7 @@ void CGAME::pollEvent()
 }
 
 void CGAME::update()
-{
+{ 
     this->pollEvent();
     if (!this->states.empty()) {
         this->states.top()->update();
