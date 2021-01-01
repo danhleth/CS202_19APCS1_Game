@@ -13,12 +13,15 @@ protected:
 	sf::Texture *texture;
 	sf::Sprite *sprite;
 	//Component
+	//sf::RectangleShape hitBox;
 	Movement* movement;
 	AnimationComponent* animation;
 
 	void createSprite(sf::Texture*);
 	void createMovement(float maxVeclocity);
 	void createAnimation(sf::Texture& texture);
+	//void createHitBox();
+	void setSizeHitBox(float, float);
 	void initTexture();
 public:
 	//Constructor
@@ -33,6 +36,7 @@ public:
 	void Y(float);
 	float getX();
 	float getY();
+
 	void changeConvex(sf::ConvexShape _convex);
 	sf::ConvexShape getConvex();
 	void setShape(vector<vector<float>>);
@@ -40,6 +44,7 @@ public:
 	virtual void KeyBoardMove(float, float);
 	virtual void Draw(sf::RenderTarget*);
 	virtual void setPosition(float, float);
+	virtual sf::RectangleShape hitbox();
 	virtual void update();
 };
 
@@ -49,6 +54,7 @@ private:
 public:
 	CVEHICLE(sf::Texture* texture);
 	CVEHICLE(float, float, sf::Texture* texture);
+	sf::RectangleShape hitbox();
 };
 
 class CTRUCK : public CVEHICLE {
@@ -57,6 +63,7 @@ private:
 public:
 	CTRUCK(sf::Texture* texture);
 	CTRUCK(float, float);
+	sf::RectangleShape hitbox();
 };
 
 class CCAR : public CVEHICLE {
@@ -65,6 +72,7 @@ private:
 public:
 	CCAR(sf::Texture* texture);
 	CCAR(float, float);
+	sf::RectangleShape hitbox();
 };
 
 class CANIMAL : public COBJECT {
@@ -73,6 +81,7 @@ private:
 public:
 	CANIMAL(sf::Texture* texture);
 	CANIMAL(float, float);
+	sf::RectangleShape hitbox();
 	//virtual void Tell();
 };
 
@@ -80,6 +89,7 @@ class CDINOSAUR : public CANIMAL {
 public:
 	CDINOSAUR(sf::Texture* texture);
 	CDINOSAUR(float, float);
+	sf::RectangleShape hitbox();
 	void update();
 };
 
@@ -87,6 +97,7 @@ class CBIRD : public CANIMAL {
 public:
 	CBIRD(sf::Texture* texture);
 	CBIRD(float, float);
+	sf::RectangleShape hitbox();
 	void update();
 };
 
@@ -98,10 +109,10 @@ private:
 public:
 	PEOPLE();
 	PEOPLE(float, float, sf::Texture* texture);
+	sf::RectangleShape hitbox();
 
 	void KeyBoadMove_WithDt(float, sf::Event &);
-	//bool isImpact(const CVEHICLE*&);
-	//bool isImpact(const CANIMAL);
+	bool isImpact(vector<COBJECT*> enemies);
 
 	void setSpeed(float);
 	bool isImpact() { return false; }

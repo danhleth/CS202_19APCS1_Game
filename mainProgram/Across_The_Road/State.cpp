@@ -52,7 +52,7 @@ GameState::GameState(sf::RenderWindow* window, stack<State*>* states) :
     initLevel();
 
     this->pauseMenu = new PauseMenu(this->window);
-
+    this->messageBox = new MessageBox(this->window);
     this->points = 0;
     this->enemySpawnTimerMax = 120.f;
     this->enemySpawnTimer = this->enemySpawnTimerMax;
@@ -73,18 +73,23 @@ void GameState::endState()
 
 void GameState::update()
 {
-
     checkForPause();
+    checkImpact();
     if (!this->pause) {
         this->checkForQuit();
         this->updateEnemies();
         people.update();
     }
     else {
-        pauseMenu->update();
-        if (pauseMenu->getPause()) {
-            this->pause = false;
-            pauseMenu->setPause(false);
+        if (!this->messageBox->pause) {
+            pauseMenu->update();
+            if (pauseMenu->getPause()) {
+                this->pause = false;
+                pauseMenu->setPause(false);
+            }
+        }
+        else {
+            messageBox->draw(this->window);
         }
     }
     checkFromPause();
@@ -99,8 +104,9 @@ void GameState::render(sf::Event &ev, sf::RenderTarget* target)
     if (!pause) {
         
         renderPlayer(ev);
+        renderEnemies();
     }
-    renderEnemies();
+    
     generateMap();
 
     if (this->pause) {
@@ -169,14 +175,27 @@ void GameState::setLevel(unsigned level) {
 }
 
 void GameState::updateEnemies() {
-    //to create the enemies
     if (this->enemies.size() < this->maxEnemies) {
         if (this->enemySpawnTimer >= this->enemySpawnTimerMax) {
             //spaw the enemy and reset the timer
             this->spawnEnemy();
-            this->spawnEnemy();
-            if (this->enemies[this->enemies.size() - 1]->Y() == this->enemies[this->enemies.size() - 2]->Y()) {
-                this->enemies.pop_back();
+            int keepSize = this->enemies.size();
+            for (int i = 0; i < this->currentLevel; i++) {
+                this->spawnEnemy();
+                int keepCurrentSize = this->enemies.size();
+                float checkSameLine = this->enemies[static_cast<int>(keepCurrentSize - 1)]->Y();
+                for (unsigned j = keepSize; j < keepCurrentSize; j++) {
+                    float checkSameLine1 = this->enemies[j - 1]->Y();
+                    if (checkSameLine == checkSameLine1 || (checkSameLine == checkSameLine1 - 20) ||
+                        checkSameLine == checkSameLine1 + 20) {
+                        this->enemies.pop_back();
+                        break;
+                    }
+                }
+                if (this->enemies.size() == keepCurrentSize) {
+                    this->enemies[this->enemies.size() - 1]->
+                        setPosition(-150.f, this->enemies[this->enemies.size() - 1]->Y());
+                }
             }
             enemySpawnTimer = 0.f;
         }
@@ -186,7 +205,7 @@ void GameState::updateEnemies() {
     else {
         enemies.erase(enemies.begin());// 6 = max - 1
     }
-    for (auto& e : this->enemies) 
+    for (auto& e : this->enemies)
         e->update();
 }
 
@@ -205,34 +224,32 @@ void GameState::renderPlayer(sf::Event &ev)
 }
 
 void GameState::spawnEnemy() {
+    COBJECT* enemyTmp = nullptr;
     unsigned tmp = static_cast<unsigned>(rand() % 4);
     switch (tmp)
     {
     case 0:
-        this->enemy = new CTRUCK(&this->textures["truck"]);
+        enemyTmp = new CTRUCK(&this->textures["truck"]);
         break;
     case 1:
-        this->enemy = new CCAR(&this->textures["car"]);
+        enemyTmp = new CCAR(&this->textures["car"]);
         break;
     case 2:
-        this->enemy = new CBIRD(&this->textures["bird"]);
+        enemyTmp = new CBIRD(&this->textures["bird"]);
         break;
     default:
-        this->enemy = new CDINOSAUR(&this->textures["dino"]);
+        enemyTmp = new CDINOSAUR(&this->textures["dino"]);
         break;
     }
     float tmpp = 130 + static_cast<float>((rand() % 4) * 92);//set location
-    if (typeid(*this->enemy) == typeid(CTRUCK) || typeid(*this->enemy) == typeid(CBIRD))
+    if (typeid(*enemyTmp) == typeid(CTRUCK) || typeid(*enemyTmp) == typeid(CBIRD))
         tmpp -= 20;
-    this->enemy->setPosition(0.f, tmpp);
-    
-    this->enemies.push_back(enemy);
+    enemyTmp->setPosition(0.f, tmpp);
+    this->enemies.push_back(enemyTmp);
 }
 
 void GameState::generateMap()
 {
-
-
     if (people.getY() <= 552.f) {//change from 100 to 552 because the sprite is something mysterious about the location
         if (currentLevel >= 3)
             setLevel(1);
@@ -242,6 +259,15 @@ void GameState::generateMap()
         }
         people.setPosition(400, 508);
         enemies.clear();
+    }
+}
+
+void GameState::checkImpact()
+{
+    if (this->people.isImpact(this->enemies)) {
+        setQuit(true);
+        this->pause = true;
+        this->messageBox->pause = true;
     }
 }
 
