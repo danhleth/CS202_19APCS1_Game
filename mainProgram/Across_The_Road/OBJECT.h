@@ -46,8 +46,10 @@ public:
 	virtual void KeyBoardMove(float, float);
 	virtual void Draw(sf::RenderTarget*);
 	virtual void setPosition(float, float);
-	virtual sf::RectangleShape hitbox();
 	virtual void update();
+	virtual void setScale(float,float);
+	virtual void setColor(float,float,float);
+	virtual sf::RectangleShape hitbox();
 	void playSound();
 };
 
@@ -116,7 +118,6 @@ public:
 
 	void KeyBoadMove_WithDt(float, sf::Event &);
 	bool isImpact(vector<COBJECT*> enemies);
-
 	void setSpeed(float);
 	bool isImpact() { return false; }
 	void Draw(sf::RenderTarget*);
