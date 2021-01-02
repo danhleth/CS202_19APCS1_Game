@@ -22,7 +22,6 @@ void State::setQuit(bool q)
     this->quit = q;
 }
 
-
 void State::checkForQuit()
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
@@ -51,15 +50,13 @@ GameState::GameState(sf::RenderWindow* window, stack<State*>* states) :
     initBackground();
     initLevel();
     initTrafficLights();
-
+    initSound();
     this->pauseMenu = new PauseMenu(this->window);
-
+    this->messageBox = new MessageBox(this->window);
     this->points = 0;
     this->enemySpawnTimerMax = 120.f;
     this->enemySpawnTimer = this->enemySpawnTimerMax;
     this->maxEnemies = 7;
-    
-
 }
 
 GameState::~GameState()
@@ -82,6 +79,7 @@ void GameState::update()
 {
 
     checkForPause();
+    checkImpact();
     if (!this->pause) {
         this->checkForQuit();
         this->updateEnemies();
@@ -89,10 +87,12 @@ void GameState::update()
         people.update();
     }
     else {
-        pauseMenu->update();
-        if (pauseMenu->getPause()) {
-            this->pause = false;
-            pauseMenu->setPause(false);
+        if (!this->messageBox->pause) {
+            pauseMenu->update();
+            if (pauseMenu->getPause()) {
+                this->pause = false;
+                pauseMenu->setPause(false);
+            }
         }
     }
     checkFromPause();
@@ -104,23 +104,27 @@ void GameState::render(sf::Event &ev, sf::RenderTarget* target)
     if (!target)
         target = this->window;
     target->draw(background);
-    if (!pause) {
-        
-        renderPlayer(ev);
-    }
+    renderPlayer(ev);
     renderEnemies();
     renderTrafficLights();
     generateMap();
 
     if (this->pause) {
         //pause render
-        pauseMenu->render(ev, this->window);
+        if (this->messageBox->pause) {
+            messageBox->draw(this->window);
+            if (messageBox->checkQuit(ev)) {
+                setQuit(true);
+            }
+        }
+        else
+            pauseMenu->render(ev, this->window);
     }
 }
 
 void GameState::initPlayer()
 {
-    this->people = PEOPLE(400, 500, &this->textures["people"]);
+    this->people = PEOPLE(400, 500, &this->textures["people"], &this->soundBuffers["people"]);
 }
 
 void GameState::initEnemies() {}
@@ -197,6 +201,27 @@ void GameState::initTrafficLights(){
     tmp->setScale(0.11f, 0.125f);
     tmp->setColor(0.f, 0.f, 0.f);
     trafficLights.push_back(tmp);
+void GameState::initSound()
+{
+    sf::SoundBuffer soundTmp;
+    soundTmp.loadFromFile("sound/bird.wav");
+    soundBuffers["bird"] = soundTmp;
+    soundTmp.loadFromFile("sound/car_sound.wav");
+    soundBuffers["car"] = soundTmp;
+    soundTmp.loadFromFile("sound/dino.wav");
+    soundBuffers["dino"] = soundTmp;
+    soundTmp.loadFromFile("sound/people_footstep.wav");
+    soundBuffers["people"] = soundTmp;
+
+    sf::Sound sound;
+    sound.setBuffer(soundBuffers["birds"]);
+    sounds["birds"] = sound;
+    sound.setBuffer(soundBuffers["car"]);
+    sounds["car"] = sound;
+    sound.setBuffer(soundBuffers["dino"]);
+    sounds["dino"] = sound;
+    sound.setBuffer(soundBuffers["people"]);
+    sounds["people"] = sound;
 }
 
 void GameState::setLevel(unsigned level) {
@@ -211,7 +236,6 @@ void GameState::setLevel(unsigned level) {
 }
 
 void GameState::updateEnemies() {
-    //to create the enemies
     if (this->enemies.size() < this->maxEnemies) {
         if (this->enemySpawnTimer >= this->enemySpawnTimerMax) {
             //spaw the enemy and reset the timer
@@ -247,19 +271,32 @@ void GameState::updateEnemies() {
 }
 
 void GameState::renderEnemies() {
-    for (auto& e : this->enemies)
+
+    for (auto& e : this->enemies) {
         e->Draw(this->window);
-    for (auto& e : this->enemies) {//red, yellow, green
         if (typeid(*e) == typeid(CTRUCK) || typeid(*e) == typeid(CCAR)) {
-            if (currentTrafficLights == 2)
-                e->Move(((3.f + (static_cast<float>(currentLevel - 1))) / 2) / 2, 0.f);
-            else if (currentTrafficLights == 1)
-                e->Move(0.f, 0.f);
-            else
-                e->Move((3.f + (static_cast<float>(currentLevel - 1))) / 2, 0.f);
+            sounds["car"].play();
         }
-        else 
-            e->Move((3.f + (static_cast<float>(currentLevel - 1))) / 2, 0.f);
+        if (typeid(*e) == typeid(CBIRD)) {
+            sounds["bird"].play();
+        }
+        if (typeid(*e) == typeid(CDINOSAUR)) {
+            sounds["dino"].play();
+        }
+    }
+    if (!this->pause) {
+        for (auto& e : this->enemies) {//red, yellow, green
+            if (typeid(*e) == typeid(CTRUCK) || typeid(*e) == typeid(CCAR)) {
+                if (currentTrafficLights == 2)
+                    e->Move(((3.f + (static_cast<float>(currentLevel - 1))) / 2) / 2, 0.f);
+                else if (currentTrafficLights == 1)
+                    e->Move(0.f, 0.f);
+                else
+                    e->Move((3.f + (static_cast<float>(currentLevel - 1))) / 2, 0.f);
+            }
+            else 
+              e->Move((3.f + (static_cast<float>(currentLevel - 1))) / 2, 0.f);
+        }
     }
 }
 
@@ -267,7 +304,9 @@ void GameState::renderEnemies() {
 void GameState::renderPlayer(sf::Event &ev)
 {
     this->people.Draw(this->window);
-    this->people.KeyBoadMove_WithDt(46.f, ev);
+    if (!this->pause) {
+        this->people.KeyBoadMove_WithDt(46.f, ev);
+    }
 }
 
 void GameState::updateTrafficLights() {
@@ -300,40 +339,32 @@ void GameState::renderTrafficLights(){
 }
 
 void GameState::spawnEnemy() {
-    unsigned tmp=0;
-    if(currentTrafficLights==1)
-        tmp = static_cast<unsigned>(rand() % 2) + 2;
-    else if(currentTrafficLights==2)
-        tmp = static_cast<unsigned>(rand() % 4);
-    else 
-        tmp = static_cast<unsigned>(rand() % 2);
+    COBJECT* enemyTmp = nullptr;
+    unsigned tmp = static_cast<unsigned>(rand() % 4);
     switch (tmp)
     {
     case 0:
-        this->enemy = new CTRUCK(&this->textures["truck"]);
+        enemyTmp = new CTRUCK(&this->textures["truck"], &this->soundBuffers["car"]);
         break;
     case 1:
-        this->enemy = new CCAR(&this->textures["car"]);
+        enemyTmp = new CCAR(&this->textures["car"], &this->soundBuffers["car"]);
         break;
     case 2:
-        this->enemy = new CBIRD(&this->textures["bird"]);
+        enemyTmp = new CBIRD(&this->textures["bird"], &this->soundBuffers["bird"]);
         break;
     default:
-        this->enemy = new CDINOSAUR(&this->textures["dino"]);
+        enemyTmp = new CDINOSAUR(&this->textures["dino"], &this->soundBuffers["dino"]);
         break;
     }
     float tmpp = 130 + static_cast<float>((rand() % 4) * 92);//set location
-    if (typeid(*this->enemy) == typeid(CTRUCK) || typeid(*this->enemy) == typeid(CBIRD))
+    if (typeid(*enemyTmp) == typeid(CTRUCK) || typeid(*enemyTmp) == typeid(CBIRD))
         tmpp -= 20;
-    this->enemy->setPosition(0.f, tmpp);
-    
-    this->enemies.push_back(enemy);
+    enemyTmp->setPosition(0.f, tmpp);
+    this->enemies.push_back(enemyTmp);
 }
 
 void GameState::generateMap()
 {
-
-
     if (people.getY() <= 552.f) {//change from 100 to 552 because the sprite is something mysterious about the location
         if (currentLevel >= 3)
             setLevel(1);
@@ -343,6 +374,14 @@ void GameState::generateMap()
         }
         people.setPosition(400, 508);
         enemies.clear();
+    }
+}
+
+void GameState::checkImpact()
+{
+    if (this->people.isImpact(this->enemies)) {
+        this->pause = true;
+        this->messageBox->pause = true;
     }
 }
 

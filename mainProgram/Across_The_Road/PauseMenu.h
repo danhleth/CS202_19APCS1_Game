@@ -35,3 +35,18 @@ public:
 	void update();
 	void render(sf::Event &, sf::RenderTarget* target = nullptr);
 };
+
+class MessageBox {
+private:
+	sf::RenderWindow* window;
+	sf::RectangleShape box;
+	sf::Text text[2];
+	sf::Font font;
+public:
+	bool pause;
+	MessageBox(sf::RenderWindow*);
+	void initFont();
+	void initBackground();
+	void draw(sf::RenderTarget*);
+	bool checkQuit(sf::Event&);
+};
