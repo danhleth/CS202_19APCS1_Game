@@ -6,8 +6,6 @@ COBJECT::COBJECT() {
 	this->texture = NULL;
 	this->sprite = NULL;
 	this->movement = NULL;
-	this->createMovement(3);
-	//this->createHitBox();
 }
 
 COBJECT::COBJECT(float x, float y) {
@@ -16,9 +14,13 @@ COBJECT::COBJECT(float x, float y) {
 	this->texture = NULL;
 	this->sprite = NULL;
 	this->createMovement(3);
-	//this->createHitBox();
 }
-
+void COBJECT::setScale(float width, float hight){
+	this->sprite->setScale(width, hight);
+}
+void COBJECT::setColor (float red, float green, float white) {
+	this->sprite->setColor(sf::Color(red, green, white));
+}
 void COBJECT::update()
 {
 	int a = 0;
@@ -109,8 +111,6 @@ void COBJECT::Draw(sf::RenderTarget* window) {
 	//}
 	//window->draw(convex);
 	window->draw(*this->sprite);
-	//window->draw(this->hitbox());
-	//window->draw(this->hitBox);
 }
 
 void COBJECT::setPosition(float x, float y) {
@@ -196,6 +196,13 @@ sf::RectangleShape CTRUCK::hitbox() {
 	h.setOutlineThickness(2.f);
 	return h;
 }
+//CTRUCK::CTRUCK(float x, float y)
+//	:CVEHICLE(x, y)
+//{
+//	setShape({
+//		{0.f ,0.f}, {0.f, -80.f}, {115.f, -80.f}, {115.f, -45.f}, {120.f, -70.f}, {150.f, -70.f}, { 170.f, -35.f }, { 175.f, -35.f }, { 180.f, -30.f }, { 180.f, 0.f }
+//		});
+//}
 
 //CCAR
 CCAR::CCAR(sf::Texture* texture, sf::SoundBuffer* soundBuffer)
@@ -224,6 +231,13 @@ sf::RectangleShape CCAR::hitbox() {
 	h.setOutlineThickness(2.f);
 	return h;
 }
+//CCAR::CCAR(float _x, float _y)
+//	: CVEHICLE(_x, _y)
+//{
+//	setShape({
+//		{0.f, 0.f}, {90.f, 0.f}, {90.f, -7.f}, {88.f, -12.f}, {82.f, -12.f}, {68.f, -36.f}, {18.f, -36.f}, {10.f, -12.f}, {0.f, -12.f}
+//		});
+//}
 
 
 //CANIMAL
@@ -257,7 +271,6 @@ CDINOSAUR::CDINOSAUR(sf::Texture* texture, sf::SoundBuffer* soundBuffer)
 	this->animation->addAnimation("LEFT", 60.f, 0, 0, 11, 0, 54, 50);
 	//this->setSizeHitBox(54 * 1.3f , 50 * 1.3f);
 }
-
 //CDINOSAUR::CDINOSAUR(float _x, float _y)
 //	: CANIMAL(_x, _y)
 //{
@@ -285,7 +298,6 @@ sf::RectangleShape CDINOSAUR::hitbox() {
 	h.setOutlineThickness(2.f);
 	return h;
 }
-
 void CDINOSAUR::update() {
 	this->animation->play("LEFT");
 }
@@ -349,8 +361,6 @@ PEOPLE::PEOPLE(float x, float y, sf::Texture* texture, sf::SoundBuffer* soundBuf
 	this->animation->addAnimation("LEFT", 60.f, 0, 0, 2, 0, 50, 61);
 	//this->setSizeHitBox(50 * 0.9f, 61 * 0.9f);
 }
-
-
 
 bool PEOPLE::isImpact(vector<COBJECT*> enemies)
 {
