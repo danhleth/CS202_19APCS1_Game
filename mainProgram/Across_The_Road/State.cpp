@@ -235,7 +235,7 @@ void GameState::renderEnemies() {
 
 
 void GameState::renderPlayer(sf::Event &ev)
-{
+ {
     this->people.Draw(this->window);
     this->people.KeyBoadMove_WithDt(46.f, ev);
 }

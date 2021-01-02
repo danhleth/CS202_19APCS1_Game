@@ -2,9 +2,9 @@
 #include "CGAME.h"
 int main()
 {
-        //srand(static_cast<unsigned>(time(NULL)));
-        ////Init Game
-        //CGAME game;
+        srand(static_cast<unsigned>(time(NULL)));
+        //Init Game
+        CGAME game;
 
     /*sf::Thread thread(&func);
     thread.launch();*/
@@ -21,23 +21,23 @@ int main()
     text.setCharacterSize(12);
     text.setFont(font);*/
 
-        //while (game.running())
-        //{
-        //   //Update
-        //   game.update();
-        //   //Render
-        //   game.render();
-        //    //window->clear();
-        //    //window->draw(text);
-        //    //window->display();
-        //}
+        while (game.running())
+        {
+           //Update
+           game.update();
+           //Render
+           game.render();
+            //window->clear();
+            //window->draw(text);
+            //window->display();
+        }
 
-    sf::SoundBuffer a;
-    if (!a.loadFromFile("sound/dino.wav"))
-        return -1;
-    sf::Sound b;
+    //sf::SoundBuffer a;
+    //if (!a.loadFromFile("sound/dino.wav"))
+    //    return -1;
+    //sf::Sound b;
 
-    b.setBuffer(a);
-    b.play();
+    //b.setBuffer(a);
+    //b.play();
     return 0;
 }
