@@ -2,9 +2,9 @@
 #include "CGAME.h"
 int main()
 {
-        srand(static_cast<unsigned>(time(NULL)));
-        //Init Game
-        CGAME game;
+     srand(static_cast<unsigned>(time(NULL)));
+     //Init Game
+     CGAME game;
 
     while (game.running())
     {
