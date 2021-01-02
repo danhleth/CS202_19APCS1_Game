@@ -69,10 +69,24 @@ GameState::~GameState()
 void GameState::endState()
 {   
     ofstream fout;
-    int rID = rand() % 1000;
-    string batch= "data/" + to_string(rID) + "_user.txt";
- 
-    fout.open(batch);
+    ofstream file_info;
+    time_t now = time(0);
+    tm* ltm = localtime(&now);
+
+    int year = 1900 + ltm->tm_year;
+    int month = 1 + ltm->tm_mon;
+    int day = ltm->tm_mday;
+    int hour = ltm->tm_hour;
+    int minute = ltm->tm_min;
+    string batch= to_string(year) + "_" + to_string(month) + "_" + to_string(day) + "_" + to_string(hour) + "_" + to_string(minute) + "_user";
+    
+    file_info.open("data/inf.txt",ofstream::app);
+    if (file_info.is_open()) {
+        file_info << batch << endl;
+    }
+    file_info.close();
+
+    fout.open("data/" + batch + ".txt");
     if (fout.is_open()) {
         fout << currentLevel << endl;
     }
@@ -369,11 +383,27 @@ void MenuState::initFont()
     }
 }
 
+
 void MenuState::checkButton()
 {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Enter)) {
         if(currentButton == 0)
             this->states->push(new GameState(this->window, this->states));
+        if (currentButton == 1) {
+            ifstream fin;
+            fin.open("data/inf.txt");
+            static vector<string> listFile;
+            if (fin.is_open()) {
+                while (!fin.eof()) {
+                    string tmp;
+                    getline(fin, tmp);
+                    cout << tmp << endl;
+                    //listFile.push_back(tmp);
+                }
+            }
+            fin.close();
+
+        }
         if (currentButton == 2)
             window->close();
     }

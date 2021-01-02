@@ -1,4 +1,4 @@
-#pragma once
+#pragma warning(disable : 4996)
 #include "includePath.h"
 #include "OBJECT.h"
 #include "PauseMenu.h"
@@ -76,8 +76,23 @@ public:
 	void render(sf::Event &, sf::RenderTarget* target = nullptr);
 };
 
-class MenuState : public State {
+class MenuItem {
+private:
+	sf::Font font;
+	int currentbutton;
+public:
+	MenuItem() {
+		if (!this->font.loadFromFile("font/Dosis-Light.ttf")) {
+			throw("Font not found! \n");
+		}
+	}
+	
+	vector<sf::RectangleShape> Listrec;
+	vector<sf::Text> Listtext;
+};
 
+class MenuState : public State {
+	MenuItem items;
 	sf::RectangleShape rec[3];
 	sf::Text text[3];
 	sf::Font font;
