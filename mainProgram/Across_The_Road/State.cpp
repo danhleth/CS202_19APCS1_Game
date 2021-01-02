@@ -182,25 +182,27 @@ void GameState::initLevel() {
 	setLevel(1);
 }
 
-void GameState::initTrafficLights(){
+void GameState::initTrafficLights() {
     currentTrafficLights = 3;
     this->trafficLightsSpawnTimer = 120.f;
     this->trafficLightsSpawnTimerMax = this->trafficLightsSpawnTimer;
-    COBJECT* tmp = new CTRUCK(&this->textures["red"]);
+    COBJECT* tmp = new CTRUCK(&this->textures["red"], &this->soundBuffers["car"]);
     tmp->setPosition(550.f, 40.f);
     tmp->setScale(0.21f, 0.21f);
     tmp->setColor(0.f, 0.f, 0.f);
     trafficLights.push_back(tmp);
-    tmp = new CTRUCK(&this->textures["yellow"]);
+    tmp = new CTRUCK(&this->textures["yellow"], &this->soundBuffers["car"]);
     tmp->setPosition(602.5f, 40.f);
     tmp->setScale(0.07f, 0.07f);
     tmp->setColor(0.f, 0.f, 0.f);
     trafficLights.push_back(tmp);
-    tmp = new CTRUCK(&this->textures["blue"]);
+    tmp = new CTRUCK(&this->textures["blue"], &this->soundBuffers["car"]);
     tmp->setPosition(650.f, 40.f);
     tmp->setScale(0.11f, 0.125f);
     tmp->setColor(0.f, 0.f, 0.f);
     trafficLights.push_back(tmp);
+}
+
 void GameState::initSound()
 {
     sf::SoundBuffer soundTmp;
@@ -302,7 +304,7 @@ void GameState::renderEnemies() {
 
 
 void GameState::renderPlayer(sf::Event &ev)
-{
+ {
     this->people.Draw(this->window);
     if (!this->pause) {
         this->people.KeyBoadMove_WithDt(46.f, ev);
@@ -337,6 +339,7 @@ void GameState::renderTrafficLights(){
     for (auto& e : this->trafficLights)
         e->Draw(this->window);
 }
+
 
 void GameState::spawnEnemy() {
     COBJECT* enemyTmp = nullptr;
