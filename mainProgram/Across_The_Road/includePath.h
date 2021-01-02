@@ -2,6 +2,7 @@
 //#include <windows.h>
 //#include <iostream>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <vector>
 #include <time.h>  
 #include <ctime>

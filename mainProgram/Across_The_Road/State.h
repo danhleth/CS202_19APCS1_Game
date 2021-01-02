@@ -2,6 +2,7 @@
 #include "includePath.h"
 #include "OBJECT.h"
 #include "PauseMenu.h"
+//#include "Sound.h"
 
 class State
 {
@@ -43,6 +44,8 @@ private:
 	PEOPLE people;
 	COBJECT* enemy;
 	vector<COBJECT*> enemies;
+	map<string, sf::SoundBuffer> soundBuffers;
+	map<string, sf::Sound> sounds;
 	COBJECT* line;
 	map<string, sf::Texture> textures;
 	//Level
@@ -50,6 +53,7 @@ private:
 	int MAX_LEVEL;
 	//PauseMenu
 	PauseMenu *pauseMenu;
+	MessageBox* messageBox;
 	void checkForPause();
 	void checkFromPause();
 	//Init
@@ -58,15 +62,16 @@ private:
 	void initTextures();
 	void initBackground();
 	void initLevel();
+	void initSound();
 public:
 	GameState(sf::RenderWindow* window, stack<State*>*);
 	~GameState();
-	
+	//Function
 	void endState();
 	void setLevel(unsigned);
 	void spawnEnemy();
 	void generateMap();
-	//Function
+	void checkImpact();
 	
 	//Update & Render
 	void updateEnemies();
