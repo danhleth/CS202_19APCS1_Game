@@ -49,8 +49,8 @@ GameState::GameState(sf::RenderWindow* window, stack<State*>* states) :
     initEnemies();
     initBackground();
     initLevel();
+    initTrafficLights();
     initSound();
-
     this->pauseMenu = new PauseMenu(this->window);
     this->messageBox = new MessageBox(this->window);
     this->points = 0;
@@ -61,8 +61,12 @@ GameState::GameState(sf::RenderWindow* window, stack<State*>* states) :
 
 GameState::~GameState()
 {
-    for (int i = 0; i < enemies.size(); i++)
+    int n = enemies.size();
+    for (int i = 0; i < n; i++)
         delete enemies[i];
+    n = trafficLights.size();
+    for (int i = 0; i < n; i++)
+        delete trafficLights[i];
     delete[] line;
 }
 
@@ -113,11 +117,13 @@ void GameState::endState()
 
 void GameState::update()
 {
+
     checkForPause();
     checkImpact();
     if (!this->pause) {
         this->checkForQuit();
         this->updateEnemies();
+        this->updateTrafficLights();
         people.update();
     }
     else {
@@ -130,6 +136,7 @@ void GameState::update()
         }
     }
     checkFromPause();
+
 }
 
 void GameState::render(sf::Event &ev, sf::RenderTarget* target)
@@ -137,11 +144,9 @@ void GameState::render(sf::Event &ev, sf::RenderTarget* target)
     if (!target)
         target = this->window;
     target->draw(background);
-        
-        renderPlayer(ev);
-        renderEnemies();
-    
-    
+    renderPlayer(ev);
+    renderEnemies();
+    renderTrafficLights();
     generateMap();
 
     if (this->pause) {
@@ -187,6 +192,18 @@ void GameState::initTextures()
     tmp.loadFromFile("sprites/player3.png");
     tmp.setSmooth(true);
     this->textures["people"] = tmp;
+
+    tmp.loadFromFile("trafficLights/red.jfif");
+    tmp.setSmooth(true);
+    this->textures["red"] = tmp;
+
+    tmp.loadFromFile("trafficLights/yellow.jpg");
+    tmp.setSmooth(true);
+    this->textures["yellow"] = tmp;
+
+    tmp.loadFromFile("trafficLights/blue.jpg");
+    tmp.setSmooth(true);
+    this->textures["blue"] = tmp;
 }
 
 void GameState::initBackground()
@@ -203,6 +220,27 @@ void GameState::initLevel() {
 	MAX_LEVEL = 3;
 
 	setLevel(1);
+}
+
+void GameState::initTrafficLights() {
+    currentTrafficLights = 3;
+    this->trafficLightsSpawnTimer = 120.f;
+    this->trafficLightsSpawnTimerMax = this->trafficLightsSpawnTimer;
+    COBJECT* tmp = new CTRUCK(&this->textures["red"], &this->soundBuffers["car"]);
+    tmp->setPosition(550.f, 40.f);
+    tmp->setScale(0.21f, 0.21f);
+    tmp->setColor(0.f, 0.f, 0.f);
+    trafficLights.push_back(tmp);
+    tmp = new CTRUCK(&this->textures["yellow"], &this->soundBuffers["car"]);
+    tmp->setPosition(602.5f, 40.f);
+    tmp->setScale(0.07f, 0.07f);
+    tmp->setColor(0.f, 0.f, 0.f);
+    trafficLights.push_back(tmp);
+    tmp = new CTRUCK(&this->textures["blue"], &this->soundBuffers["car"]);
+    tmp->setPosition(650.f, 40.f);
+    tmp->setScale(0.11f, 0.125f);
+    tmp->setColor(0.f, 0.f, 0.f);
+    trafficLights.push_back(tmp);
 }
 
 void GameState::initSound()
@@ -236,7 +274,7 @@ void GameState::setLevel(unsigned level) {
     //this->points = 0;
     this->enemySpawnTimerMax = (140.f - static_cast<float>((level - 1) * 40));
     this->enemySpawnTimer = this->enemySpawnTimerMax;
-    this->maxEnemies = 10;// loop some   times
+    this->maxEnemies = 15;// loop some   times
 }
 
 void GameState::updateEnemies() {
@@ -259,7 +297,7 @@ void GameState::updateEnemies() {
                 }
                 if (this->enemies.size() == keepCurrentSize) {
                     this->enemies[this->enemies.size() - 1]->
-                        setPosition(-150.f, this->enemies[this->enemies.size() - 1]->Y());
+                        setPosition(-100.f, this->enemies[this->enemies.size()-1]->Y());
                 }
             }
             enemySpawnTimer = 0.f;
@@ -270,7 +308,7 @@ void GameState::updateEnemies() {
     else {
         enemies.erase(enemies.begin());// 6 = max - 1
     }
-    for (auto& e : this->enemies)
+    for (auto& e : this->enemies) 
         e->update();
 }
 
@@ -289,20 +327,59 @@ void GameState::renderEnemies() {
         }
     }
     if (!this->pause) {
-        for (auto& e : this->enemies)
-            e->Move((2.f + static_cast<float>(currentLevel - 1)), 0.f);
+        for (auto& e : this->enemies) {//red, yellow, green
+            if (typeid(*e) == typeid(CTRUCK) || typeid(*e) == typeid(CCAR)) {
+                if (currentTrafficLights == 2)
+                    e->Move(((3.f + (static_cast<float>(currentLevel - 1))) / 2) / 2, 0.f);
+                else if (currentTrafficLights == 1)
+                    e->Move(0.f, 0.f);
+                else
+                    e->Move((3.f + (static_cast<float>(currentLevel - 1))) / 2, 0.f);
+            }
+            else 
+              e->Move((3.f + (static_cast<float>(currentLevel - 1))) / 2, 0.f);
+        }
     }
-
 }
 
 
 void GameState::renderPlayer(sf::Event &ev)
-{
+ {
     this->people.Draw(this->window);
     if (!this->pause) {
         this->people.KeyBoadMove_WithDt(46.f, ev);
     }
 }
+
+void GameState::updateTrafficLights() {
+    if (this->trafficLightsSpawnTimer < this->trafficLightsSpawnTimerMax)
+        this->trafficLightsSpawnTimer++;
+    else {
+        if (currentTrafficLights <= 1)
+            currentTrafficLights = 3;
+        else
+            currentTrafficLights--;
+        if (currentTrafficLights == 1) {
+            this->trafficLights[1]->setColor(0.f, 0.f, 0.f);
+            this->trafficLights[0]->setColor(255.f, 255.f, 255.f);//red
+        }
+        else if (currentTrafficLights == 2) {
+            this->trafficLights[2]->setColor(0.f, 0.f, 0.f);
+            this->trafficLights[1]->setColor(255.f, 255.f, 0.f);//yellow
+        }
+        else {
+            this->trafficLights[0]->setColor(0.f, 0.f, 0.f);
+            this->trafficLights[2]->setColor(0.f, 255.f, 0.f);
+        }
+        this->trafficLightsSpawnTimer = 0.f;
+    }
+}
+
+void GameState::renderTrafficLights(){
+    for (auto& e : this->trafficLights)
+        e->Draw(this->window);
+}
+
 
 void GameState::spawnEnemy() {
     COBJECT* enemyTmp = nullptr;

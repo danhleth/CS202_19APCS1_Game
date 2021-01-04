@@ -41,6 +41,11 @@ private:
 	unsigned maxEnemies;
 	float enemyEndTimer;
 	float enemyEndTimerMax;
+	//Traffic lights
+	vector<COBJECT*> trafficLights;
+	int currentTrafficLights;
+	float trafficLightsSpawnTimer;
+	float trafficLightsSpawnTimerMax;
 	//Objects
 	PEOPLE people;
 	COBJECT* enemy;
@@ -63,6 +68,7 @@ private:
 	void initTextures();
 	void initBackground();
 	void initLevel();
+	void initTrafficLights();
 	void initSound();
 public:
 	GameState(sf::RenderWindow* window, stack<State*>*);
@@ -78,6 +84,8 @@ public:
 	void updateEnemies();
 	void renderEnemies();
 	void renderPlayer(sf::Event &);
+	void updateTrafficLights();
+	void renderTrafficLights();
 	void update();
 	void render(sf::Event &, sf::RenderTarget* target = nullptr);
 };
