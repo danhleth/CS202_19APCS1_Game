@@ -80,9 +80,26 @@ void GameState::endState()
     int minute = ltm->tm_min;
     string batch= to_string(year) + "_" + to_string(month) + "_" + to_string(day) + "_" + to_string(hour) + "_" + to_string(minute) + "_user";
     
-    file_info.open("data/inf.txt",ofstream::app);
+    ifstream fin;
+    fin.open("data/inf.txt");
+   
+    if (fin.is_open()) {
+        for (int i = 0; i < 10; i++) {
+            if (fin.eof()) break;
+            string tmp;
+            getline(fin,tmp);
+            Lfile.push_back(tmp);
+        }
+    }
+    fin.close();
+
+    file_info.open("data/inf.txt",ostream::out);
     if (file_info.is_open()) {
         file_info << batch << endl;
+        int size = (Lfile.size() >= 10 ? 10 : Lfile.size());
+        for (int i = 0; i < size; i++) {
+            file_info << Lfile[i] << endl;
+        }
     }
     file_info.close();
 
@@ -357,12 +374,12 @@ MenuState::MenuState(sf::RenderWindow* window, stack<State*>* states) :
     initButton();
     initBackground();
     ismoving = false;
+    this->loadfilebox = new LoadFileBox(window);
 }
 
 void MenuState::initButton()
 {
     currentButton = 0;
-
     this->rec[0].setSize(sf::Vector2f(200, 75));
     this->rec[1].setSize(sf::Vector2f(200, 75));
     this->rec[2].setSize(sf::Vector2f(200, 75));
@@ -458,16 +475,17 @@ void MenuState::checkButton()
         if (currentButton == 1) {
             ifstream fin;
             fin.open("data/inf.txt");
-            static vector<string> listFile;
+            
             if (fin.is_open()) {
-                while (!fin.eof()) {
+                for (int i = 0; i < 10; i++) {
+                    if (fin.eof()) break;
                     string tmp;
                     getline(fin, tmp);
-                    cout << tmp << endl;
-                    //listFile.push_back(tmp);
+                    Lfile.push_back(tmp);
                 }
             }
             fin.close();
+            this->loadfilebox = new LoadFileBox()
 
         }
         if (currentButton == 2)
@@ -491,4 +509,100 @@ void MenuState::render(sf::Event &ev, sf::RenderTarget* target)
         target->draw(rec[i]);
         target->draw(text[i]);
     }
+}
+
+
+LoadFileBox::LoadFileBox(sf::RenderWindow* window, vector<string> file)
+{
+    
+    this->window = window;
+    initFont();
+    for (int i = 0; i < file.size(); i++) {
+        sf::Text text;
+        text.setString(file[i]);
+        text.setCharacterSize(15);
+        text.setFont(this->font);
+    }
+    initBackground();
+    pause = false;
+}
+
+void LoadFileBox::initFont()
+{
+    if (!this->font.loadFromFile("font/Dosis-Light.ttf")) {
+        throw("Font not found! \n");
+    }
+}
+
+void LoadFileBox::initBackground()
+{
+    this->box.setSize(
+        sf::Vector2f(
+            (float)this->window->getSize().x,
+            (float)this->window->getSize().y
+        )
+    );
+    this->box.setFillColor(sf::Color(20, 20, 20, 100));
+ 
+    for (int i = 0; i < Ltext.size(); i++) {
+        Ltext[i].setPosition((float)this->window->getSize().x / 2 - 50.f,
+            (float)this->window->getSize().y / -i * 10.f);
+    }
+}
+
+void LoadFileBox::draw(sf::RenderTarget* target)
+{
+    if (!target)
+        target = this->window;
+    target->draw(box);
+    for (int i = 0; i < Ltext.size(); i++) {
+        target->draw(Ltext[i]);
+   }
+}
+
+int LoadFileBox::checkQuit(sf::Event& ev)
+{
+
+    switch (ev.key.code)
+    {
+    case sf::Keyboard::Num1: {
+        return 1;
+        break;
+    }
+    case sf::Keyboard::Num2: {
+        return 2;
+        break;
+    }
+    case sf::Keyboard::Num3: {
+        return 3;
+        break;
+    }
+    case sf::Keyboard::Num4: {
+        return 4;
+        break;
+    }
+    case sf::Keyboard::Num5: {
+        return 5;
+        break;
+    }
+    case sf::Keyboard::Num6: {
+        return 6;
+        break;
+    }
+    case sf::Keyboard::Num7: {
+        return 7;
+        break;
+    }
+    case sf::Keyboard::Num8: {
+        return 8;
+        break;
+    }
+    case sf::Keyboard::Num9: {
+        return 9;
+        break;
+    }
+    default:
+        break;
+    }
+    return -1;
 }

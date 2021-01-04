@@ -9,6 +9,7 @@ class State
 private:
 	bool quit;
 protected:
+	vector<string> Lfile;
 	bool pause;
 	sf::RenderWindow* window;
 	stack<State*>* states;
@@ -81,23 +82,9 @@ public:
 	void render(sf::Event &, sf::RenderTarget* target = nullptr);
 };
 
-class MenuItem {
-private:
-	sf::Font font;
-	int currentbutton;
-public:
-	MenuItem() {
-		if (!this->font.loadFromFile("font/Dosis-Light.ttf")) {
-			throw("Font not found! \n");
-		}
-	}
-	
-	vector<sf::RectangleShape> Listrec;
-	vector<sf::Text> Listtext;
-};
+
 
 class MenuState : public State {
-	MenuItem items;
 	sf::RectangleShape rec[3];
 	sf::Text text[3];
 	sf::Font font;
@@ -107,6 +94,7 @@ class MenuState : public State {
 	void initFont();
 	void initButton();
 	void initBackground();
+	LoadFileBox* loadfilebox;
 public:
 	MenuState(sf::RenderWindow* window, stack<State*>*);
 	~MenuState();
@@ -119,4 +107,20 @@ public:
 
 	void update();
 	void render(sf::Event &, sf::RenderTarget* target = nullptr);
+};
+
+
+class LoadFileBox {
+private:
+	sf::RenderWindow* window;
+	sf::RectangleShape box;
+	vector<sf::Text> Ltext;
+	sf::Font font;
+public:
+	bool pause;
+	LoadFileBox(sf::RenderWindow*, vector<string>);
+	void initFont();
+	void initBackground();
+	void draw(sf::RenderTarget*);
+	int checkQuit(sf::Event&);
 };
