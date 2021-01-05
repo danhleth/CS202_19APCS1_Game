@@ -2,6 +2,7 @@
 #include "includePath.h"
 #include "OBJECT.h"
 #include "PauseMenu.h"
+#define NUMBER_FILE 10
 //#include "Sound.h"
 
 class State
@@ -70,6 +71,7 @@ private:
 	void initLevel();
 	void initTrafficLights();
 	void initSound();
+	void saveFile();
 public:
 	GameState(sf::RenderWindow* window, stack<State*>*);
 	~GameState();
@@ -90,9 +92,34 @@ public:
 	void render(sf::Event &, sf::RenderTarget* target = nullptr);
 };
 
+class LoadFileState : public State {
+private:
+	sf::RectangleShape rec[NUMBER_FILE];
+	sf::Text text[NUMBER_FILE];
+	sf::Font font;
+	int currentButton;
+	bool ismoving;
+	void initFont();
+	void initButton();
+	void initBackground();
+	vector<string> getListfromFile();
+public:
+	LoadFileState(sf::RenderWindow* window, stack<State*>*);
+	~LoadFileState();
+	//Function
+	void endState();
+	void nextButton(sf::Event);
+	void highlight();
+	void checkButton();
+	//Update & Render
+
+	void update();
+	void render(sf::Event&, sf::RenderTarget* target = nullptr);
+};
 
 
 class MenuState : public State {
+	LoadFileState* filebox;
 	sf::RectangleShape rec[3];
 	sf::Text text[3];
 	sf::Font font;
@@ -102,7 +129,6 @@ class MenuState : public State {
 	void initFont();
 	void initButton();
 	void initBackground();
-	LoadFileBox* loadfilebox;
 public:
 	MenuState(sf::RenderWindow* window, stack<State*>*);
 	~MenuState();
@@ -118,17 +144,3 @@ public:
 };
 
 
-class LoadFileBox {
-private:
-	sf::RenderWindow* window;
-	sf::RectangleShape box;
-	vector<sf::Text> Ltext;
-	sf::Font font;
-public:
-	bool pause;
-	LoadFileBox(sf::RenderWindow*, vector<string>);
-	void initFont();
-	void initBackground();
-	void draw(sf::RenderTarget*);
-	int checkQuit(sf::Event&);
-};
