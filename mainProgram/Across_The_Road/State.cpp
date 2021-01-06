@@ -57,6 +57,7 @@ GameState::GameState(sf::RenderWindow* window, stack<State*>* states) :
     this->enemySpawnTimerMax = 120.f;
     this->enemySpawnTimer = this->enemySpawnTimerMax;
     this->maxEnemies = 7;
+    this->backgroundSound.play();
 }
 
 GameState::~GameState()
@@ -224,6 +225,10 @@ void GameState::initSound()
     sounds["dino"] = sound;
     sound.setBuffer(soundBuffers["people"]);
     sounds["people"] = sound;
+
+    if (!this->backgroundSound.openFromFile("sound/BackGround.wav")) {
+        cout << "Can not open music file" << endl;
+    }
 }
 
 void GameState::setLevel(unsigned level) {
@@ -276,7 +281,7 @@ void GameState::renderEnemies() {
 
     for (auto& e : this->enemies) {
         e->Draw(this->window);
-        if (typeid(*e) == typeid(CTRUCK) || typeid(*e) == typeid(CCAR)) {
+        /*if (typeid(*e) == typeid(CTRUCK) || typeid(*e) == typeid(CCAR)) {
             sounds["car"].play();
         }
         if (typeid(*e) == typeid(CBIRD)) {
@@ -284,7 +289,7 @@ void GameState::renderEnemies() {
         }
         if (typeid(*e) == typeid(CDINOSAUR)) {
             sounds["dino"].play();
-        }
+        }*/
     }
     if (!this->pause) {
         for (auto& e : this->enemies) {//red, yellow, green
