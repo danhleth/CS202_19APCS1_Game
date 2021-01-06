@@ -64,6 +64,7 @@ private:
 	//Init
 	void initPlayer();
 	void initEnemies();
+	void initEnemiesAtFirst();
 	void initTextures();
 	void initBackground();
 	void initLevel();

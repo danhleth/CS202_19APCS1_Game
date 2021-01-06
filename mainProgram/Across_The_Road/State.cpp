@@ -47,6 +47,7 @@ GameState::GameState(sf::RenderWindow* window, stack<State*>* states) :
     initTextures();
     initPlayer();
     initEnemies();
+    initEnemiesAtFirst();
     initBackground();
     initLevel();
     initTrafficLights();
@@ -56,7 +57,7 @@ GameState::GameState(sf::RenderWindow* window, stack<State*>* states) :
     this->points = 0;
     this->enemySpawnTimerMax = 120.f;
     this->enemySpawnTimer = this->enemySpawnTimerMax;
-    this->maxEnemies = 7;
+    this->maxEnemies = 17;
 }
 
 GameState::~GameState()
@@ -129,6 +130,27 @@ void GameState::initPlayer()
 
 void GameState::initEnemies() {}
 
+void GameState::initEnemiesAtFirst(){
+    this->spawnEnemy();
+    int tmp = (rand()%2)*200 + 200;
+    this->enemies[0]->setPosition(tmp, this->enemies[0]->Y());
+    int tmpp = 1;
+    for (int i = 0; i < 3; i++) {
+        this->spawnEnemy();
+        tmpp = this->enemies.size();
+        for (int j = 0; j < tmpp - 1; j++) {
+            if (typeid(*this->enemies[j]) == typeid(*this->enemies[tmpp - 1])) {
+                this->enemies.pop_back();
+                break;
+            }
+            if (j == tmpp - 2) {
+                tmp = (rand() % 2) * 200 + 200;
+                this->enemies[tmpp - 1]->setPosition(tmp, this->enemies[tmpp-1]->Y());
+            }
+        }
+    }
+}
+
 void GameState::initTextures()
 {
     sf::Texture tmp;
@@ -182,25 +204,27 @@ void GameState::initLevel() {
 	setLevel(1);
 }
 
-void GameState::initTrafficLights(){
+void GameState::initTrafficLights() {
     currentTrafficLights = 3;
     this->trafficLightsSpawnTimer = 120.f;
     this->trafficLightsSpawnTimerMax = this->trafficLightsSpawnTimer;
-    COBJECT* tmp = new CTRUCK(&this->textures["red"]);
+    COBJECT* tmp = new CTRUCK(&this->textures["red"], &this->soundBuffers["car"]);
     tmp->setPosition(550.f, 40.f);
     tmp->setScale(0.21f, 0.21f);
     tmp->setColor(0.f, 0.f, 0.f);
     trafficLights.push_back(tmp);
-    tmp = new CTRUCK(&this->textures["yellow"]);
+    tmp = new CTRUCK(&this->textures["yellow"], &this->soundBuffers["car"]);
     tmp->setPosition(602.5f, 40.f);
     tmp->setScale(0.07f, 0.07f);
     tmp->setColor(0.f, 0.f, 0.f);
     trafficLights.push_back(tmp);
-    tmp = new CTRUCK(&this->textures["blue"]);
+    tmp = new CTRUCK(&this->textures["blue"], &this->soundBuffers["car"]);
     tmp->setPosition(650.f, 40.f);
     tmp->setScale(0.11f, 0.125f);
     tmp->setColor(0.f, 0.f, 0.f);
     trafficLights.push_back(tmp);
+}
+
 void GameState::initSound()
 {
     sf::SoundBuffer soundTmp;
@@ -232,7 +256,7 @@ void GameState::setLevel(unsigned level) {
     //this->points = 0;
     this->enemySpawnTimerMax = (140.f - static_cast<float>((level - 1) * 40));
     this->enemySpawnTimer = this->enemySpawnTimerMax;
-    this->maxEnemies = 15;// loop some   times
+    this->maxEnemies = 17;// loop some   times
 }
 
 void GameState::updateEnemies() {
@@ -240,23 +264,20 @@ void GameState::updateEnemies() {
         if (this->enemySpawnTimer >= this->enemySpawnTimerMax) {
             //spaw the enemy and reset the timer
             this->spawnEnemy();
+            if (currentTrafficLights == 1)
+                if (typeid(*this->enemies[this->enemies.size() - 1]) == typeid(CTRUCK) ||
+                    typeid(*this->enemies[this->enemies.size() - 1]) == typeid(CCAR))
+                    this->enemies.pop_back();
             int keepSize = this->enemies.size();
             for (int i = 0; i < this->currentLevel; i++) {
                 this->spawnEnemy();
-                int keepCurrentSize = this->enemies.size();
-                float checkSameLine = this->enemies[static_cast<int>(keepCurrentSize - 1)]->Y();
-                for (unsigned j = keepSize; j < keepCurrentSize; j++) {
-                    float checkSameLine1 = this->enemies[j - 1]->Y();
-                    if (checkSameLine == checkSameLine1 || (checkSameLine == checkSameLine1 - 20) ||
-                        checkSameLine == checkSameLine1 + 20) {
+                if(currentTrafficLights==1)
+                    if (typeid(*this->enemies[this->enemies.size() - 1]) == typeid(CTRUCK)||
+                        typeid(*this->enemies[this->enemies.size() - 1]) == typeid(CCAR))
                         this->enemies.pop_back();
-                        break;
-                    }
-                }
-                if (this->enemies.size() == keepCurrentSize) {
-                    this->enemies[this->enemies.size() - 1]->
-                        setPosition(-100.f, this->enemies[this->enemies.size()-1]->Y());
-                }
+                else if(keepSize!=0)
+                        if(typeid(*this->enemies[this->enemies.size() - 1]) == typeid(*this->enemies[keepSize - 1]))
+                    this->enemies.pop_back();
             }
             enemySpawnTimer = 0.f;
         }
@@ -302,7 +323,7 @@ void GameState::renderEnemies() {
 
 
 void GameState::renderPlayer(sf::Event &ev)
-{
+ {
     this->people.Draw(this->window);
     if (!this->pause) {
         this->people.KeyBoadMove_WithDt(46.f, ev);
@@ -338,27 +359,33 @@ void GameState::renderTrafficLights(){
         e->Draw(this->window);
 }
 
+
 void GameState::spawnEnemy() {
     COBJECT* enemyTmp = nullptr;
     unsigned tmp = static_cast<unsigned>(rand() % 4);
+    float tmpp = 0;
     switch (tmp)
     {
     case 0:
         enemyTmp = new CTRUCK(&this->textures["truck"], &this->soundBuffers["car"]);
+        tmpp = 130-20;
         break;
     case 1:
         enemyTmp = new CCAR(&this->textures["car"], &this->soundBuffers["car"]);
+        tmpp = 130 + 92*2;
         break;
     case 2:
         enemyTmp = new CBIRD(&this->textures["bird"], &this->soundBuffers["bird"]);
+        tmpp = 130 + 92-20;
         break;
     default:
         enemyTmp = new CDINOSAUR(&this->textures["dino"], &this->soundBuffers["dino"]);
+        tmpp = 130 + 92*3;
         break;
     }
-    float tmpp = 130 + static_cast<float>((rand() % 4) * 92);//set location
+    /*float tmpp = 130 + static_cast<float>((rand() % 4) * 92);//set location
     if (typeid(*enemyTmp) == typeid(CTRUCK) || typeid(*enemyTmp) == typeid(CBIRD))
-        tmpp -= 20;
+        tmpp -= 20;*/
     enemyTmp->setPosition(0.f, tmpp);
     this->enemies.push_back(enemyTmp);
 }
@@ -374,6 +401,7 @@ void GameState::generateMap()
         }
         people.setPosition(400, 508);
         enemies.clear();
+        initEnemiesAtFirst();
     }
 }
 
