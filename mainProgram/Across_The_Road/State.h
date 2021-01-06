@@ -51,7 +51,7 @@ private:
 	vector<COBJECT*> enemies;
 	map<string, sf::SoundBuffer> soundBuffers;
 	map<string, sf::Sound> sounds;
-	sf::Music backgroundSound;
+	//sf::Music backgroundSound;
 	COBJECT* line;
 	map<string, sf::Texture> textures;
 	//Level

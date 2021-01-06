@@ -75,3 +75,14 @@ void CGAME::render()
     this->window->display();
 }
 
+void CGAME::initSound()
+{
+    if (!backgroundSound.openFromFile("sound/BackGround.wav"))
+        cout << "Can not load file BackGround.wav" << endl;
+}
+
+void CGAME::playSound()
+{
+    backgroundSound.play();
+}
+

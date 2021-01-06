@@ -57,7 +57,7 @@ GameState::GameState(sf::RenderWindow* window, stack<State*>* states) :
     this->enemySpawnTimerMax = 120.f;
     this->enemySpawnTimer = this->enemySpawnTimerMax;
     this->maxEnemies = 7;
-    this->backgroundSound.play();
+    //this->backgroundSound.play();
 }
 
 GameState::~GameState()
@@ -226,9 +226,9 @@ void GameState::initSound()
     sound.setBuffer(soundBuffers["people"]);
     sounds["people"] = sound;
 
-    if (!this->backgroundSound.openFromFile("sound/BackGround.wav")) {
+    /*if (!this->backgroundSound.openFromFile("sound/BackGround.wav")) {
         cout << "Can not open music file" << endl;
-    }
+    }*/
 }
 
 void GameState::setLevel(unsigned level) {

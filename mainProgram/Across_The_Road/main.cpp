@@ -5,7 +5,8 @@ int main()
      srand(static_cast<unsigned>(time(NULL)));
      //Init Game
      CGAME game;
-
+     game.initSound();
+     game.playSound();
     while (game.running())
     {
         //Update
