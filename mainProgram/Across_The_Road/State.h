@@ -18,6 +18,7 @@ protected:
 	sf::RectangleShape background;
 public:
 	State(sf::RenderWindow* window, stack<State*>*);
+	
 	virtual ~State();
 	//Pause and Unpause
 	void pauseState();
@@ -69,11 +70,13 @@ private:
 	void initTextures();
 	void initBackground();
 	void initLevel();
+	void initLevel(int);
 	void initTrafficLights();
 	void initSound();
 	void saveFile();
 public:
 	GameState(sf::RenderWindow* window, stack<State*>*);
+	GameState(sf::RenderWindow* window, stack<State*>*, int);
 	~GameState();
 	//Function
 	void endState();

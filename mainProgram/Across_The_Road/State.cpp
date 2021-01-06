@@ -59,6 +59,24 @@ GameState::GameState(sf::RenderWindow* window, stack<State*>* states) :
     this->maxEnemies = 7;
 }
 
+GameState::GameState(sf::RenderWindow* window, stack<State*>* states, int level) :
+    State(window, states)
+{
+    initTextures();
+    initPlayer();
+    initEnemies();
+    initBackground();
+    initLevel(level);
+    initTrafficLights();
+    initSound();
+    this->pauseMenu = new PauseMenu(this->window);
+    this->messageBox = new MessageBox(this->window);
+    this->points = 0;
+    this->enemySpawnTimerMax = 120.f;
+    this->enemySpawnTimer = this->enemySpawnTimerMax;
+    this->maxEnemies = 7;
+}
+
 GameState::~GameState()
 {
     int n = enemies.size();
@@ -224,6 +242,12 @@ void GameState::initLevel() {
 	MAX_LEVEL = 3;
 
 	setLevel(1);
+}
+
+void GameState::initLevel(int level) {
+    MAX_LEVEL = 3;
+    if (level > MAX_LEVEL) setLevel(1);
+    else setLevel(level);
 }
 
 void GameState::initTrafficLights() {
@@ -554,6 +578,7 @@ void MenuState::checkButton()
         if(currentButton == 0)
             this->states->push(new GameState(this->window, this->states));
         if (currentButton == 1) {
+            this->states->push(new LoadFileState(this->window,this->states));
         }
         if (currentButton == 2)
             window->close();
@@ -596,22 +621,24 @@ vector<string> LoadFileState::getListfromFile() {
     fin.open("data/inf.txt");
     if (fin.is_open()) {
         for (int i = 0; i < NUMBER_FILE; i++) {
+            if (fin.eof()) break;
             string tmp;
             getline(fin, tmp);
             rs.push_back(tmp);
         }
     }
+    fin.close();
     return rs;
 }
 
 void LoadFileState::initButton()
 {
     currentButton = 0;
-    /*for (int i = 0; i < NUMBER_FILE; i++) {
-        this->rec[i].setSize(sf::Vector2f(100, 75));
+    for (int i = 0; i < NUMBER_FILE; i++) {
+        this->rec[i].setSize(sf::Vector2f(150, 30));
         this->rec[i].setFillColor(sf::Color(160, 167, 136));
-        this->rec[i].setPosition(sf::Vector2f(300, i * 100 + 75));
-    }*/
+        this->rec[i].setPosition(sf::Vector2f(300, (i * 50) + 30));
+    }
 
 
     vector<string> lFile = getListfromFile();
@@ -663,11 +690,11 @@ void LoadFileState::nextButton(sf::Event ev)
 
     if (ev.type == sf::Event::KeyReleased) {
         if (ev.key.code == sf::Keyboard::S && ismoving) {
-            this->currentButton = (this->currentButton + 1) % 3;
+            this->currentButton = (this->currentButton + 1) % NUMBER_FILE;
             ismoving = false;
         }
         if (ev.key.code == sf::Keyboard::W && ismoving) {
-            this->currentButton = (this->currentButton + 2) % 3;
+            this->currentButton = (this->currentButton - 1) % NUMBER_FILE;
             ismoving = false;
         }
     }
@@ -693,13 +720,20 @@ void LoadFileState::initFont()
 void LoadFileState::checkButton()
 {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Enter)) {
-        switch (currentButton)
-        {
-        case 1: {
-            break;
-        }
-        default:
-            break;
+        if (currentButton > 0 && currentButton < NUMBER_FILE) {
+            string tmp = text[currentButton].getString();
+            ifstream fin;
+            if (!tmp.empty()) {
+                int level;
+                fin.open("data/" + tmp + ".txt");
+                if (fin.is_open())
+                    fin >> level;
+                fin.close();
+                this->states->push(new GameState(this->window, this->states, level));
+            }
+            else {
+                this->states->push(new GameState(this->window, this->states));
+            }
         }
     }
 }
@@ -716,7 +750,7 @@ void LoadFileState::render(sf::Event& ev, sf::RenderTarget* target)
     if (!target)
         target = this->window;
     target->draw(background);
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < NUMBER_FILE; i++) {
         target->draw(rec[i]);
         target->draw(text[i]);
     }
