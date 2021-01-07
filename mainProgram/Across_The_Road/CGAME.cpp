@@ -83,6 +83,8 @@ void CGAME::initSound()
 
 void CGAME::playSound()
 {
+    this->initSound();
     backgroundSound.play();
+    backgroundSound.setLoop(true);
 }
 
