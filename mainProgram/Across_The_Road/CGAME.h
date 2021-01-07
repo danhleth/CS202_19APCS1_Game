@@ -10,6 +10,7 @@ private:
 	sf::ContextSettings settings;
 	sf::VideoMode videoMode;
 	sf::Event event;
+	sf::Music backgroundSound;
 	//States
 	stack<State*> states;
 	void initStates();
@@ -25,5 +26,6 @@ public:
 	//Update&Render
 	void update();
 	void render();
-
+	void initSound();
+	void playSound();
 };
