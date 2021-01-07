@@ -268,7 +268,7 @@ CDINOSAUR::CDINOSAUR(sf::Texture* texture, sf::SoundBuffer* soundBuffer)
 	//	});
 	this->sprite->setScale(1.3f, 1.3f);
 	this->createAnimation(*texture);
-	this->animation->addAnimation("LEFT", 60.f, 0, 0, 11, 0, 54, 50);
+	this->animation->addAnimation("LEFT", 60.f, 0.5, 0, 11, 0, 56, 50);
 	//this->setSizeHitBox(54 * 1.3f , 50 * 1.3f);
 }
 //CDINOSAUR::CDINOSAUR(float _x, float _y)
