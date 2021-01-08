@@ -84,7 +84,7 @@ private:
 	void saveFile();
 public:
 	GameState(sf::RenderWindow* window, stack<State*>*);
-	GameState(sf::RenderWindow* window, stack<State*>*, int);
+	GameState(sf::RenderWindow* window, stack<State*>*, int, int);
 	~GameState();
 	//Function
 	void endState();
