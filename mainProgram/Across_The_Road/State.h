@@ -60,8 +60,11 @@ private:
 	COBJECT* line;
 	map<string, sf::Texture> textures;
 	//Level
+	sf::Font font;
 	int currentLevel;
 	int MAX_LEVEL;
+	string levelLabel;
+	sf::Text levelLabelText;
 	//PauseMenu
 	PauseMenu *pauseMenu;
 	MessageBox* messageBox;
@@ -76,6 +79,7 @@ private:
 	void initLevel(int);
 	void initTrafficLights();
 	void initSound();
+	void initFont();
 	void saveFile();
 public:
 	GameState(sf::RenderWindow* window, stack<State*>*);
@@ -125,7 +129,7 @@ public:
 
 
 class MenuState : public State {
-	LoadFileState* filebox;
+	/*LoadFileState* filebox;*/
 	sf::RectangleShape rec[3];
 	sf::Text text[3];
 	sf::Font font;

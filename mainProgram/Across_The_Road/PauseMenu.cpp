@@ -128,6 +128,10 @@ void PauseMenu::checkButton(sf::Event& ev)
     if (ev.key.code == sf::Keyboard::Enter) {
         if (currentButton == 0)
             this->unpause = true;
+        if (currentButton == 1) {
+            this->unpause = true;
+            this->senderFromGame = 1;
+        }
         if (currentButton == 2) {
             this->unpause = true;
             this->senderFromGame = 1;

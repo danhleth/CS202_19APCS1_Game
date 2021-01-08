@@ -45,6 +45,7 @@ GameState::GameState(sf::RenderWindow* window, stack<State*>* states) :
 	State(window, states)
 {
     initTextures();
+    initFont();
     initPlayer();
     initEnemies();
     initBackground();
@@ -64,6 +65,7 @@ GameState::GameState(sf::RenderWindow* window, stack<State*>* states, int level)
     State(window, states)
 {
     initTextures();
+    initFont();
     initPlayer();
     initEnemies();
     initBackground();
@@ -96,7 +98,6 @@ void GameState::endState()
 
 void GameState::update()
 {
-
     checkForPause();
     checkImpact();
     if (!this->pause) {
@@ -115,7 +116,6 @@ void GameState::update()
         }
     }
     checkFromPause();
-
 }
 
 void GameState::saveFile() {
@@ -167,6 +167,7 @@ void GameState::render(sf::Event &ev, sf::RenderTarget* target)
     if (!target)
         target = this->window;
     target->draw(background);
+    target->draw(levelLabelText);
     renderPlayer(ev);
     renderEnemies();
     renderTrafficLights();
@@ -245,7 +246,13 @@ void GameState::initBackground()
 
 void GameState::initLevel() {
 	MAX_LEVEL = 3;
-
+    levelLabel = "Level: 1";
+    levelLabelText.setFont(font);
+    levelLabelText.setString(levelLabel);
+    levelLabelText.setFillColor(sf::Color(255, 255, 255, 255));
+    levelLabelText.setPosition(50.f, 10.f);
+    levelLabelText.setCharacterSize(30);
+    levelLabelText.setStyle(sf::Text::Bold);
 	setLevel(1);
 }
 
@@ -253,6 +260,15 @@ void GameState::initLevel(int level) {
     MAX_LEVEL = 3;
     if (level > MAX_LEVEL) setLevel(1);
     else setLevel(level);
+
+    levelLabel = "Level: ";
+    levelLabel += to_string(level);
+    levelLabelText.setFont(font);
+    levelLabelText.setString(levelLabel);
+    levelLabelText.setFillColor(sf::Color(255, 255, 255, 255));
+    levelLabelText.setPosition(10.f, 10.f);
+    levelLabelText.setCharacterSize(30);
+    levelLabelText.setStyle(sf::Text::Bold);
 }
 
 void GameState::initTrafficLights() {
@@ -282,6 +298,13 @@ void GameState::initSound()
     GameOverSound.setBuffer(GameOverSoundBuffer);
 }
 
+void GameState::initFont()
+{
+    if (!this->font.loadFromFile("font/Dosis-Light.ttf")) {
+        throw("Font not found! \n");
+    }
+}
+
 void GameState::setLevel(unsigned level) {
     /*if (level > MAX_LEVEL)
         return;*/
@@ -291,6 +314,10 @@ void GameState::setLevel(unsigned level) {
     this->enemySpawnTimerMax = (140.f - static_cast<float>((level - 1) * 40));
     this->enemySpawnTimer = this->enemySpawnTimerMax;
     this->maxEnemies = 15;// loop some   times
+
+    levelLabel = "Level: ";
+    levelLabel += to_string(level);
+    levelLabelText.setString(levelLabel);
 }
 
 void GameState::updateEnemies() {
@@ -332,15 +359,6 @@ void GameState::renderEnemies() {
 
     for (auto& e : this->enemies) {
         e->Draw(this->window);
-        /*if (typeid(*e) == typeid(CTRUCK) || typeid(*e) == typeid(CCAR)) {
-            sounds["car"].play();
-        }
-        if (typeid(*e) == typeid(CBIRD)) {
-            sounds["bird"].play();
-        }
-        if (typeid(*e) == typeid(CDINOSAUR)) {
-            sounds["dino"].play();
-        }*/
     }
     if (!this->pause) {
         for (auto& e : this->enemies) {//red, yellow, green
@@ -753,13 +771,14 @@ void LoadFileState::checkButton()
                 this->states->push(new GameState(this->window, this->states));
             }
         }
-    }
+    } 
 }
 
 void LoadFileState::update()
 {
     checkButton();
     highlight();
+    checkForQuit();
 }
 
 void LoadFileState::render(sf::Event& ev, sf::RenderTarget* target)
@@ -772,4 +791,6 @@ void LoadFileState::render(sf::Event& ev, sf::RenderTarget* target)
         target->draw(rec[i]);
         target->draw(text[i]);
     }
+
+
 }
