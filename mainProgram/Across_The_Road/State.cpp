@@ -424,15 +424,19 @@ void GameState::spawnEnemy() {
     switch (tmp)
     {
     case 0:
+        this_thread::sleep_for(std::chrono::milliseconds(1));
         enemyTmp = new CTRUCK(&this->textures["truck"], &this->soundBuffers["car"]);
         break;
     case 1:
+        this_thread::sleep_for(std::chrono::milliseconds(1));
         enemyTmp = new CCAR(&this->textures["car"], &this->soundBuffers["car"]);
         break;
     case 2:
+        this_thread::sleep_for(std::chrono::milliseconds(1));
         enemyTmp = new CBIRD(&this->textures["bird"], &this->soundBuffers["bird"]);
         break;
     default:
+        this_thread::sleep_for(std::chrono::milliseconds(1));
         enemyTmp = new CDINOSAUR(&this->textures["dino"], &this->soundBuffers["dino"]);
         break;
     }
