@@ -472,7 +472,7 @@ void GameState::spawnEnemy() {
 }
 void GameState::generateMap()
 {
-    if (people.getY() <= 552.f) {//change from 100 to 552 because the sprite is something mysterious about the location
+    if (people.position().y < 20.f) {//change from 100 to 552 because the sprite is something mysterious about the location
         if (currentLevel >= 3)
             setLevel(1);
         else {
