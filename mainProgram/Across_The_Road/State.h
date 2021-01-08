@@ -140,7 +140,7 @@ public:
 	void endState();
 	void nextButton(sf::Event);
 	void highlight();
-	void checkButton();
+	void checkButton(sf::Event &);
 	//Update & Render
 
 	void update();
