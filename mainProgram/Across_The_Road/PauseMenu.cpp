@@ -130,7 +130,7 @@ void PauseMenu::checkButton(sf::Event& ev)
             this->unpause = true;
         if (currentButton == 1) {
             this->unpause = true;
-            this->senderFromGame = 1;
+            this->senderFromGame = 2;
         }
         if (currentButton == 2) {
             this->unpause = true;
