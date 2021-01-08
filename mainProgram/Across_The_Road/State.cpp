@@ -60,6 +60,24 @@ GameState::GameState(sf::RenderWindow* window, stack<State*>* states) :
     //this->backgroundSound.play();
 }
 
+GameState::GameState(sf::RenderWindow* window, stack<State*>* states, int level) :
+    State(window, states)
+{
+    initTextures();
+    initPlayer();
+    initEnemies();
+    initBackground();
+    initLevel(level);
+    initTrafficLights();
+    initSound();
+    this->pauseMenu = new PauseMenu(this->window);
+    this->messageBox = new MessageBox(this->window);
+    this->points = 0;
+    this->enemySpawnTimerMax = 120.f;
+    this->enemySpawnTimer = this->enemySpawnTimerMax;
+    this->maxEnemies = 7;
+}
+
 GameState::~GameState()
 {
     int n = enemies.size();
@@ -72,8 +90,8 @@ GameState::~GameState()
 }
 
 void GameState::endState()
-{
-	cout << "End GameState" << endl;
+{   
+    cout << "Eng gamestate" << endl;
 }
 
 void GameState::update()
@@ -98,6 +116,50 @@ void GameState::update()
     }
     checkFromPause();
 
+}
+
+void GameState::saveFile() {
+    ofstream fout;
+    ofstream file_info;
+    time_t now = time(0);
+    tm* ltm = localtime(&now);
+
+    int year = 1900 + ltm->tm_year;
+    int month = 1 + ltm->tm_mon;
+    int day = ltm->tm_mday;
+    int hour = ltm->tm_hour;
+    int minute = ltm->tm_min;
+    string batch = to_string(year) + "_" + to_string(month) + "_" + to_string(day) + "_" + to_string(hour) + "_" + to_string(minute) + "_user";
+
+    ifstream fin;
+    fin.open("data/inf.txt");
+
+    if (fin.is_open()) {
+        for (int i = 0; i < 10; i++) {
+            if (fin.eof()) break;
+            string tmp;
+            getline(fin, tmp);
+            Lfile.push_back(tmp);
+        }
+    }
+    fin.close();
+
+    file_info.open("data/inf.txt", ostream::out);
+    if (file_info.is_open()) {
+        file_info << batch << endl;
+        int size = (Lfile.size() >= 10 ? 10 : Lfile.size());
+        for (int i = 0; i < size; i++) {
+            file_info << Lfile[i] << endl;
+        }
+    }
+    file_info.close();
+
+    fout.open("data/" + batch + ".txt");
+    if (fout.is_open()) {
+        fout << currentLevel << endl;
+    }
+    fout.close();
+    cout << batch << endl;
 }
 
 void GameState::render(sf::Event &ev, sf::RenderTarget* target)
@@ -185,6 +247,12 @@ void GameState::initLevel() {
 	MAX_LEVEL = 3;
 
 	setLevel(1);
+}
+
+void GameState::initLevel(int level) {
+    MAX_LEVEL = 3;
+    if (level > MAX_LEVEL) setLevel(1);
+    else setLevel(level);
 }
 
 void GameState::initTrafficLights() {
@@ -409,6 +477,7 @@ void GameState::checkForPause()
 void GameState::checkFromPause()
 {
     if (this->pauseMenu->senderFromGame == 1) {
+        saveFile();
         setQuit(true);
     }
 }
@@ -427,7 +496,6 @@ MenuState::MenuState(sf::RenderWindow* window, stack<State*>* states) :
 void MenuState::initButton()
 {
     currentButton = 0;
-
     this->rec[0].setSize(sf::Vector2f(200, 75));
     this->rec[1].setSize(sf::Vector2f(200, 75));
     this->rec[2].setSize(sf::Vector2f(200, 75));
@@ -472,7 +540,7 @@ MenuState::~MenuState()
 }
 
 void MenuState::endState()
-{
+{   
     cout << "End GameState" << endl;
 }
 
@@ -514,11 +582,15 @@ void MenuState::initFont()
     }
 }
 
+
 void MenuState::checkButton()
 {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Enter)) {
         if(currentButton == 0)
             this->states->push(new GameState(this->window, this->states));
+        if (currentButton == 1) {
+            this->states->push(new LoadFileState(this->window,this->states));
+        }
         if (currentButton == 2)
             window->close();
     }
@@ -537,6 +609,159 @@ void MenuState::render(sf::Event &ev, sf::RenderTarget* target)
         target = this->window;
     target->draw(background);
     for (int i = 0; i < 3; i++) {
+        target->draw(rec[i]);
+        target->draw(text[i]);
+    }
+}
+
+
+
+
+LoadFileState::LoadFileState(sf::RenderWindow* window, stack<State*>* states) :
+    State(window, states)
+{
+    initFont();
+    initButton();
+    initBackground();
+    
+}
+
+vector<string> LoadFileState::getListfromFile() {
+    vector<string> rs;
+    ifstream fin;
+    fin.open("data/inf.txt");
+    if (fin.is_open()) {
+        for (int i = 0; i < NUMBER_FILE; i++) {
+            if (fin.eof()) break;
+            string tmp;
+            getline(fin, tmp);
+            rs.push_back(tmp);
+        }
+    }
+    fin.close();
+    return rs;
+}
+
+void LoadFileState::initButton()
+{
+    currentButton = 0;
+    for (int i = 0; i < NUMBER_FILE; i++) {
+        this->rec[i].setSize(sf::Vector2f(150, 30));
+        this->rec[i].setFillColor(sf::Color(160, 167, 136));
+        this->rec[i].setPosition(sf::Vector2f(300, (i * 50) + 30));
+    }
+
+
+    vector<string> lFile = getListfromFile();
+    for (int i = 0; i < NUMBER_FILE; i++) {
+        this->text[i].setString(lFile[i]);
+    }
+
+
+    for (int i = 0; i < NUMBER_FILE; i++) {
+        text[i].setFillColor(sf::Color(255, 255, 255, 255));
+        rec[i].setOutlineColor(sf::Color(255, 255, 255));
+        text[i].setPosition(
+            rec[i].getPosition().x + 40 - text[i].getLocalBounds().width / 2.f,
+            rec[i].getPosition().y + 15 - text[i].getLocalBounds().height / 2.f
+        );
+        text[i].setCharacterSize(10);
+        text[i].setFont(this->font);
+        text[i].setStyle(sf::Text::Bold);
+    }
+}
+
+void LoadFileState::initBackground() {
+    this->background.setSize(sf::Vector2f((float)this->window->getSize().x, (float)this->window->getSize().y));
+    if (!this->backgroundTexture.loadFromFile("images/bg1.png")) {
+        throw "Texture load fail!! \n";
+    }
+    this->background.setTexture(&this->backgroundTexture);
+}
+
+LoadFileState::~LoadFileState()
+{
+    delete this->window;
+}
+
+void LoadFileState::endState()
+{
+    cout << "End GameState" << endl;
+}
+
+
+void LoadFileState::nextButton(sf::Event ev)
+{
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
+        ismoving = true;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
+        ismoving = true;
+    }
+
+    if (ev.type == sf::Event::KeyReleased) {
+        if (ev.key.code == sf::Keyboard::S && ismoving) {
+            this->currentButton = (this->currentButton + 1) % NUMBER_FILE;
+            ismoving = false;
+        }
+        if (ev.key.code == sf::Keyboard::W && ismoving) {
+            this->currentButton = (this->currentButton - 1) % NUMBER_FILE;
+            ismoving = false;
+        }
+    }
+}
+
+void LoadFileState::highlight()
+{
+    for (int i = 0; i < NUMBER_FILE; i++)
+        if (i != currentButton)
+            rec[i].setOutlineThickness(0);
+        else
+            rec[i].setOutlineThickness(10);
+}
+
+void LoadFileState::initFont()
+{
+    if (!this->font.loadFromFile("font/Dosis-Light.ttf")) {
+        throw("Font not found! \n");
+    }
+}
+
+
+void LoadFileState::checkButton()
+{
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Enter)) {
+        if (currentButton > 0 && currentButton < NUMBER_FILE) {
+            string tmp = text[currentButton].getString();
+            ifstream fin;
+            if (!tmp.empty()) {
+                int level;
+                fin.open("data/" + tmp + ".txt");
+                if (fin.is_open())
+                    fin >> level;
+                fin.close();
+                this->states->push(new GameState(this->window, this->states, level));
+            }
+            else {
+                this->states->push(new GameState(this->window, this->states));
+            }
+        }
+    }
+}
+
+void LoadFileState::update()
+{
+    checkButton();
+    highlight();
+}
+
+void LoadFileState::render(sf::Event& ev, sf::RenderTarget* target)
+{
+    nextButton(ev);
+    if (!target)
+        target = this->window;
+    target->draw(background);
+    for (int i = 0; i < NUMBER_FILE; i++) {
         target->draw(rec[i]);
         target->draw(text[i]);
     }

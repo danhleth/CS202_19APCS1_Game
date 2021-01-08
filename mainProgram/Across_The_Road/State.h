@@ -1,7 +1,8 @@
-#pragma once
+#pragma warning(disable : 4996)
 #include "includePath.h"
 #include "OBJECT.h"
 #include "PauseMenu.h"
+#define NUMBER_FILE 10
 //#include "Sound.h"
 
 class State
@@ -9,6 +10,7 @@ class State
 private:
 	bool quit;
 protected:
+	vector<string> Lfile;
 	bool pause;
 	sf::RenderWindow* window;
 	stack<State*>* states;
@@ -16,6 +18,7 @@ protected:
 	sf::RectangleShape background;
 public:
 	State(sf::RenderWindow* window, stack<State*>*);
+	
 	virtual ~State();
 	//Pause and Unpause
 	void pauseState();
@@ -68,10 +71,13 @@ private:
 	void initTextures();
 	void initBackground();
 	void initLevel();
+	void initLevel(int);
 	void initTrafficLights();
 	void initSound();
+	void saveFile();
 public:
 	GameState(sf::RenderWindow* window, stack<State*>*);
+	GameState(sf::RenderWindow* window, stack<State*>*, int);
 	~GameState();
 	//Function
 	void endState();
@@ -90,8 +96,34 @@ public:
 	void render(sf::Event &, sf::RenderTarget* target = nullptr);
 };
 
-class MenuState : public State {
+class LoadFileState : public State {
+private:
+	sf::RectangleShape rec[NUMBER_FILE];
+	sf::Text text[NUMBER_FILE];
+	sf::Font font;
+	int currentButton;
+	bool ismoving;
+	void initFont();
+	void initButton();
+	void initBackground();
+	vector<string> getListfromFile();
+public:
+	LoadFileState(sf::RenderWindow* window, stack<State*>*);
+	~LoadFileState();
+	//Function
+	void endState();
+	void nextButton(sf::Event);
+	void highlight();
+	void checkButton();
+	//Update & Render
 
+	void update();
+	void render(sf::Event&, sf::RenderTarget* target = nullptr);
+};
+
+
+class MenuState : public State {
+	LoadFileState* filebox;
 	sf::RectangleShape rec[3];
 	sf::Text text[3];
 	sf::Font font;
@@ -114,3 +146,5 @@ public:
 	void update();
 	void render(sf::Event &, sf::RenderTarget* target = nullptr);
 };
+
+
