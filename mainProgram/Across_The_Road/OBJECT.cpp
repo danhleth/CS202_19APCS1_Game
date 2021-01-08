@@ -35,7 +35,7 @@ sf::RectangleShape COBJECT::hitbox()
 	return sf::RectangleShape();
 }
 
-COBJECT::COBJECT(sf::Texture* texture, sf::SoundBuffer* soundBuffer) {
+COBJECT::COBJECT(sf::Texture* texture) {
 	mX = 0;
 	mY = 0;
 	this->texture = NULL;
@@ -43,19 +43,15 @@ COBJECT::COBJECT(sf::Texture* texture, sf::SoundBuffer* soundBuffer) {
 	this->movement = NULL;
 	createSprite(texture);
 	this->createMovement(3);
-	this->soundBuffer = soundBuffer;
-	this->sound = new sf::Sound(*this->soundBuffer);
 	//this->createHitBox();
 }
-COBJECT::COBJECT(float x, float y, sf::Texture* texture, sf::SoundBuffer* soundBuffer) {
+COBJECT::COBJECT(float x, float y, sf::Texture* texture) {
 	mX = x;
 	mY = y;
 	this->texture = NULL;
 	this->sprite = NULL;
 	createSprite(texture);
 	this->createMovement(3);
-	this->soundBuffer = soundBuffer;
-	this->sound = new sf::Sound(*this->soundBuffer);
 	//this->createHitBox();
 }
 
@@ -160,18 +156,18 @@ sf::ConvexShape COBJECT::getConvex()
 }
 
 //CVEHICLE
-CVEHICLE::CVEHICLE(sf::Texture* texture, sf::SoundBuffer* soundBuffer)
-	:COBJECT(texture, soundBuffer) {}
-CVEHICLE::CVEHICLE(float x, float y, sf::Texture* texture, sf::SoundBuffer* soundBuffer)
-	: COBJECT(x, y,texture, soundBuffer) {}
+CVEHICLE::CVEHICLE(sf::Texture* texture)
+	:COBJECT(texture) {}
+CVEHICLE::CVEHICLE(float x, float y, sf::Texture* texture)
+	: COBJECT(x, y,texture) {}
 
 sf::RectangleShape CVEHICLE::hitbox()
 {
 	return sf::RectangleShape();
 }
 //CTRUCK
-CTRUCK::CTRUCK(sf::Texture* texture, sf::SoundBuffer* soundBuffer)
-	: CVEHICLE(texture, soundBuffer)
+CTRUCK::CTRUCK(sf::Texture* texture)
+	: CVEHICLE(texture)
 {
 	//setShape({
 	//	{0.f ,0.f}, {0.f, -80.f}, {115.f, -80.f}, {115.f, -45.f}, {120.f, -70.f}, {150.f, -70.f}, { 170.f, -35.f }, { 175.f, -35.f }, { 180.f, -30.f }, { 180.f, 0.f }
@@ -205,8 +201,8 @@ sf::RectangleShape CTRUCK::hitbox() {
 //}
 
 //CCAR
-CCAR::CCAR(sf::Texture* texture, sf::SoundBuffer* soundBuffer)
-	: CVEHICLE(texture, soundBuffer)
+CCAR::CCAR(sf::Texture* texture)
+	: CVEHICLE(texture)
 {
 	//setShape({
 	//	{0.f, 0.f}, {90.f, 0.f}, {90.f, -7.f}, {88.f, -12.f}, {82.f, -12.f}, {68.f, -36.f}, {18.f, -36.f}, {10.f, -12.f}, {0.f, -12.f}
@@ -241,8 +237,8 @@ sf::RectangleShape CCAR::hitbox() {
 
 
 //CANIMAL
-CANIMAL::CANIMAL(sf::Texture* texture, sf::SoundBuffer* soundBuffer)
-	: COBJECT(texture, soundBuffer) {}
+CANIMAL::CANIMAL(sf::Texture* texture)
+	: COBJECT(texture) {}
 CANIMAL::CANIMAL(float _x, float _y)
 	: COBJECT(_x, _y){}
 sf::RectangleShape CANIMAL::hitbox()
@@ -250,8 +246,8 @@ sf::RectangleShape CANIMAL::hitbox()
 	return sf::RectangleShape();
 }
 	//CDINOSAUR
-CDINOSAUR::CDINOSAUR(sf::Texture* texture, sf::SoundBuffer* soundBuffer)
-	: CANIMAL(texture, soundBuffer)
+CDINOSAUR::CDINOSAUR(sf::Texture* texture)
+	: CANIMAL(texture)
 {
 	//setShape({
 	//	//tail
@@ -303,8 +299,8 @@ void CDINOSAUR::update() {
 }
 
 	//CBIRD
-CBIRD::CBIRD(sf::Texture* texture, sf::SoundBuffer* soundBuffer)
-	: CANIMAL(texture, soundBuffer)
+CBIRD::CBIRD(sf::Texture* texture)
+	: CANIMAL(texture)
 {
 	//setShape({
 	//	{-2,-22}, {-4.5, -21}, {-6, -19}, {-10, -19.5}, {-6, -9}, {-5,-5}, {-8,0}, {-14,-4}, {-12,-9}, {-18,-12}, {-16, -19},{-19,-19}, {-22,-20}, {-29, -15}, {-32,-13},{-30,-20}, {-34, -20},
@@ -349,7 +345,7 @@ PEOPLE::PEOPLE(){
 
 }
 
-PEOPLE::PEOPLE(float x, float y, sf::Texture* texture, sf::SoundBuffer* soundBuffer) : COBJECT(x, y, texture, soundBuffer) {
+PEOPLE::PEOPLE(float x, float y, sf::Texture* texture) : COBJECT(x, y, texture) {
 	mState = 1;
 	//setShape({
 	//	{0, -55}, {-4, -54}, {-9, -52}, { -13, -47 }, {-15, -42},{ -15.5, -37.9 }, {-13, -33}, { -11, -31 },/* {-16.6, -33.4},*/{ -8.3, -29 }, { -16.6, -20 }, { -12.5, -15 }, { -8.5, -18 }, { -12, 0 }, { -4, 0 }, { -2, -8 },
