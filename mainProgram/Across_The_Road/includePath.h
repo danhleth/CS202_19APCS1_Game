@@ -5,6 +5,8 @@
 #include <SFML/Audio.hpp>
 #include <vector>
 #include <time.h>  
+#include <thread>
+#include <chrono>
 #include <ctime>
 #include <iostream>
 #include <fstream>
