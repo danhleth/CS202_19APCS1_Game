@@ -359,6 +359,7 @@ PEOPLE::PEOPLE(float x, float y, sf::Texture* texture, sf::SoundBuffer* soundBuf
 	this->sprite->setScale(0.9f, 0.9f);
 	this->createAnimation(*texture);
 	this->animation->addAnimation("LEFT", 60.f, 0, 0, 2, 0, 50, 61);
+	this->impact = false;
 	//this->setSizeHitBox(50 * 0.9f, 61 * 0.9f);
 }
 
@@ -374,6 +375,7 @@ bool PEOPLE::isImpact(vector<COBJECT*> enemies)
 			e->hitbox().getGlobalBounds().contains(end_x, start_y) ||
 			e->hitbox().getGlobalBounds().contains(end_x, end_y)
 			) {
+			this->impact = true;
 			return true;
 		}
 	}
@@ -435,5 +437,11 @@ sf::RectangleShape PEOPLE::hitbox() {
 
 void PEOPLE::update()
 {
-	this->animation->play("LEFT");
+	if (!this->impact) {
+		this->animation->play("LEFT");
+	}
+}
+
+sf::Vector2f PEOPLE::position() {
+	return this->sprite->getPosition();
 }

@@ -15,17 +15,17 @@ void PauseMenu::initButton()
 {
     currentButton = 0;
 
-    this->rec[0].setSize(sf::Vector2f(200, 75));
-    this->rec[1].setSize(sf::Vector2f(200, 75));
-    this->rec[2].setSize(sf::Vector2f(200, 75));
+    this->rec[0].setSize(sf::Vector2f(300, 75));
+    this->rec[1].setSize(sf::Vector2f(300, 75));
+    this->rec[2].setSize(sf::Vector2f(300, 75));
 
     this->rec[0].setFillColor(sf::Color(255, 0, 0, 255));
     this->rec[1].setFillColor(sf::Color(0, 255, 0, 255));
     this->rec[2].setFillColor(sf::Color(0, 0, 255, 255));
 
-    this->rec[0].setPosition(sf::Vector2f(300, 100));
-    this->rec[1].setPosition(sf::Vector2f(300, 225));
-    this->rec[2].setPosition(sf::Vector2f(300, 350));
+    this->rec[0].setPosition(sf::Vector2f(250, 100));
+    this->rec[1].setPosition(sf::Vector2f(250, 225));
+    this->rec[2].setPosition(sf::Vector2f(250, 350));
 
     this->text[0].setString("CONTINUE");
     this->text[1].setString("ENDGAME & REMOVE");
@@ -35,13 +35,26 @@ void PauseMenu::initButton()
         text[i].setFillColor(sf::Color(255, 255, 255, 255));
         rec[i].setOutlineColor(sf::Color(255, 255, 255));
         text[i].setPosition(
-            rec[i].getPosition().x + 40 - text[i].getLocalBounds().width / 2.f,
-            rec[i].getPosition().y + 15 - text[i].getLocalBounds().height / 2.f
+            rec[i].getPosition().x + (rec[i].getSize().x / 2.f),
+            rec[i].getPosition().y + (rec[i].getSize().y / 2.f)
         );
         text[i].setCharacterSize(30);
         text[i].setFont(this->font);
         text[i].setStyle(sf::Text::Bold);
     }
+    
+    this->text[0].setPosition(
+        text[0].getPosition().x - 8*7.5f,
+        text[0].getPosition().y - 20.f
+    );
+    this->text[1].setPosition(
+        text[1].getPosition().x - 16 * 7.5f,
+        text[1].getPosition().y - 20.f
+    );
+    this->text[2].setPosition(
+        text[2].getPosition().x - 15 * 7.5f,
+        text[2].getPosition().y - 20.f
+    );
 }
 
 void PauseMenu::initBackground() {

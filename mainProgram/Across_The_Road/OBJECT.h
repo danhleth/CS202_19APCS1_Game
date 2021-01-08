@@ -19,7 +19,7 @@ protected:
 	Movement* movement;
 	AnimationComponent* animation;
 
-	void createSprite(sf::Texture*);
+	
 	void createMovement(float maxVeclocity);
 	void createAnimation(sf::Texture& texture);
 	//void createHitBox();
@@ -39,6 +39,7 @@ public:
 	float getX();
 	float getY();
 
+	void createSprite(sf::Texture*);
 	void changeConvex(sf::ConvexShape _convex);
 	sf::ConvexShape getConvex();
 	void setShape(vector<vector<float>>);
@@ -111,11 +112,12 @@ class PEOPLE : public COBJECT {
 private:
 	bool mState;
 	bool isMoving;
+	bool impact;
 public:
 	PEOPLE();
 	PEOPLE(float, float, sf::Texture* texture, sf::SoundBuffer* soundBuffer);
 	sf::RectangleShape hitbox();
-
+	sf::Vector2f position();
 	void KeyBoadMove_WithDt(float, sf::Event &);
 	bool isImpact(vector<COBJECT*> enemies);
 	void setSpeed(float);
@@ -125,5 +127,6 @@ public:
 	bool isDead();
 	void collisionAnimation();
 	void update();
+	void setSprite(sf::Texture* texture);
 };
 
