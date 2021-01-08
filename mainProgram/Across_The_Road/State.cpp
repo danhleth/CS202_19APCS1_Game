@@ -439,27 +439,31 @@ void GameState::spawnEnemy() {
             enemyTmp = new CDINOSAUR(&this->textures["dino"], &this->soundBuffers["dino"]);
             break;
         }
-        if (typeid(*enemyTmp) == typeid(CTRUCK) || typeid(*enemyTmp) == typeid(CBIRD) || typeid(*enemyTmp) == typeid(CCAR) || typeid(*enemyTmp) == typeid(CDINOSAUR))
+        if (typeid(*enemyTmp) == typeid(CTRUCK) || typeid(*enemyTmp) == typeid(CBIRD))
             tmpp -= 20;
         enemyTmp->setPosition(0.f, tmpp);
         this->enemies.push_back(enemyTmp);
     }
     else if (currentTrafficLights == 2) {
-        enemyTmp = new CCAR(&this->textures["car"], &this->soundBuffers["car"]);
-        if (typeid(*enemyTmp) == typeid(CTRUCK) || typeid(*enemyTmp) == typeid(CBIRD) || typeid(*enemyTmp) == typeid(CCAR) || typeid(*enemyTmp) == typeid(CDINOSAUR))
+        tmp = static_cast<unsigned>(rand() % 2);
+        switch (tmp)
+        {
+        case 0:
+            enemyTmp = new CCAR(&this->textures["car"], &this->soundBuffers["car"]);
+            break;
+        default:
+            enemyTmp = new CTRUCK(&this->textures["truck"], &this->soundBuffers["car"]);
+            break;
+        }
+        
+        if (typeid(*enemyTmp) == typeid(CTRUCK) || typeid(*enemyTmp) == typeid(CBIRD))
             tmpp -= 20;
         enemyTmp->setPosition(0.f, tmpp);
         this->enemies.push_back(enemyTmp);
     }
     else {
         enemyTmp = new CBIRD(&this->textures["bird"], &this->soundBuffers["bird"]);
-        if (typeid(*enemyTmp) == typeid(CTRUCK) || typeid(*enemyTmp) == typeid(CBIRD) || typeid(*enemyTmp) == typeid(CCAR) || typeid(*enemyTmp) == typeid(CDINOSAUR))
-            tmpp -= 20;
-        enemyTmp->setPosition(0.f, tmpp);
-        this->enemies.push_back(enemyTmp);
-
-        enemyTmp = new CDINOSAUR(&this->textures["dino"], &this->soundBuffers["dino"]);
-        if (typeid(*enemyTmp) == typeid(CTRUCK) || typeid(*enemyTmp) == typeid(CBIRD) || typeid(*enemyTmp) == typeid(CCAR) || typeid(*enemyTmp) == typeid(CDINOSAUR))
+        if (typeid(*enemyTmp) == typeid(CTRUCK) || typeid(*enemyTmp) == typeid(CBIRD))
             tmpp -= 20;
         enemyTmp->setPosition(0.f, tmpp);
         this->enemies.push_back(enemyTmp);
