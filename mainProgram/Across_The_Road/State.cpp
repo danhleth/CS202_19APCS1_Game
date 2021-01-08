@@ -421,32 +421,51 @@ void GameState::renderTrafficLights(){
 void GameState::spawnEnemy() {
     COBJECT* enemyTmp = nullptr;
     unsigned tmp = static_cast<unsigned>(rand() % 4);
-    switch (tmp)
-    {
-    case 0:
-        this_thread::sleep_for(std::chrono::milliseconds(1));
-        enemyTmp = new CTRUCK(&this->textures["truck"], &this->soundBuffers["car"]);
-        break;
-    case 1:
-        this_thread::sleep_for(std::chrono::milliseconds(1));
-        enemyTmp = new CCAR(&this->textures["car"], &this->soundBuffers["car"]);
-        break;
-    case 2:
-        this_thread::sleep_for(std::chrono::milliseconds(1));
-        enemyTmp = new CBIRD(&this->textures["bird"], &this->soundBuffers["bird"]);
-        break;
-    default:
-        this_thread::sleep_for(std::chrono::milliseconds(1));
-        enemyTmp = new CDINOSAUR(&this->textures["dino"], &this->soundBuffers["dino"]);
-        break;
-    }
     float tmpp = 130 + static_cast<float>((rand() % 4) * 92);//set location
-    if (typeid(*enemyTmp) == typeid(CTRUCK) || typeid(*enemyTmp) == typeid(CBIRD))
-        tmpp -= 20;
-    enemyTmp->setPosition(0.f, tmpp);
-    this->enemies.push_back(enemyTmp);
-}
+    this_thread::sleep_for(std::chrono::milliseconds(10));
+    if (currentTrafficLights == 3) {
+        switch (tmp)
+        {
+        case 0:
+            enemyTmp = new CTRUCK(&this->textures["truck"], &this->soundBuffers["car"]);
+            break;
+        case 1:
+            enemyTmp = new CCAR(&this->textures["car"], &this->soundBuffers["car"]);
+            break;
+        case 2:
+            enemyTmp = new CBIRD(&this->textures["bird"], &this->soundBuffers["bird"]);
+            break;
+        default:
+            enemyTmp = new CDINOSAUR(&this->textures["dino"], &this->soundBuffers["dino"]);
+            break;
+        }
+        if (typeid(*enemyTmp) == typeid(CTRUCK) || typeid(*enemyTmp) == typeid(CBIRD) || typeid(*enemyTmp) == typeid(CCAR) || typeid(*enemyTmp) == typeid(CDINOSAUR))
+            tmpp -= 20;
+        enemyTmp->setPosition(0.f, tmpp);
+        this->enemies.push_back(enemyTmp);
+    }
+    else if (currentTrafficLights == 2) {
+        enemyTmp = new CCAR(&this->textures["car"], &this->soundBuffers["car"]);
+        if (typeid(*enemyTmp) == typeid(CTRUCK) || typeid(*enemyTmp) == typeid(CBIRD) || typeid(*enemyTmp) == typeid(CCAR) || typeid(*enemyTmp) == typeid(CDINOSAUR))
+            tmpp -= 20;
+        enemyTmp->setPosition(0.f, tmpp);
+        this->enemies.push_back(enemyTmp);
+    }
+    else {
+        enemyTmp = new CBIRD(&this->textures["bird"], &this->soundBuffers["bird"]);
+        if (typeid(*enemyTmp) == typeid(CTRUCK) || typeid(*enemyTmp) == typeid(CBIRD) || typeid(*enemyTmp) == typeid(CCAR) || typeid(*enemyTmp) == typeid(CDINOSAUR))
+            tmpp -= 20;
+        enemyTmp->setPosition(0.f, tmpp);
+        this->enemies.push_back(enemyTmp);
 
+        enemyTmp = new CDINOSAUR(&this->textures["dino"], &this->soundBuffers["dino"]);
+        if (typeid(*enemyTmp) == typeid(CTRUCK) || typeid(*enemyTmp) == typeid(CBIRD) || typeid(*enemyTmp) == typeid(CCAR) || typeid(*enemyTmp) == typeid(CDINOSAUR))
+            tmpp -= 20;
+        enemyTmp->setPosition(0.f, tmpp);
+        this->enemies.push_back(enemyTmp);
+    }
+    
+}
 void GameState::generateMap()
 {
     if (people.getY() <= 552.f) {//change from 100 to 552 because the sprite is something mysterious about the location
