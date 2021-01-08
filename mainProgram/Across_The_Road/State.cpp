@@ -53,8 +53,9 @@ GameState::GameState(sf::RenderWindow* window, stack<State*>* states) :
     initTrafficLights();
     initSound();
     this->pauseMenu = new PauseMenu(this->window);
-    this->messageBox = new MessageBox(this->window);
+    this->messageBox = new MessageBox(this->window, this->points);
     this->points = 0;
+    this->times = 0;
     this->enemySpawnTimerMax = 120.f;
     this->enemySpawnTimer = this->enemySpawnTimerMax;
     this->maxEnemies = 7;
@@ -73,8 +74,9 @@ GameState::GameState(sf::RenderWindow* window, stack<State*>* states, int level)
     initTrafficLights();
     initSound();
     this->pauseMenu = new PauseMenu(this->window);
-    this->messageBox = new MessageBox(this->window);
+    this->messageBox = new MessageBox(this->window, this->points);
     this->points = 0;
+    this->times = 0;
     this->enemySpawnTimerMax = 120.f;
     this->enemySpawnTimer = this->enemySpawnTimerMax;
     this->maxEnemies = 7;
@@ -105,6 +107,7 @@ void GameState::update()
         this->updateEnemies();
         this->updateTrafficLights();
         people.update();
+        this->times ++;
     }
     else {
         if (!this->messageBox->pause) {
@@ -167,15 +170,16 @@ void GameState::render(sf::Event &ev, sf::RenderTarget* target)
     if (!target)
         target = this->window;
     target->draw(background);
+    generateMap();
     target->draw(levelLabelText);
     renderPlayer(ev);
     renderEnemies();
     renderTrafficLights();
-    generateMap();
-
+   
     if (this->pause) {
         //pause render
         if (this->messageBox->pause) {
+            messageBox->setPoints(this->points);
             messageBox->draw(this->window);
             if (messageBox->checkQuit(ev)) {
                 setQuit(true);
@@ -317,6 +321,8 @@ void GameState::setLevel(unsigned level) {
 
     levelLabel = "Level: ";
     levelLabel += to_string(level);
+    levelLabel += "          Score: ";
+    levelLabel += to_string(points);
     levelLabelText.setString(levelLabel);
 }
 
@@ -470,6 +476,8 @@ void GameState::spawnEnemy() {
 void GameState::generateMap()
 {
     if (people.position().y < 20.f) {//change from 100 to 552 because the sprite is something mysterious about the location
+        points += (500 - times);
+        times = 0;
         if (currentLevel >= 3)
             setLevel(1);
         else {

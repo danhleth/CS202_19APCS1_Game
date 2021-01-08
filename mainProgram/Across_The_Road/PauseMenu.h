@@ -42,11 +42,13 @@ private:
 	sf::RectangleShape box;
 	sf::Text text[2];
 	sf::Font font;
+	int points;
 public:
 	bool pause;
-	MessageBox(sf::RenderWindow*);
+	MessageBox(sf::RenderWindow*, int);
 	void initFont();
 	void initBackground();
 	void draw(sf::RenderTarget*);
 	bool checkQuit(sf::Event&);
+	void setPoints(int);
 };

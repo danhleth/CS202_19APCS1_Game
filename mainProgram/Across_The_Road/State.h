@@ -40,6 +40,7 @@ class GameState : public State {
 private:
 	//Logic
 	int points;
+	int times;
 	float enemySpawnTimer;
 	float enemySpawnTimerMax;
 	unsigned maxEnemies;
