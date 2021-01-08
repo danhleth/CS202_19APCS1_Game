@@ -173,9 +173,10 @@ void PauseMenu::render(sf::Event &ev, sf::RenderTarget* target)
     }
 }
 
-MessageBox::MessageBox(sf::RenderWindow* window)
+MessageBox::MessageBox(sf::RenderWindow* window, int points)
 {
     this->window = window;
+    this->points = points;
     initFont();
     initBackground();
     pause = false;
@@ -197,7 +198,6 @@ void MessageBox::initBackground()
         )
     );
     this->box.setFillColor(sf::Color(20, 20, 20, 100));
-    this->text[0].setString("YOU LOSE");
     this->text[1].setString("Press Enter to continue !");
 
     text[0].setCharacterSize(30);
@@ -209,7 +209,7 @@ void MessageBox::initBackground()
     text[1].setStyle(sf::Text::Regular);
 
     text[0].setPosition(
-        (float)this->window->getSize().x / 2 - 50.f,
+        (float)this->window->getSize().x / 2 - 150.f,
         (float)this->window->getSize().y / 2 - 50.f
     );
     text[1].setPosition(
@@ -234,4 +234,10 @@ bool MessageBox::checkQuit(sf::Event& ev)
         return true;
     }
     return false;
+}
+
+void MessageBox::setPoints(int p) {
+    string s = "YOU LOSE with Score: ";
+    s += to_string(p);
+    this->text[0].setString(s);
 }
