@@ -16,6 +16,8 @@ protected:
 	stack<State*>* states;
 	sf::Texture backgroundTexture;
 	sf::RectangleShape background;
+	sf::SoundBuffer GameOverSoundBuffer;
+	sf::Sound GameOverSound;
 public:
 	State(sf::RenderWindow* window, stack<State*>*);
 	
@@ -52,8 +54,8 @@ private:
 	PEOPLE people;
 	COBJECT* enemy;
 	vector<COBJECT*> enemies;
-	map<string, sf::SoundBuffer> soundBuffers;
-	map<string, sf::Sound> sounds;
+	/*map<string, sf::SoundBuffer> soundBuffers;
+	map<string, sf::Sound> sounds;*/
 	//sf::Music backgroundSound;
 	COBJECT* line;
 	map<string, sf::Texture> textures;

@@ -188,7 +188,7 @@ void GameState::render(sf::Event &ev, sf::RenderTarget* target)
 
 void GameState::initPlayer()
 {
-    this->people = PEOPLE(400, 500, &this->textures["people"], &this->soundBuffers["people"]);
+    this->people = PEOPLE(400, 500, &this->textures["people"]);
 }
 
 void GameState::initEnemies() {}
@@ -275,17 +275,17 @@ void GameState::initTrafficLights() {
     currentTrafficLights = 3;
     this->trafficLightsSpawnTimer = 120.f;
     this->trafficLightsSpawnTimerMax = this->trafficLightsSpawnTimer;
-    COBJECT* tmp = new CTRUCK(&this->textures["red"], &this->soundBuffers["car"]);
+    COBJECT* tmp = new CTRUCK(&this->textures["red"]);
     tmp->setPosition(550.f, 40.f);
     tmp->setScale(0.21f, 0.21f);
     tmp->setColor(0.f, 0.f, 0.f);
     trafficLights.push_back(tmp);
-    tmp = new CTRUCK(&this->textures["yellow"], &this->soundBuffers["car"]);
+    tmp = new CTRUCK(&this->textures["yellow"]);
     tmp->setPosition(602.5f, 40.f);
     tmp->setScale(0.07f, 0.07f);
     tmp->setColor(0.f, 0.f, 0.f);
     trafficLights.push_back(tmp);
-    tmp = new CTRUCK(&this->textures["blue"], &this->soundBuffers["car"]);
+    tmp = new CTRUCK(&this->textures["blue"]);
     tmp->setPosition(650.f, 40.f);
     tmp->setScale(0.11f, 0.125f);
     tmp->setColor(0.f, 0.f, 0.f);
@@ -294,29 +294,8 @@ void GameState::initTrafficLights() {
 
 void GameState::initSound()
 {
-    sf::SoundBuffer soundTmp;
-    soundTmp.loadFromFile("sound/bird.wav");
-    soundBuffers["bird"] = soundTmp;
-    soundTmp.loadFromFile("sound/car_sound.wav");
-    soundBuffers["car"] = soundTmp;
-    soundTmp.loadFromFile("sound/dino.wav");
-    soundBuffers["dino"] = soundTmp;
-    soundTmp.loadFromFile("sound/people_footstep.wav");
-    soundBuffers["people"] = soundTmp;
-
-    sf::Sound sound;
-    sound.setBuffer(soundBuffers["birds"]);
-    sounds["birds"] = sound;
-    sound.setBuffer(soundBuffers["car"]);
-    sounds["car"] = sound;
-    sound.setBuffer(soundBuffers["dino"]);
-    sounds["dino"] = sound;
-    sound.setBuffer(soundBuffers["people"]);
-    sounds["people"] = sound;
-
-    /*if (!this->backgroundSound.openFromFile("sound/BackGround.wav")) {
-        cout << "Can not open music file" << endl;
-    }*/
+    GameOverSoundBuffer.loadFromFile("sound/GameOverSound.wav");
+    GameOverSound.setBuffer(GameOverSoundBuffer);
 }
 
 void GameState::initFont()
@@ -445,16 +424,16 @@ void GameState::spawnEnemy() {
         switch (tmp)
         {
         case 0:
-            enemyTmp = new CTRUCK(&this->textures["truck"], &this->soundBuffers["car"]);
+            enemyTmp = new CTRUCK(&this->textures["truck"]);
             break;
         case 1:
-            enemyTmp = new CCAR(&this->textures["car"], &this->soundBuffers["car"]);
+            enemyTmp = new CCAR(&this->textures["car"]);
             break;
         case 2:
-            enemyTmp = new CBIRD(&this->textures["bird"], &this->soundBuffers["bird"]);
+            enemyTmp = new CBIRD(&this->textures["bird"]);
             break;
         default:
-            enemyTmp = new CDINOSAUR(&this->textures["dino"], &this->soundBuffers["dino"]);
+            enemyTmp = new CDINOSAUR(&this->textures["dino"]);
             break;
         }
         if (typeid(*enemyTmp) == typeid(CTRUCK) || typeid(*enemyTmp) == typeid(CBIRD))
@@ -467,10 +446,10 @@ void GameState::spawnEnemy() {
         switch (tmp)
         {
         case 0:
-            enemyTmp = new CCAR(&this->textures["car"], &this->soundBuffers["car"]);
+            enemyTmp = new CCAR(&this->textures["car"]);
             break;
         default:
-            enemyTmp = new CTRUCK(&this->textures["truck"], &this->soundBuffers["car"]);
+            enemyTmp = new CTRUCK(&this->textures["truck"]);
             break;
         }
         
@@ -480,7 +459,7 @@ void GameState::spawnEnemy() {
         this->enemies.push_back(enemyTmp);
     }
     else {
-        enemyTmp = new CBIRD(&this->textures["bird"], &this->soundBuffers["bird"]);
+        enemyTmp = new CBIRD(&this->textures["bird"]);
         if (typeid(*enemyTmp) == typeid(CTRUCK) || typeid(*enemyTmp) == typeid(CBIRD))
             tmpp -= 20;
         enemyTmp->setPosition(0.f, tmpp);
@@ -505,8 +484,9 @@ void GameState::generateMap()
 void GameState::checkImpact()
 {
     if (this->people.isImpact(this->enemies)) {
+        GameOverSound.play();
         int x = people.position().x, y = people.position().y;
-        people = PEOPLE(x, y, &this->textures["people_dead"], &this->soundBuffers["people"]);
+        people = PEOPLE(x, y, &this->textures["people_dead"]);
         this->pause = true;
         this->messageBox->pause = true;
     }

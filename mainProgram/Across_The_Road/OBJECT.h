@@ -28,9 +28,9 @@ protected:
 public:
 	//Constructor
 	COBJECT();
-	COBJECT(sf::Texture* texture, sf::SoundBuffer* soundBuffer);
+	COBJECT(sf::Texture* texture);
 	COBJECT(float x, float y);
-	COBJECT(float, float, sf::Texture* texture, sf::SoundBuffer* soundBuffer);
+	COBJECT(float, float, sf::Texture* texture);
 
 	float X();
 	float Y();
@@ -58,8 +58,8 @@ class CVEHICLE : public COBJECT {
 private:
 
 public:
-	CVEHICLE(float, float, sf::Texture* texture, sf::SoundBuffer* soundBuffer);
-	CVEHICLE(sf::Texture* texture, sf::SoundBuffer* soundBuffer);
+	CVEHICLE(float, float, sf::Texture* texture);
+	CVEHICLE(sf::Texture* texture);
 	sf::RectangleShape hitbox();
 };
 
@@ -67,7 +67,7 @@ class CTRUCK : public CVEHICLE {
 private:
 
 public:
-	CTRUCK(sf::Texture* texture, sf::SoundBuffer* soundBuffer);
+	CTRUCK(sf::Texture* texture);
 	CTRUCK(float, float);
 	sf::RectangleShape hitbox();
 };
@@ -76,7 +76,7 @@ class CCAR : public CVEHICLE {
 private:
 
 public:
-	CCAR(sf::Texture* texture, sf::SoundBuffer* soundBuffer);
+	CCAR(sf::Texture* texture);
 	CCAR(float, float);
 	sf::RectangleShape hitbox();
 };
@@ -85,7 +85,7 @@ class CANIMAL : public COBJECT {
 private:
 
 public:
-	CANIMAL(sf::Texture* texture, sf::SoundBuffer* soundBuffer);
+	CANIMAL(sf::Texture* texture);
 	CANIMAL(float, float);
 	sf::RectangleShape hitbox();
 	//virtual void Tell();
@@ -93,7 +93,7 @@ public:
 
 class CDINOSAUR : public CANIMAL {
 public:
-	CDINOSAUR(sf::Texture* texture, sf::SoundBuffer* soundBuffer);
+	CDINOSAUR(sf::Texture* texture);
 	CDINOSAUR(float, float);
 	sf::RectangleShape hitbox();
 	void update();
@@ -101,7 +101,7 @@ public:
 
 class CBIRD : public CANIMAL {
 public:
-	CBIRD(sf::Texture* texture, sf::SoundBuffer* soundBuffer);
+	CBIRD(sf::Texture* texture);
 	CBIRD(float, float);
 	sf::RectangleShape hitbox();
 	void update();
@@ -115,7 +115,7 @@ private:
 	bool impact;
 public:
 	PEOPLE();
-	PEOPLE(float, float, sf::Texture* texture, sf::SoundBuffer* soundBuffer);
+	PEOPLE(float, float, sf::Texture* texture);
 	sf::RectangleShape hitbox();
 	sf::Vector2f position();
 	void KeyBoadMove_WithDt(float, sf::Event &);
