@@ -583,9 +583,9 @@ void MenuState::initFont()
 }
 
 
-void MenuState::checkButton()
+void MenuState::checkButton(sf::Event &ev)
 {
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Enter)) {
+    if (ev.key.code == sf::Keyboard::Enter) {
         if(currentButton == 0)
             this->states->push(new GameState(this->window, this->states));
         if (currentButton == 1) {
@@ -594,11 +594,11 @@ void MenuState::checkButton()
         if (currentButton == 2)
             window->close();
     }
+    ev.key.code = sf::Keyboard::Unknown;
 }
 
 void MenuState::update()
 {
-    checkButton();
     highlight();
 }
 
@@ -612,10 +612,8 @@ void MenuState::render(sf::Event &ev, sf::RenderTarget* target)
         target->draw(rec[i]);
         target->draw(text[i]);
     }
+    checkButton(ev);
 }
-
-
-
 
 LoadFileState::LoadFileState(sf::RenderWindow* window, stack<State*>* states) :
     State(window, states)
@@ -623,7 +621,6 @@ LoadFileState::LoadFileState(sf::RenderWindow* window, stack<State*>* states) :
     initFont();
     initButton();
     initBackground();
-    
 }
 
 vector<string> LoadFileState::getListfromFile() {
@@ -705,7 +702,10 @@ void LoadFileState::nextButton(sf::Event ev)
             ismoving = false;
         }
         if (ev.key.code == sf::Keyboard::W && ismoving) {
-            this->currentButton = (this->currentButton - 1) % NUMBER_FILE;
+            if (this->currentButton == 0) 
+                this->currentButton = NUMBER_FILE - 1;
+            else
+                this->currentButton = (this->currentButton - 1) % NUMBER_FILE;
             ismoving = false;
         }
     }
@@ -731,7 +731,7 @@ void LoadFileState::initFont()
 void LoadFileState::checkButton()
 {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Enter)) {
-        if (currentButton > 0 && currentButton < NUMBER_FILE) {
+        if (currentButton >= 0 && currentButton < NUMBER_FILE) {
             string tmp = text[currentButton].getString();
             ifstream fin;
             if (!tmp.empty()) {
