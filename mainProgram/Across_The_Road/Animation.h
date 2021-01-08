@@ -15,7 +15,8 @@ private:
 		//Constructor
 		Animation(sf::Texture& textureSheet, sf::Sprite& sprite, 
 			float speed, 
-			int start_x, int start_y, int end_x, int end_y, int width, int height)
+			int start_x, int start_y, int end_x, int end_y, int width, int height
+		)
 			:textureSheet(textureSheet), sprite(sprite), speed(speed), height(height), width(width)
 		{
 			this->timer = 0.f;
@@ -23,7 +24,7 @@ private:
 			this->currentRect = this->startRect;
 			this->endRect = sf::IntRect(end_x * width, end_y * height, width, height);
 			this->sprite.setTexture(this->textureSheet);
-			this->sprite.setTextureRect(this->startRect);//funny
+			this->sprite.setTextureRect(this->startRect);
 		}
 		//Functions
 		void play() {
@@ -39,7 +40,6 @@ private:
 				this->sprite.setTextureRect(this->currentRect);
 			}
 		}
-
 		void reset() {
 			this->timer = 0.f;
 			this->currentRect = startRect;

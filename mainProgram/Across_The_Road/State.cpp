@@ -165,6 +165,10 @@ void GameState::initTextures()
     tmp.loadFromFile("trafficLights/blue.jpg");
     tmp.setSmooth(true);
     this->textures["blue"] = tmp;
+
+    tmp.loadFromFile("sprites/death.png");
+    tmp.setSmooth(true);
+    this->textures["people_dead"] = tmp;
 }
 
 void GameState::initBackground()
@@ -388,6 +392,8 @@ void GameState::generateMap()
 void GameState::checkImpact()
 {
     if (this->people.isImpact(this->enemies)) {
+        int x = people.position().x, y = people.position().y;
+        people = PEOPLE(x, y, &this->textures["people_dead"], &this->soundBuffers["people"]);
         this->pause = true;
         this->messageBox->pause = true;
     }
