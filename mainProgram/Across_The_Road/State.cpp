@@ -505,6 +505,9 @@ void GameState::checkFromPause()
         saveFile();
         setQuit(true);
     }
+    if (this->pauseMenu->senderFromGame == 2) {
+        setQuit(true);
+    }
 }
 
 //MENU STATE
