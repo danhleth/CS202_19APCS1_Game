@@ -62,7 +62,7 @@ GameState::GameState(sf::RenderWindow* window, stack<State*>* states) :
     //this->backgroundSound.play();
 }
 
-GameState::GameState(sf::RenderWindow* window, stack<State*>* states, int level) :
+GameState::GameState(sf::RenderWindow* window, stack<State*>* states, int level, int ipoint):
     State(window, states)
 {
     initTextures();
@@ -75,11 +75,17 @@ GameState::GameState(sf::RenderWindow* window, stack<State*>* states, int level)
     initSound();
     this->pauseMenu = new PauseMenu(this->window);
     this->messageBox = new MessageBox(this->window, this->points);
-    this->points = 0;
+    this->points = ipoint;
     this->times = 0;
     this->enemySpawnTimerMax = 120.f;
     this->enemySpawnTimer = this->enemySpawnTimerMax;
     this->maxEnemies = 7;
+
+    levelLabel = "Level: ";
+    levelLabel += to_string(level);
+    levelLabel += "          Score: ";
+    levelLabel += to_string(points);
+    levelLabelText.setString(levelLabel);
 }
 
 GameState::~GameState()
@@ -159,7 +165,7 @@ void GameState::saveFile() {
 
     fout.open("data/" + batch + ".txt");
     if (fout.is_open()) {
-        fout << currentLevel << endl;
+        fout << currentLevel << " " << points << endl;
     }
     fout.close();
     cout << batch << endl;
@@ -702,6 +708,8 @@ void LoadFileState::initButton()
         text[i].setFont(this->font);
         text[i].setStyle(sf::Text::Bold);
     }
+
+ 
 }
 
 void LoadFileState::initBackground() {
@@ -734,14 +742,14 @@ void LoadFileState::nextButton(sf::Event ev)
 
     if (ev.type == sf::Event::KeyReleased) {
         if (ev.key.code == sf::Keyboard::S && ismoving) {
-            this->currentButton = (this->currentButton + 1) % NUMBER_FILE;
+            this->currentButton = (this->currentButton + 1) % (NUMBER_FILE);
             ismoving = false;
         }
         if (ev.key.code == sf::Keyboard::W && ismoving) {
             if (this->currentButton == 0) 
-                this->currentButton = NUMBER_FILE - 1;
+                this->currentButton = NUMBER_FILE-1;
             else
-                this->currentButton = (this->currentButton - 1) % NUMBER_FILE;
+                this->currentButton = (this->currentButton - 1) % (NUMBER_FILE);
             ismoving = false;
         }
     }
@@ -772,11 +780,14 @@ void LoadFileState::checkButton()
             ifstream fin;
             if (!tmp.empty()) {
                 int level;
+                int ipoint;
                 fin.open("data/" + tmp + ".txt");
-                if (fin.is_open())
+                if (fin.is_open()) {
                     fin >> level;
+                    fin >> ipoint;
+                }
                 fin.close();
-                this->states->push(new GameState(this->window, this->states, level));
+                this->states->push(new GameState(this->window, this->states, level,ipoint));
             }
             else {
                 this->states->push(new GameState(this->window, this->states));
