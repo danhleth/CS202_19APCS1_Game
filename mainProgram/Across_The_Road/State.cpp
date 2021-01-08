@@ -51,7 +51,6 @@ GameState::GameState(sf::RenderWindow* window, stack<State*>* states) :
     initBackground();
     initLevel();
     initTrafficLights();
-    initSound();
     this->pauseMenu = new PauseMenu(this->window);
     this->messageBox = new MessageBox(this->window);
     this->points = 0;
@@ -71,7 +70,6 @@ GameState::GameState(sf::RenderWindow* window, stack<State*>* states, int level)
     initBackground();
     initLevel(level);
     initTrafficLights();
-    initSound();
     this->pauseMenu = new PauseMenu(this->window);
     this->messageBox = new MessageBox(this->window);
     this->points = 0;
@@ -292,12 +290,6 @@ void GameState::initTrafficLights() {
     trafficLights.push_back(tmp);
 }
 
-void GameState::initSound()
-{
-    GameOverSoundBuffer.loadFromFile("sound/GameOverSound.wav");
-    GameOverSound.setBuffer(GameOverSoundBuffer);
-}
-
 void GameState::initFont()
 {
     if (!this->font.loadFromFile("font/Dosis-Light.ttf")) {
@@ -484,7 +476,6 @@ void GameState::generateMap()
 void GameState::checkImpact()
 {
     if (this->people.isImpact(this->enemies)) {
-        GameOverSound.play();
         int x = people.position().x, y = people.position().y;
         people = PEOPLE(x, y, &this->textures["people_dead"]);
         this->pause = true;

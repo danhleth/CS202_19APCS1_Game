@@ -25,10 +25,6 @@ void COBJECT::update()
 {
 	int a = 0;
 }
-void COBJECT::playSound()
-{
-	this->sound->play();
-}
 
 sf::RectangleShape COBJECT::hitbox()
 {
@@ -404,15 +400,6 @@ void PEOPLE::KeyBoadMove_WithDt(float distance, sf::Event &ev) {
 		isMoving = true;
 	}
 	ev.key.code = sf::Keyboard::Unknown;
-}
-
-void PEOPLE::collisionAnimation()
-{
-	if (this->isImpact()) {
-		sf::ConvexShape x = this->getConvex();
-		x.setFillColor(sf::Color::Red);
-		this->changeConvex(x);
-	}
 }
 
 void PEOPLE::Draw(sf::RenderTarget* window)

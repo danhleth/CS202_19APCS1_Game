@@ -12,8 +12,6 @@ protected:
 	sf::ConvexShape convex;
 	sf::Texture *texture;
 	sf::Sprite *sprite;
-	sf::Sound* sound;
-	sf::SoundBuffer* soundBuffer;
 	//Component
 	//sf::RectangleShape hitBox;
 	Movement* movement;
@@ -51,7 +49,6 @@ public:
 	virtual void setScale(float,float);
 	virtual void setColor(float,float,float);
 	virtual sf::RectangleShape hitbox();
-	void playSound();
 };
 
 class CVEHICLE : public COBJECT {
@@ -124,8 +121,6 @@ public:
 	bool isImpact() { return false; }
 	void Draw(sf::RenderTarget*);
 	bool isFinish();
-	bool isDead();
-	void collisionAnimation();
 	void update();
 	void setSprite(sf::Texture* texture);
 };

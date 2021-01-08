@@ -16,8 +16,6 @@ protected:
 	stack<State*>* states;
 	sf::Texture backgroundTexture;
 	sf::RectangleShape background;
-	sf::SoundBuffer GameOverSoundBuffer;
-	sf::Sound GameOverSound;
 public:
 	State(sf::RenderWindow* window, stack<State*>*);
 	
@@ -78,7 +76,6 @@ private:
 	void initLevel();
 	void initLevel(int);
 	void initTrafficLights();
-	void initSound();
 	void initFont();
 	void saveFile();
 public:
