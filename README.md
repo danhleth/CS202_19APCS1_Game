@@ -1,5 +1,5 @@
 # CS202_19APCS1_Game
-Contribute:
+Contact:\
 Mai Quoc Khanh - mqkhanh19@apcs.vn\
 Nguyen Cong Tai - nctai19@apcs.vn\
 Le Thanh Danh - ltdanh19@apcs.vn\
